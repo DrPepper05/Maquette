@@ -119,7 +119,7 @@ Cifra apare aici din primul ecran — pe pagina de evaluare se afișează mare �
 > ## Software projects don't fail in the coding.
 > They fail at the start, when nobody has written down clearly what needs to exist. It begins with a conversation and a rough estimate, and three months later the unspoken assumptions surface. That is why the first thing we sell is not code.
 
-**Aici stă diagrama BeforeAfter** — durerea, făcută vizibilă. Figura 01.
+*(Diagrama Before/After a fost scoasă — decizie utilizator, 2026-08-24. Secțiunea e doar text.)*
 
 ### Ce primești — cinci livrabile
 
@@ -148,7 +148,7 @@ Cifra apare aici din primul ecran — pe pagina de evaluare se afișează mare �
 ### Livrabilul-mostră
 
 > ## This is what you receive.
-> Figura 02: `BlueprintDoc` — p. 7 / 24 din specificația funcțională. Legendă: `Deliverable · sample`.
+> Figura 01: `BlueprintDoc` — p. 7 / 24 din specificația funcțională. Legendă: `Deliverable · sample`. Singura figură de pe site.
 
 ### Pentru cine e / nu e
 

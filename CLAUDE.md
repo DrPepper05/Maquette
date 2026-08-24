@@ -75,7 +75,7 @@ Motivul e practic, nu moral: piața B2B din România e mică și oamenii vorbesc
 
 **Mișcare: totul nativ, ~250 de octeți de JS.** `@view-transition` · secvența de deschidere pe homepage (5 elemente, 70ms) · `animation-timeline: view()` cu fallback IntersectionObserver. Reveal-uri subtile: opacitate + 10px. Curbe: `cubic-bezier(.23,1,.32,1)` intrare, `.16,1,.3,1` reveal. UI sub 300ms.
 
-**Nu se adaugă, cu motiv:** GSAP/ScrollTrigger (50,7 KB gzip pentru un classList.add; licență Webflow revocabilă) · Lenis · split-text · preloader · scroll orizontal · cursor custom · Three.js · Rive/Lottie · nimic care se construiește pe ecran.
+**Nu se adaugă, cu motiv:** GSAP/ScrollTrigger (50,7 KB gzip pentru un classList.add; licență Webflow revocabilă) · Lenis · split-text · preloader · scroll orizontal · cursor custom · Three.js · Rive/Lottie · nimic care se construiește pe ecran. **Diagramele au fost scoase de pe site** (decizie utilizator, 2026-08-24) — diagrama Before/After a fost ștearsă împreună cu excepția ei de asamblare la scroll; regula rămâne fără excepții.
 
 Detaliile complete în `docs/brand.md`.
 
@@ -101,7 +101,7 @@ src/
   styles/global.css     ← tokenii din docs/brand.md + componentele, în @layer components
   layouts/Base.astro    ← head, navigație, subsol, fallback-ul IO
   components/           ← Figure (rama + legenda), SectionHead (index numerotat)
-  components/screens/   ← ecranele live: BlueprintDoc, BeforeAfter
+  components/screens/   ← ecranul live: BlueprintDoc (mostra livrabilului)
   pages/                ← index · blueprint · lab · contact · privacy
 ```
 
@@ -123,7 +123,7 @@ Navigația: **Blueprint · Lab · Contact** + butonul CTA.
 
 ⚠️ Ordinea nu e testată empiric nicăieri — e tipar convergent (Stark, Designjoy, NanoGlobals), nu dovadă. Măsurate sunt doar cele 10 secunde și avantajul copy-ului scurt (Unbounce: sub ~100 de cuvinte pe secțiune convertește ~2×).
 
-**`/blueprint` poartă toată greutatea de convingere** (ordinea Stark): durere → vis → ofertă (ce include / ce nu / prețul) → CTA + reversarea riscului lipită de el → **livrabilul-mostră arătat** (BlueprintDoc: „ăsta e ce primești") → toate cele 7 întrebări → al doilea CTA. Pagină lungă e OK aici; concizia e regulă de homepage.
+**`/blueprint` poartă toată greutatea de convingere** (ordinea Stark): durere (doar text — diagrama a fost scoasă) → vis → ofertă (ce include / ce nu / prețul) → CTA + reversarea riscului lipită de el → **livrabilul-mostră arătat** (BlueprintDoc: „ăsta e ce primești") → toate cele 7 întrebări → al doilea CTA. Pagină lungă e OK aici; concizia e regulă de homepage.
 
 **Comenzi:** `npm run dev` · `npm run build` · `npm run preview`
 

@@ -49,9 +49,9 @@ FIG. 01 · BLUEPRINT — FUNCTIONAL SPECIFICATION
 Deliverable · sample — Document, 24 pp. · 2026
 ```
 
-Ecranele **sunt cod care rulează, nu capturi** — pentru un studio de software, adevărat într-un fel în care o poză nu e. Diagramele rămân SVG scris de mână, inline, fără librărie.
+Ecranele **sunt cod care rulează, nu capturi** — pentru un studio de software, adevărat într-un fel în care o poză nu e. **Diagramele au fost scoase de pe site** (decizie utilizator, 2026-08-24) — singurul ecran rămas e documentul BlueprintDoc.
 
-> ⚠️ **Capcană Astro (rămâne valabilă):** un bloc `<style>` în `<defs>` într-o componentă `.astro` e extras și scopat — selectorii nu mai ajung la SVG. Stilurile SVG stau ca **atribute de prezentare**, răspândite din obiecte JS. Vezi `BeforeAfter.astro`.
+> ⚠️ **Capcană Astro (rămâne valabilă dacă revin ecrane SVG):** un bloc `<style>` în `<defs>` într-o componentă `.astro` e extras și scopat — selectorii nu mai ajung la SVG. Stilurile SVG stau ca **atribute de prezentare**, răspândite din obiecte JS.
 
 **Câmpul `kind` al legendei are exact trei valori. Nu e text liber.** Vine din `copy.kinds`:
 
@@ -134,7 +134,7 @@ Sistemul din v5 se păstrează integral (era deja corect):
 | Secvența de deschidere | Cinci elemente din hero, decalaj 70ms, sub o secundă, doar pe homepage. `[data-seq]` / `[data-seq-i]`. | **0 KB** |
 | `animation-timeline: view()` | Aparițiile `.rise`. Rulează în compozitor, nu atinge INP. | **0 KB** |
 
-Un `IntersectionObserver` de ~250 de octeți în `Base.astro` preia `.rise` unde `animation-timeline` lipsește. **Deriva plăcilor a murit odată cu plăcile.**
+Un `IntersectionObserver` de ~250 de octeți în `Base.astro` preia `.rise` unde `animation-timeline` lipsește. **Deriva plăcilor a murit odată cu plăcile.** Excepția de asamblare pentru diagrama Before/After a fost anulată odată cu diagrama (2026-08-24) — regula „nimic care se construiește pe ecran" rămâne fără excepții.
 
 Reveal-urile se retunează subtil: opacitate + 10px, nu 16px.
 

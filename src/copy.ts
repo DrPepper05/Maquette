@@ -119,7 +119,6 @@ export const copy = {
       label: 'The problem',
       h: "Software projects don't fail in the coding.",
       p: 'They fail at the start, when nobody has written down clearly what needs to exist. It begins with a conversation and a rough estimate, and three months later the unspoken assumptions surface. That is why the first thing we sell is not code.',
-      fig: { title: 'Before / After — the order flow', tech: 'Hand-written SVG · 2026' },
     },
 
     get: {
@@ -304,17 +303,6 @@ export const copy = {
         'It does not issue the invoice; it only prepares the data for it',
         'It has no mobile app',
       ],
-    },
-    flow: {
-      bar: 'Diagnostic · the order flow', side: 'Before / After',
-      before: 'BEFORE', after: 'AFTER',
-      orders: 'ORDERS', erp: 'ERP', stockBad: 'STOCK XLS', stock: 'STOCK',
-      quotes: 'QUOTES', invoices: 'INVOICES', bus: 'BUS', decide: 'DECIDES',
-      person: '1 PERSON', personSub: 'copies everything',
-      eManual: 'copied by hand', eRetyped: 're-entered', eAuto: 'automatic',
-      sumBefore: '≈ 12 H / WEEK', sumBeforeSub: 'lost to re-entry',
-      sumAfter: '≈ 2 H / WEEK', sumAfterSub: 'decisions only',
-      hint: '← drag sideways',
     },
   },
 } as const;

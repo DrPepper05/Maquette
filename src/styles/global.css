@@ -147,7 +147,7 @@
   /* ── mișcarea 2: figura — rama întunecată + legenda mono ── */
   .figure { margin: 0; }
   .figure .screen {
-    /* remapăm tokenii de text pe întuneric; stilurile .doc/.dgm rămân neschimbate */
+    /* remapăm tokenii de text pe întuneric; stilurile .doc rămân neschimbate */
     --hi: var(--scr-hi); --mid: var(--scr-mid); --low: var(--scr-low);
     --edge: var(--scr-edge); --red: var(--scr-red);
     background: var(--scr-bg); color: var(--scr-hi);
@@ -218,18 +218,6 @@
   .doc .out li { color: var(--mid); font-size: 12.5px; padding-left: 16px; position: relative; }
   .doc .out li::before { content: "—"; position: absolute; left: 0; color: var(--low); }
 
-  /* — diagrama: derulare proprie, nu micșorare până devine ilizibilă — */
-  .dgm { padding: 26px 22px 22px; overflow-x: auto; }
-  .dgm svg { width: 100%; height: auto; display: block; min-width: 680px; }
-  .dgm-hint { display: none; }
-  @media (max-width: 900px) {
-    .dgm { padding: 20px 0 18px 18px; }
-    .dgm-hint {
-      display: block; margin: 12px 18px 0;
-      font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .12em;
-      text-transform: uppercase; color: var(--low);
-    }
-  }
 }
 
 /* ═══ MIȘCAREA — totul nativ, ~250 de octeți de JS (fallback-ul IO). ═══ */

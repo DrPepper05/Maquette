@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import SectionHead from '../components/SectionHead.astro';
 import Figure from '../components/Figure.astro';
-import BeforeAfter from '../components/screens/BeforeAfter.astro';
 import BlueprintDoc from '../components/screens/BlueprintDoc.astro';
 import { copy, routes } from '../copy';
 const t = copy.blueprint;
@@ -25,16 +24,11 @@ const t = copy.blueprint;
     </dl>
   </section>
 
-  <!-- ── 01 · Durerea — diagrama e durerea făcută vizibilă ── -->
+  <!-- ── 01 · Durerea ── -->
   <section class="wrap sec rise">
     <SectionHead index="01" title={t.pain.label} />
     <h2 class="t-h2 max-w-[22ch]">{t.pain.h}</h2>
     <p class="mt-6 prose-w" style="color: var(--mid)">{t.pain.p}</p>
-    <div class="mt-12">
-      <Figure index="01" title={t.pain.fig.title} kind="demo" tech={t.pain.fig.tech}>
-        <BeforeAfter />
-      </Figure>
-    </div>
   </section>
 
   <!-- ── 02 · Ce primești — cinci livrabile ── -->
@@ -85,7 +79,7 @@ const t = copy.blueprint;
     <SectionHead index="05" title={t.sample.label} />
     <h2 class="t-h2">{t.sample.h}</h2>
     <div class="mt-10 max-w-[720px]">
-      <Figure index="02" title={t.sample.fig.title} kind="deliverable" tech={t.sample.fig.tech}>
+      <Figure index="01" title={t.sample.fig.title} kind="deliverable" tech={t.sample.fig.tech}>
         <BlueprintDoc />
       </Figure>
     </div>
