@@ -7,6 +7,13 @@ interface Props { route: RouteKey; title: string; desc: string; noindex?: boolea
 const { route, title, desc, noindex = false } = Astro.props;
 const site = 'https://maquette.ro';
 const t = copy;
+
+/* Mobilierul documentului: cod per pagină + data reviziei, din build. */
+const docCodes: Record<RouteKey, string> = {
+  home: 'MQ-DOC-001', blueprint: 'MQ-DOC-002', lab: 'MQ-DOC-003',
+  contact: 'MQ-DOC-004', privacy: 'MQ-DOC-005',
+};
+const rev = new Date().toISOString().slice(0, 10);
 ---
 <html lang="en">
 <head>
@@ -29,15 +36,16 @@ const t = copy;
 </head>
 <body>
 
-<header class="border-b" style="border-color: var(--hairline)">
+<header class="site-head">
   <div class="wrap flex items-center justify-between gap-6 py-5">
-    <a href={routes.home} class="text-[18px] font-bold tracking-[-.02em]">
+    <a href={routes.home} class="vt-mark text-[18px] font-bold tracking-[-.02em]">
       Maquette<span style="color: var(--red)">.</span>
     </a>
 
-    <nav class="hidden md:flex items-center gap-8">
+    <nav class="vt-nav hidden md:flex items-center gap-8">
       {t.nav.map(([key, label]) => (
-        <a href={routes[key]} class="text-[14.5px] transition-colors"
+        <a href={routes[key]} class="nav-lnk text-[14.5px]"
+           aria-current={route === key ? 'page' : undefined}
            style={route === key ? 'color: var(--red)' : 'color: var(--mid)'}>{label}</a>
       ))}
     </nav>
@@ -47,19 +55,39 @@ const t = copy;
 
   <nav class="md:hidden wrap flex flex-wrap gap-5 pb-4">
     {t.nav.map(([key, label]) => (
-      <a href={routes[key]} class="text-[14px]"
+      <a href={routes[key]} class="nav-lnk text-[14px]"
+         aria-current={route === key ? 'page' : undefined}
          style={route === key ? 'color: var(--red)' : 'color: var(--mid)'}>{label}</a>
     ))}
   </nav>
+
+  <div class="prog" aria-hidden="true"></div>
 </header>
+
+<div class="wrap docline" aria-hidden="true">
+  <span>{docCodes[route]} · Maquette Studio</span>
+  <span class="tabular">Rev A · {rev}</span>
+</div>
 
 <main><slot /></main>
 
 <footer class="border-t" style="border-color: var(--hairline); margin-top: var(--sec)">
-  <div class="wrap py-14 grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
+  <div class="wrap py-14 grid gap-x-14 gap-y-10 md:grid-cols-[1.2fr_1.2fr_1fr]">
     <div class="grid gap-3 content-start">
       <span class="text-[18px] font-bold tracking-[-.02em]">Maquette<span style="color: var(--red)">.</span></span>
       <p class="text-[13.5px] max-w-[34ch]" style="color: var(--mid)">{t.footer.brandNote}</p>
+    </div>
+
+    <div class="grid content-start">
+      <span class="lbl pb-2">{t.footer.contentsLabel}</span>
+      {t.footer.contents.map(([key, label], i) => (
+        <a href={routes[key]} class="toc-row">
+          <span class="no">{String(i + 1).padStart(2, '0')}</span>
+          <span>{label}</span>
+          <i class="dots" aria-hidden="true"></i>
+          <span class="path">{routes[key]}</span>
+        </a>
+      ))}
     </div>
 
     <div class="grid gap-1.5 text-[13px] content-start" style="color: var(--mid)">
@@ -67,10 +95,6 @@ const t = copy;
       <span class="tabular">{t.footer.cui}</span>
       <span class="tabular">{t.footer.onrc}</span>
       <span>{t.footer.seat}</span>
-    </div>
-
-    <div class="grid gap-1.5 text-[13px] content-start" style="color: var(--mid)">
-      <a href={routes.privacy} class="hover:text-[var(--ink)]">{t.footer.privacy}</a>
       <div class="flex gap-4 pt-2">
         <a href="https://anpc.ro" rel="noopener" target="_blank">{t.footer.anpc}</a>
         <a href="https://ec.europa.eu/consumers/odr" rel="noopener" target="_blank">{t.footer.sol}</a>

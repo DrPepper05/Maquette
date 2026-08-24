@@ -1,9 +1,12 @@
 ---
 /** Mișcarea de design nr. 1: antetul de secțiune numerotat, ca într-un
- *  document de specificație. Index mono roșu + titlu mono + hairline. */
+ *  document de specificație — index mono roșu + titlu mono + hairline —
+ *  plus același numeral ca filigran uriaș în spatele conținutului.
+ *  Secțiunea-părinte are nevoie de .sec (position: relative). */
 interface Props { index: string; title: string; }
 const { index, title } = Astro.props;
 ---
+<span class="sec-mark" aria-hidden="true">{index}</span>
 <div class="sec-head">
   <span class="idx" aria-hidden="true">{index}</span>
   <h2 class="ttl">{title}</h2>

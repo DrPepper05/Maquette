@@ -31,6 +31,11 @@ export const copy = {
     title: 'Maquette — software studio',
     desc: 'We build web apps and automations for companies that have outgrown spreadsheets. We start with the model: a fixed-price Blueprint before anything big.',
     kicker: 'First the model. Then the system.',
+    /* Titlul se randează în trei bucăți: cuvântul din mijloc e îmbinarea mono —
+       un singur cuvânt, maxim, pe titlu (docs/brand.md § Mișcările). */
+    h1a: 'We build web apps and automations for companies that have outgrown ',
+    h1mono: 'spreadsheets',
+    h1b: '.',
     h1: 'We build web apps and automations for companies that have outgrown spreadsheets.',
     lede: 'We start with the model, not the code — a fixed-price Blueprint before anything big.',
     heroLink: 'Talk to us',
@@ -86,6 +91,9 @@ export const copy = {
       ],
       exhibit: 'The third exhibit is this site — static, hand-written, about 250 bytes of JavaScript.',
       link: 'See the Lab',
+      /* Ștampila onestității — o singură instanță pe site. Se actualizează
+         când realitatea se schimbă; nu se șterge cât timp e adevărată. */
+      stamp: ['Delivered projects', '00', 'updated Aug 2026'],
     },
 
     /* 05 — o singură obiecție, cea care blochează totul, fix înainte de CTA. */
@@ -274,6 +282,13 @@ export const copy = {
   },
 
   footer: {
+    contentsLabel: 'Contents',
+    contents: [
+      ['blueprint', 'Blueprint'],
+      ['lab', 'Lab'],
+      ['contact', 'Contact'],
+      ['privacy', 'Privacy'],
+    ] as [RouteKey, string][],
     legalName: 'EUDAIMONIA AI TECH S.R.L.',
     cui: 'VAT/CUI 52005701',
     onrc: 'J__/____/____',           /* de completat de utilizator — blocant de lansare */

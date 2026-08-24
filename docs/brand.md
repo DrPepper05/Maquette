@@ -28,18 +28,28 @@ Site-ul împrumută gramatica vizuală a propriului livrabil: secțiuni numerota
 
 ---
 
-## 2. Cele trei mișcări de design — listă închisă
+## 2. Mișcările de design — ficțiunea documentului, mobilată complet
 
-Nu se adaugă a patra. Când o pagină pare goală, se lucrează la tipografie și spațiere, nu se inventează decor.
+Revizuit 2026-08-24, după cercetarea „max quality": site-urile memorabile din registrul ăsta (U.S. Graphics Company mai presus de toate) câștigă **terminând conceptul de document, nu adăugând evenimente vizuale**. Mișcările de mai jos sunt lista închisă. Când o pagină pare goală, se lucrează la tipografie și spațiere, nu se inventează decor.
+
+**Mobilierul documentului** (toate în mono, toate adevărate):
+- **Cod de document + revizie** pe fiecare pagină: `MQ-DOC-002 · REV {data build-ului}` — data vine din build, nu e decor.
+- **Rigla de progres**: header sticky cu un hairline care se umple cu roșu pe măsură ce documentul e citit (`animation-timeline: scroll()`, 0 KB).
+- **Cuprins cu puncte de ghidaj** în subsol — dispozitivul de încredere al cărții tipărite.
+- **Semne de registru (crop marks)** la colțurile figurilor.
+- **Ștampila onestității** — o singură instanță pe site, rotită, chenar roșu: `DELIVERED PROJECTS · 00`. Zero-ul e cel mai onest lucru de pe pagină; ștampila îl face memorabil. Se actualizează când realitatea se schimbă.
+- **Numeralul-filigran**: indexul secțiunii, uriaș (Figtree 300, cerneală la ~6%), în spatele conținutului.
+- **Un singur bloc roșu pe pagină**: CTA-ul de pe homepage și secțiunea de preț de pe `/blueprint` sunt full-bleed `#B34530` cu text de hârtie. Restul paginii ține disciplina — de-aia detonează blocul. Niciodată două pe aceeași pagină.
+- **Îmbinarea mono în titlu**: un singur cuvânt pe titlu, maxim, setat în JetBrains Mono în interiorul display-ului Figtree.
 
 **1. Secțiuni numerotate ca un document de specificație.**
-Fiecare secțiune se deschide cu un index mono roșu + titlul mono al secțiunii + o linie subțire pe toată lățimea:
+Fiecare secțiune se deschide cu un index mono roșu + titlul mono al secțiunii + o linie subțire pe toată lățimea, iar același index apare ca filigran uriaș în spatele conținutului:
 
 ```
 01 — MECHANISM ─────────────────────────────────────
 ```
 
-Implementat în `SectionHead.astro`. Numerotarea e continuă pe pagină (01–06 pe homepage).
+Implementat în `SectionHead.astro`. Numerotarea e continuă pe pagină.
 
 **2. Figuri întunecate cu ecrane live.**
 `Figure.astro`: ramă `--scr-bg` cu colțuri rotunjite, conținut = componentă din `screens/`, legendă mono dedesubt:
@@ -61,9 +71,9 @@ Ecranele **sunt cod care rulează, nu capturi** — pentru un studio de software
 | `Capability demonstration` | Construit de noi ca să arătăm ce știm |
 | `Delivered project` | Muncă livrată, cu acord scris. **Încă nefolosită.** |
 
-**3. Roșul doar ca punctuație.**
-Unde are voie roșul — listă închisă: indexul de secțiune · **un singur buton primar pe ecran** · sublinierea linkurilor la hover · punctul din wordmark · accentele din interiorul ecranelor întunecate.
-**Nu are voie:** titluri, text curent, fundaluri mari, chenare.
+**3. Roșul ca punctuație — plus o singură detonare pe pagină.**
+Unde are voie roșul — listă închisă: indexul de secțiune · **un singur buton primar pe ecran** · sublinierea linkurilor la hover · punctul din wordmark · accentele din interiorul ecranelor întunecate · rigla de progres · chenarul ștampilei · `::selection` (fundal roșu, text de hârtie) · **și exact un bloc full-bleed roșu pe pagină** (CTA-ul de pe homepage; prețul pe `/blueprint`).
+**Nu are voie:** titluri, text curent, al doilea bloc pe aceeași pagină.
 
 ---
 

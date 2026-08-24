@@ -30,7 +30,7 @@ export default defineConfig({
         provider: fontProviders.google(),
         name: 'Figtree',
         cssVariable: '--font-figtree',
-        weights: [400, 600, 700],
+        weights: [300, 400, 600, 700],
         styles: ['normal'],
         subsets: ['latin'],
         fallbacks: ['ui-sans-serif', 'system-ui', 'sans-serif'],

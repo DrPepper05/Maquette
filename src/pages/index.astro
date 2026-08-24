@@ -9,7 +9,7 @@ const t = copy.home;
   <!-- ── Hero — ce facem și pentru cine, în 10 secunde ── -->
   <section class="wrap" data-seq style="padding-top: clamp(72px, 10vw, 140px)">
     <p class="lbl" data-seq-i>{t.kicker}</p>
-    <h1 class="t-display prose-w mt-6 max-w-[24ch]" data-seq-i>{t.h1}</h1>
+    <h1 class="t-display prose-w mt-6 max-w-[24ch]" data-seq-i>{t.h1a}<span class="h1-mono">{t.h1mono}</span>{t.h1b}</h1>
     <p class="lede prose-w mt-7 max-w-[52ch]" data-seq-i>{t.lede}</p>
     <div class="flex flex-wrap items-center gap-7 mt-10" data-seq-i>
       <a href={routes.blueprint} class="btn">{copy.cta}</a>
@@ -55,7 +55,15 @@ const t = copy.home;
   <!-- ── 03 · Dovada — etichetele de stadiu trebuie să rămână adevărate ── -->
   <section class="wrap sec rise">
     <SectionHead index="03" title={t.proof.label} />
-    <h3 class="t-h2 max-w-[24ch]">{t.proof.h}</h3>
+    <div class="flex flex-wrap items-start justify-between gap-8">
+      <h3 class="t-h2 max-w-[24ch]">{t.proof.h}</h3>
+      <!-- ștampila onestității — singura instanță de pe site -->
+      <div class="stamp mt-2" role="note">
+        <span>{t.proof.stamp[0]}</span>
+        <b>{t.proof.stamp[1]}</b>
+        <span>{t.proof.stamp[2]}</span>
+      </div>
+    </div>
     <div class="grid gap-x-14 gap-y-10 md:grid-cols-2 mt-10">
       {t.proof.cards.map((c) => (
         <article class="row-line">
@@ -80,11 +88,13 @@ const t = copy.home;
     <p class="mt-6 prose-w" style="color: var(--mid)">{t.objection.p}</p>
   </section>
 
-  <!-- ── CTA final ── -->
-  <section class="wrap sec rise">
-    <h2 class="t-h2 max-w-[20ch]">{t.end.h}</h2>
-    <p class="mt-5 prose-w" style="color: var(--mid)">{t.end.p}</p>
-    <a href={routes.contact} class="btn mt-9">{copy.cta}</a>
+  <!-- ── CTA final — singurul bloc roșu de pe pagină ── -->
+  <section class="block-red sec rise">
+    <div class="wrap">
+      <h2 class="t-h2 max-w-[20ch]">{t.end.h}</h2>
+      <p class="mt-5 prose-w" style="color: var(--mid)">{t.end.p}</p>
+      <a href={routes.contact} class="btn btn-paper mt-9">{copy.cta}</a>
+    </div>
   </section>
 
 </Base>

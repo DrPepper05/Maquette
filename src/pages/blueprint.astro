@@ -58,18 +58,21 @@ const t = copy.blueprint;
     </dl>
   </section>
 
-  <!-- ── 04 · Prețul + reversarea riscului, lipite (tiparul Stark) ── -->
-  <section class="wrap sec rise">
-    <SectionHead index="04" title={t.price.label} />
-    <div class="grid gap-12 lg:grid-cols-[auto_1fr] items-start">
-      <p class="t-display tabular" style="font-size: clamp(56px, 8vw, 104px)">{t.price.dim}</p>
-      <div class="max-w-[52ch] lg:pt-3">
-        <p class="text-[16.5px] font-semibold">{t.price.p}</p>
-        <div class="row-line mt-7">
-          <h3 class="t-h3 !text-[17px]">{t.price.keepH}</h3>
-          <p class="mt-2 text-[15px]" style="color: var(--mid)">{t.price.keepP}</p>
+  <!-- ── 04 · Prețul + reversarea riscului, lipite (tiparul Stark) ──
+       Singurul bloc roșu de pe pagină: cifra detonează aici. -->
+  <section class="block-red sec rise">
+    <div class="wrap">
+      <SectionHead index="04" title={t.price.label} />
+      <div class="grid gap-12 lg:grid-cols-[auto_1fr] items-start">
+        <p class="t-display tabular" style="font-size: clamp(56px, 8vw, 104px)">{t.price.dim}</p>
+        <div class="max-w-[52ch] lg:pt-3">
+          <p class="text-[16.5px] font-semibold">{t.price.p}</p>
+          <div class="row-line mt-7" style="border-color: var(--hairline)">
+            <h3 class="t-h3 !text-[17px]">{t.price.keepH}</h3>
+            <p class="mt-2 text-[15px]" style="color: var(--mid)">{t.price.keepP}</p>
+          </div>
+          <a href={routes.contact} class="btn btn-paper mt-9">{copy.cta}</a>
         </div>
-        <a href={routes.contact} class="btn mt-9">{copy.cta}</a>
       </div>
     </div>
   </section>

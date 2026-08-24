@@ -64,10 +64,12 @@ Motivul e practic, nu moral: piața B2B din România e mică și oamenii vorbesc
 > v1 hârtie de calc și axonometrie („site de construcții") · v2 obiect 3D condus de scroll · v3 același obiect randat offline („oribil") · v4 întuneric curat cu carduri (generic) · **v5 peretele galeriei cu plăci montate** — respins de utilizator în bloc: „nu-mi place structura, designul, mesajul; mesajul e fără sens și stângaci". Aglomerat: inventar, cheie de etichete, carteluri, parallax — totul concura cu totul.
 > **Cauza comună la v1–v3: am ilustrat numele.** La v5: prea multe dispozitive. Combinația validată de dovezi rămâne **meșteșug înalt + complexitate joasă** *(Kuric et al., 2023)*.
 
-**Cele trei mișcări de design — listă închisă, nu se adaugă a patra:**
-1. **Secțiuni numerotate ca un document de specificație** — index mono (`01 — MECHANISM`) + linie subțire pe toată lățimea.
-2. **Figuri întunecate cu ecrane live** — `Figure.astro`: ramă întunecată rotunjită, legendă mono (`FIG. 01 · DELIVERABLE — SAMPLE`). Ecranele sunt HTML/SVG care rulează, nu capturi. Câmpul `kind` păstrează exact trei valori (`Deliverable · sample`, `Capability demonstration`, `Delivered project`) — ultima nu se folosește fără acord scris de publicare.
-3. **Roșul doar ca punctuație** — indexuri de secțiune, un singur buton primar pe ecran, sublinierea linkurilor, punctul din wordmark. Atât.
+**Mișcările de design — „ficțiunea documentului, mobilată complet" (revizuit 2026-08-24):**
+1. **Secțiuni numerotate** — index mono roșu + titlu mono + hairline, plus același index ca **filigran uriaș** (Figtree 300, cerneală ~6%) în spatele conținutului.
+2. **Figuri întunecate cu ecrane live** — `Figure.astro`: ramă întunecată, **crop marks** la colțuri, legendă mono. Câmpul `kind` păstrează exact trei valori; `delivered` nu se folosește fără acord scris.
+3. **Roșul ca punctuație + o singură detonare pe pagină** — un bloc full-bleed roșu, exact unul: CTA-ul pe homepage, prețul pe `/blueprint`. Plus `::selection` roșie, rigla de progres, ștampila.
+4. **Mobilierul documentului** — cod de document + data reviziei (din build) pe fiecare pagină, header sticky cu riglă de progres, cuprins cu puncte de ghidaj în subsol, **ștampila onestității** `DELIVERED PROJECTS · 00` (o instanță, se actualizează când realitatea se schimbă), un cuvânt mono îmbinat în titlul hero.
+Detalii și rațiunea (cercetarea U.S. Graphics / „finish the document fiction") în `docs/brand.md`.
 
 **Paletă:** hârtie `#F4F2ED` · blocuri `#ECE9E2` · cerneală `#141412` · secundar `#5C5A54` · linii `#D8D5CC` · roșu `#B34530` (5,7:1 pe hârtie — are voie să fie text la ≥14px). În rame `.screen`: fundal `#0F1013`, text `#F2F0EC`/`#8B8F94`, roșu `#D9573A`.
 
