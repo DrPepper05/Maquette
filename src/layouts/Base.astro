@@ -8,12 +8,6 @@ const { route, title, desc, noindex = false } = Astro.props;
 const site = 'https://maquette.ro';
 const t = copy;
 
-/* Mobilierul documentului: cod per pagină + data reviziei, din build. */
-const docCodes: Record<RouteKey, string> = {
-  home: 'MQ-DOC-001', blueprint: 'MQ-DOC-002', lab: 'MQ-DOC-003',
-  contact: 'MQ-DOC-004', privacy: 'MQ-DOC-005',
-};
-const rev = new Date().toISOString().slice(0, 10);
 ---
 <html lang="en">
 <head>
@@ -63,11 +57,6 @@ const rev = new Date().toISOString().slice(0, 10);
 
   <div class="prog" aria-hidden="true"></div>
 </header>
-
-<div class="wrap docline" aria-hidden="true">
-  <span>{docCodes[route]} · Maquette Studio</span>
-  <span class="tabular">Rev A · {rev}</span>
-</div>
 
 <main><slot /></main>
 

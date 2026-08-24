@@ -92,15 +92,6 @@
     transform-origin: left; scale: 0 1;   /* fără suport rămâne invizibilă */
   }
 
-  /* codul de document + revizia — data vine din build, nu e decor */
-  .docline {
-    display: flex; justify-content: space-between; gap: 16px;
-    padding-top: 14px;
-    font-family: var(--font-mono); font-size: 10px; font-weight: 500;
-    letter-spacing: .14em; text-transform: uppercase; color: var(--mid);
-  }
-  .docline span:last-child { white-space: nowrap; }
-
   /* linkul de navigație: sublinierea se trage ca o linie de cerneală */
   .nav-lnk {
     padding-bottom: 3px;

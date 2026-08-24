@@ -33,7 +33,7 @@ Site-ul împrumută gramatica vizuală a propriului livrabil: secțiuni numerota
 Revizuit 2026-08-24, după cercetarea „max quality": site-urile memorabile din registrul ăsta (U.S. Graphics Company mai presus de toate) câștigă **terminând conceptul de document, nu adăugând evenimente vizuale**. Mișcările de mai jos sunt lista închisă. Când o pagină pare goală, se lucrează la tipografie și spațiere, nu se inventează decor.
 
 **Mobilierul documentului** (toate în mono, toate adevărate):
-- **Cod de document + revizie** pe fiecare pagină: `MQ-DOC-002 · REV {data build-ului}` — data vine din build, nu e decor.
+- ~~Cod de document + revizie pe fiecare pagină~~ — **scos la cererea utilizatorului (2026-08-24): „useless", strica centrarea hero-ului.** Nu se readuce fără cerere explicită.
 - **Rigla de progres**: header sticky cu un hairline care se umple cu roșu pe măsură ce documentul e citit (`animation-timeline: scroll()`, 0 KB).
 - **Cuprins cu puncte de ghidaj** în subsol — dispozitivul de încredere al cărții tipărite.
 - **Semne de registru (crop marks)** la colțurile figurilor.
