@@ -52,7 +52,7 @@
     background: var(--paper);
     color: var(--ink);
     font-family: var(--font-sans);
-    font-size: 16.5px; line-height: 1.6;
+    font-size: 17px; line-height: 1.65;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
@@ -127,8 +127,8 @@
     font-size: clamp(27px, 3.6vw, 46px); font-weight: 700;
     letter-spacing: -.028em; line-height: 1.14;
   }
-  .t-h3 { font-size: 20px; font-weight: 600; letter-spacing: -.016em; }
-  .lede { color: var(--mid); font-size: clamp(16px, 1.3vw, 19px); line-height: 1.6; }
+  .t-h3 { font-size: 22px; font-weight: 600; letter-spacing: -.016em; }
+  .lede { color: var(--mid); font-size: clamp(17px, 1.5vw, 21px); line-height: 1.6; }
   .tabular { font-variant-numeric: tabular-nums; }
 
   /* ── mișcarea 1: antetul de secțiune numerotat ──
@@ -190,7 +190,38 @@
   .fld:focus { border-color: var(--red); outline: none; }
 
   /* ── linii de listă pe hairline (livrabile, întrebări, zile) ── */
-  .row-line { padding-block: 18px; border-top: 1px solid var(--hairline); }
+  .row-line { padding-block: 22px; border-top: 1px solid var(--hairline); }
+
+  /* ── rate card-ul: meniul de scenarii cu prețuri ──
+     Ce trebuie văzut e mare: scenariul și cifra. Explicația e nota de sub. */
+  .rate { border-bottom: 1px solid var(--hairline); }
+  .rate-row {
+    display: flex; align-items: baseline; gap: 14px;
+    padding-block: 24px; border-top: 1px solid var(--hairline);
+  }
+  .rate-row .what { font-size: clamp(17px, 1.6vw, 20px); font-weight: 600; letter-spacing: -.012em; }
+  .rate-row .dots {
+    flex: 1; min-width: 40px; height: 2px; align-self: center;
+    background: radial-gradient(circle, rgb(20 20 18 / .32) .8px, transparent .95px)
+                repeat-x left center / 8px 2px;
+  }
+  .rate-row .price {
+    font-family: var(--font-mono); font-size: clamp(16px, 1.5vw, 19px);
+    font-weight: 600; letter-spacing: -.02em; white-space: nowrap;
+    display: grid; justify-items: end; gap: 2px;
+  }
+  .rate-row .price em {
+    font-style: normal; font-size: 11px; font-weight: 500;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--mid);
+  }
+  .rate-custom .price { color: var(--red); }
+  .rate-custom:hover .what { color: var(--red); }
+  @media (max-width: 640px) {
+    .rate-row { flex-wrap: wrap; gap: 6px 14px; }
+    .rate-row .dots { display: none; }
+    .rate-row .what { width: 100%; }
+    .rate-row .price { justify-items: start; }
+  }
 
   /* ── mișcarea 2: figura — rama întunecată + legenda mono ──
      .fig-frame poartă crop marks la colțuri: pregătit de tipar. */

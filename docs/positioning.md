@@ -131,6 +131,8 @@ Deci: homepage-ul duce mecanismul — *cinci zile, preț fix, se scade integral 
 
 De ce: orice „de la X €" publicat acum te blochează șase luni. Dacă pui un preț mic, nu mai poți urca fără să pari inconsecvent. Dacă pui unul mare pe care nu-l poți susține încă, ori nu te sună nimeni, ori te sună, accepți mai puțin, și prețul de pe site devine o minciună. Blueprint-ul e singurul care merită afișat, pentru că e produs fix, angajament mic și filtrează exact cine trebuie.
 
+> **Notă rate-card (2026-08-24):** pe homepage prețurile se afișează ca meniu de scenarii („site de prezentare cu CMS: X–Y € · catalog cu panou de administrare: Y–Z €…"), la cererea utilizatorului. Sub-intervalele sunt **împărțiri ale intervalelor Treapta 1** de mai jos — capetele (1.200–2.000 / 800–1.500) nu se depășesc fără decizie de business. Rândul final e mereu catch-all: „ceva specific → discuție de 30 de minute".
+
 ### Treapta 1 — acum → primele 2 case study-uri (≈3 luni)
 
 | | Preț de lucru (nepublicat) |

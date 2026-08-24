@@ -41,33 +41,27 @@ Site **doar în engleză**, pagini la rădăcină. Cinci rute:
 
 Titlul spune **ce + pentru cine**. Tagline-ul singur nu trece testul de 10 secunde (NN/g) — un vizitator nu află din el că e un studio de software pentru firme.
 
-### 02 — MECHANISM
+### 02 — WHAT WE BUILD · rate card *(revizuit 2026-08-24: meniu de prețuri, nu proză)*
 
-> ## Five days, a fixed price, and you know exactly what it will cost.
+> ## What we build, and what it typically costs.
 >
-> The Blueprint is the model of your project: a spec, an architecture, a clickable prototype and a phased estimate. You do it before committing to anything large.
+> | Presentation website, CMS included | €1,200 – 1,500 |
+> | Catalogue or client portal, with admin panel | €1,500 – 2,000 |
+> | Two systems connected — ERP ↔ website ↔ email | €800 – 1,100 · +€80/mo |
+> | Quotes, invoices and reports that run themselves | €1,100 – 1,500 · +€80/mo |
+> | Something specific — a configurator, 3D/AR, an unusual automation | **Talk to us** |
 >
-> - **Fixed price** — you know the figure up front, not after.
-> - **Deducted in full** — from the build, if it starts within 60 days.
-> - **The document stays yours** — even if you build with someone else.
+> Every figure is a typical scenario. The firm number comes after a 30-minute call — and it stays firm.
+
+Rândurile au puncte de ghidaj (ca la cuprins), prețul mare în mono. Sub-intervalele sunt împărțiri ale Treaptei 1 (positioning.md). Rândul catch-all acoperă și demo-ul AR trimis pe email.
+
+### 03 — THE BLUEPRINT *(comprimat: o propoziție, nu o secțiune grea — mecanismul complet stă pe /blueprint)*
+
+> ## Every build starts with a Blueprint: five days, a fixed price, and a document that stays yours even if you build elsewhere.
 >
 > [See what's in it →](/blueprint)
 
 Fără cifră — ancorarea rămâne regulă (vezi CLAUDE.md).
-
-### 03 — WHAT WE BUILD
-
-> ## Apps and websites
-> Web applications, catalogues, client portals, admin panels — with a CMS so you can edit it yourself, and real performance.
-> `A searchable catalogue with an admin panel, at a company of ~50 people: typically €1,200–2,000. The firm figure comes after a 30-minute call.`
->
-> ## Automations
-> We connect the systems that don't talk to each other today: ERP, website, email, spreadsheets. Sold in hours saved.
-> `Connecting the ERP to the website with automatic quotes: typically €800–1,500, plus €80/month for monitoring and upkeep.`
->
-> We also work on more specialised things — product configurators, 3D and AR visualisation, hardware integrations. If you have something unusual, ask.
-
-Ultima propoziție e linia de acoperire pentru demo-ul AR trimis pe email. Nu primește titlu, nu primește card.
 
 ### 04 — PROOF
 

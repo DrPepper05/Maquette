@@ -40,37 +40,30 @@ export const copy = {
     lede: 'We start with the model, not the code — a fixed-price Blueprint before anything big.',
     heroLink: 'Talk to us',
 
-    /* 02 — mecanismul. Fără cifră: 450 pe homepage ancorează
-       tot studioul la cea mai mică sumă pe care o ai. */
-    mech: {
-      label: 'Mechanism',
-      h: 'Five days, a fixed price, and you know exactly what it will cost.',
-      p: 'The Blueprint is the model of your project: a spec, an architecture, a clickable prototype and a phased estimate. You do it before committing to anything large.',
-      points: [
-        ['Fixed price', 'You know the figure up front, not after.'],
-        ['Deducted in full', 'From the build, if it starts within 60 days.'],
-        ['The document stays yours', 'Even if you build with someone else.'],
-      ] as [string, string][],
-      link: "See what's in it",
-    },
-
-    /* 03 — serviciile, cu intervale pe scenariu tipic (regula din CLAUDE.md). */
+    /* 01 — rate card: meniu de scenarii cu prețuri (feedback 2026-08-24).
+       Sub-intervalele împart Treapta 1 din positioning.md — capetele
+       1.200–2.000 / 800–1.500 nu se depășesc fără decizie de business. */
     build: {
       label: 'What we build',
-      items: [
-        {
-          h: 'Apps and websites',
-          p: 'Web applications, catalogues, client portals, admin panels — with a CMS so you can edit it yourself, and real performance.',
-          price: 'A searchable catalogue with an admin panel, at a company of ~50 people: typically €1,200–2,000. The firm figure comes after a 30-minute call.',
-        },
-        {
-          h: 'Automations',
-          p: "We connect the systems that don't talk to each other today: ERP, website, email, spreadsheets. Sold in hours saved.",
-          price: 'Connecting the ERP to the website with automatic quotes: typically €800–1,500, plus €80/month for monitoring and upkeep.',
-        },
-      ],
-      /* Linia de acoperire pentru demo-ul AR trimis pe email. Fără titlu, fără card. */
-      coverage: 'We also work on more specialised things — product configurators, 3D and AR visualisation, hardware integrations. If you have something unusual, ask.',
+      h: 'What we build, and what it typically costs.',
+      rows: [
+        ['Presentation website, CMS included', '€1,200 – 1,500', ''],
+        ['Catalogue or client portal, with admin panel', '€1,500 – 2,000', ''],
+        ['Two systems connected — ERP, website, email', '€800 – 1,100', '+ €80/month upkeep'],
+        ['Quotes, invoices and reports that run themselves', '€1,100 – 1,500', '+ €80/month upkeep'],
+      ] as [string, string, string][],
+      /* Rândul catch-all acoperă și demo-ul AR trimis pe email. */
+      customWhat: 'Something specific — a configurator, 3D and AR, an unusual automation',
+      customCta: 'Talk to us',
+      note: 'Every figure is a typical scenario. The firm number comes after a 30-minute call — and it stays firm.',
+    },
+
+    /* 02 — Blueprint-ul, comprimat la o propoziție. Mecanismul complet
+       stă pe /blueprint. Fără cifră: ancorarea rămâne regulă. */
+    mech: {
+      label: 'The Blueprint',
+      h: 'Every build starts with a Blueprint: five days, a fixed price, and a document that stays yours even if you build elsewhere.',
+      link: "See what's in it",
     },
 
     /* 04 — dovada. Etichetele de stadiu trebuie să rămână adevărate. */

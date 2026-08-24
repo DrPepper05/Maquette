@@ -17,39 +17,32 @@ const t = copy.home;
     </div>
   </section>
 
-  <!-- ── 01 · Mecanismul — fără cifră (ancorare, vezi CLAUDE.md) ── -->
+  <!-- ── 01 · Rate card — meniul de scenarii cu prețuri ── -->
   <section class="wrap sec rise">
-    <SectionHead index="01" title={t.mech.label} />
-    <div class="grid gap-12 lg:grid-cols-[1.2fr_1fr]">
-      <div>
-        <h3 class="t-h2 max-w-[22ch]">{t.mech.h}</h3>
-        <p class="mt-6 prose-w" style="color: var(--mid)">{t.mech.p}</p>
-        <a href={routes.blueprint} class="lnk mt-8">{t.mech.link}</a>
-      </div>
-      <dl class="content-start grid">
-        {t.mech.points.map(([dt, dd]) => (
-          <div class="row-line">
-            <dt class="font-semibold text-[15.5px]">{dt}</dt>
-            <dd class="m-0 mt-1 text-[14.5px]" style="color: var(--mid)">{dd}</dd>
-          </div>
-        ))}
-      </dl>
+    <SectionHead index="01" title={t.build.label} />
+    <h3 class="t-h2 max-w-[24ch]">{t.build.h}</h3>
+    <div class="rate mt-12">
+      {t.build.rows.map(([what, price, sub]) => (
+        <div class="rate-row">
+          <span class="what">{what}</span>
+          <i class="dots" aria-hidden="true"></i>
+          <span class="price tabular">{price}{sub && <em>{sub}</em>}</span>
+        </div>
+      ))}
+      <a href={routes.contact} class="rate-row rate-custom">
+        <span class="what">{t.build.customWhat}</span>
+        <i class="dots" aria-hidden="true"></i>
+        <span class="price">{t.build.customCta} →</span>
+      </a>
     </div>
+    <p class="mt-8 text-[15.5px] max-w-[60ch]" style="color: var(--mid)">{t.build.note}</p>
   </section>
 
-  <!-- ── 02 · Ce construim — intervale pe scenariu tipic ── -->
+  <!-- ── 02 · Blueprint-ul — o propoziție; mecanismul stă pe /blueprint ── -->
   <section class="wrap sec rise">
-    <SectionHead index="02" title={t.build.label} />
-    <div class="grid gap-x-14 gap-y-12 md:grid-cols-2">
-      {t.build.items.map((it) => (
-        <article>
-          <h3 class="t-h3">{it.h}</h3>
-          <p class="mt-3 text-[15.5px]" style="color: var(--mid)">{it.p}</p>
-          <p class="row-line mt-5 text-[14px] tabular" style="color: var(--ink)">{it.price}</p>
-        </article>
-      ))}
-    </div>
-    <p class="mt-12 text-[14.5px] max-w-[60ch]" style="color: var(--mid)">{t.build.coverage}</p>
+    <SectionHead index="02" title={t.mech.label} />
+    <h3 class="t-h2 max-w-[26ch]">{t.mech.h}</h3>
+    <a href={routes.blueprint} class="lnk mt-8">{t.mech.link}</a>
   </section>
 
   <!-- ── 03 · Dovada — etichetele de stadiu trebuie să rămână adevărate ── -->
@@ -71,12 +64,12 @@ const t = copy.home;
             <h4 class="t-h3">{c.name}</h4>
             <span class="lbl">{c.stage}</span>
           </div>
-          <p class="mt-3 text-[15px]" style="color: var(--mid)">{c.p}</p>
+          <p class="mt-3 text-[16px]" style="color: var(--mid)">{c.p}</p>
         </article>
       ))}
     </div>
     <div class="flex flex-wrap items-baseline justify-between gap-6 mt-10">
-      <p class="text-[14.5px] max-w-[48ch]" style="color: var(--mid)">{t.proof.exhibit}</p>
+      <p class="text-[15.5px] max-w-[48ch]" style="color: var(--mid)">{t.proof.exhibit}</p>
       <a href={routes.lab} class="lnk">{t.proof.link}</a>
     </div>
   </section>

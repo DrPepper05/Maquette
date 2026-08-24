@@ -29,14 +29,14 @@ const email = 'contact@maquette.ro';
             {p.blocks.map(([h, body]) => (
               <div class="row-line">
                 <h3 class="lbl">{h}</h3>
-                <p class="mt-2 text-[15px]">{body}</p>
+                <p class="mt-2 text-[16px]">{body}</p>
               </div>
             ))}
           </div>
 
           <div class="mt-8 pl-5 border-l-2 max-w-[64ch]" style="border-color: var(--hairline)">
             <h3 class="t-h3 !text-[16px]">{p.noteH}</h3>
-            <p class="mt-2 text-[14.5px]" style="color: var(--mid)">{p.noteP}</p>
+            <p class="mt-2 text-[15.5px]" style="color: var(--mid)">{p.noteP}</p>
           </div>
         </article>
       ))}
@@ -51,8 +51,8 @@ const email = 'contact@maquette.ro';
       <p class="mt-4" style="color: var(--mid)">{t.ask1P}</p>
       <a href={`mailto:${email}`} class="btn mt-8">{t.ask1Cta}</a>
 
-      <p class="row-line mt-12 text-[15px]" style="color: var(--mid)">{t.ask2}</p>
-      <p class="text-[15px] pt-4" style="color: var(--mid)">{t.ask3} <a href={`mailto:${email}`} class="lnk !text-[14px]">{email}</a></p>
+      <p class="row-line mt-12 text-[16px]" style="color: var(--mid)">{t.ask2}</p>
+      <p class="text-[16px] pt-4" style="color: var(--mid)">{t.ask3} <a href={`mailto:${email}`} class="lnk !text-[14px]">{email}</a></p>
     </div>
   </section>
 

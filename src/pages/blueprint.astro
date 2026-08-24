@@ -18,7 +18,7 @@ const t = copy.blueprint;
       {t.facts.map(([dt, dd]) => (
         <div class="pt-4">
           <dt class="lbl">{dt}</dt>
-          <dd class="m-0 mt-1.5 font-semibold text-[15.5px] tabular">{dd}</dd>
+          <dd class="m-0 mt-1.5 font-semibold text-[16.5px] tabular">{dd}</dd>
         </div>
       ))}
     </dl>
@@ -38,8 +38,8 @@ const t = copy.blueprint;
       {t.get.deliverables.map(([h, p], i) => (
         <li class="row-line grid gap-x-10 gap-y-1 md:grid-cols-[44px_240px_1fr]">
           <span class="lbl tabular pt-0.5">{String(i + 1).padStart(2, '0')}</span>
-          <h3 class="t-h3 !text-[17px]">{h}</h3>
-          <p class="text-[15px]" style="color: var(--mid)">{p}</p>
+          <h3 class="t-h3 !text-[18px]">{h}</h3>
+          <p class="text-[16px]" style="color: var(--mid)">{p}</p>
         </li>
       ))}
     </ol>
@@ -52,7 +52,7 @@ const t = copy.blueprint;
       {t.days.rows.map(([d, p]) => (
         <div class="row-line grid gap-x-10 gap-y-1 md:grid-cols-[120px_1fr]">
           <dt class="lbl pt-0.5">{d}</dt>
-          <dd class="m-0 text-[15.5px]">{p}</dd>
+          <dd class="m-0 text-[16.5px]">{p}</dd>
         </div>
       ))}
     </dl>
@@ -68,8 +68,8 @@ const t = copy.blueprint;
         <div class="max-w-[52ch] lg:pt-3">
           <p class="text-[16.5px] font-semibold">{t.price.p}</p>
           <div class="row-line mt-7" style="border-color: var(--hairline)">
-            <h3 class="t-h3 !text-[17px]">{t.price.keepH}</h3>
-            <p class="mt-2 text-[15px]" style="color: var(--mid)">{t.price.keepP}</p>
+            <h3 class="t-h3 !text-[18px]">{t.price.keepH}</h3>
+            <p class="mt-2 text-[16px]" style="color: var(--mid)">{t.price.keepP}</p>
           </div>
           <a href={routes.contact} class="btn btn-paper mt-9">{copy.cta}</a>
         </div>
@@ -94,14 +94,14 @@ const t = copy.blueprint;
     <div class="grid gap-x-14 gap-y-8 md:grid-cols-2">
       <ul class="m-0 p-0 list-none grid content-start">
         {t.fit.yes.map((li) => (
-          <li class="row-line text-[15px] pl-7 relative">
+          <li class="row-line text-[16px] pl-7 relative">
             <span class="absolute left-0 top-[19px] lbl" aria-hidden="true">—</span>{li}
           </li>
         ))}
       </ul>
       <ul class="m-0 p-0 list-none grid content-start">
         {t.fit.no.map((li) => (
-          <li class="row-line text-[15px] pl-7 relative" style="color: var(--mid)">
+          <li class="row-line text-[16px] pl-7 relative" style="color: var(--mid)">
             <span class="absolute left-0 top-[19px] lbl" aria-hidden="true">×</span>{li}
           </li>
         ))}
@@ -115,8 +115,8 @@ const t = copy.blueprint;
     <div class="grid max-w-[74ch]">
       {t.q.items.map(([q, a]) => (
         <div class="row-line">
-          <h3 class="t-h3 !text-[17px]">{q}</h3>
-          <p class="mt-2 text-[15px]" style="color: var(--mid)">{a}</p>
+          <h3 class="t-h3 !text-[18px]">{q}</h3>
+          <p class="mt-2 text-[16px]" style="color: var(--mid)">{a}</p>
         </div>
       ))}
     </div>

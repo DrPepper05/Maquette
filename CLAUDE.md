@@ -115,13 +115,15 @@ src/
 Navigația: **Blueprint · Lab · Contact** + butonul CTA.
 `/servicii` s-a pliat în homepage (secțiunea „What we build"); `/cum-lucram` s-a pliat în `/contact` (regulile de lucru + răspunsul la „câți sunteți?"). Vechile URL-uri `/ro/*` și `/en/*` au redirect în `astro.config.mjs`.
 
-**Ordinea secțiunilor pe homepage — 6, sub ~400 de cuvinte în total:**
+**Ordinea secțiunilor pe homepage — revizuit 2026-08-24 (feedback utilizator: „prea mult mecanism, vreau mai multe prețuri, mă pierd în text"):**
 1. **Hero** — ce facem și pentru cine, în 10 secunde *(NN/g)*. Tagline-ul e kicker, nu titlu.
-2. **Mecanismul** — Blueprint în trei propoziții, fără cifră.
-3. **Ce construim** — cele două servicii cu intervale pe scenariu tipic + propoziția de acoperire AR/3D.
-4. **Dovada** — două carduri de produs (Declutter, GigTim) cu etichete de stadiu adevărate + „al treilea exponat e site-ul ăsta".
-5. **O singură obiecție** — „unde sunt studiile de caz?", răspuns onest, fix înainte de CTA.
-6. **CTA.**
+2. **Ce construim — rate card**: meniu de scenarii concrete cu prețul fiecăruia, rânduri cu puncte de ghidaj, prețul mare în mono. Ultimul rând e mereu catch-all-ul: „ceva specific → 30 de minute, cifră fermă". Sub-intervalele sunt împărțiri ale intervalelor Treapta 1 din positioning.md — nu se depășesc capetele fără decizie de business.
+3. **Blueprint-ul** — o singură propoziție + link către `/blueprint`. Mecanismul complet trăiește acolo, nu pe homepage.
+4. **Dovada** — două carduri de produs cu etichete de stadiu adevărate + ștampila + „al treilea exponat e site-ul ăsta".
+5. **O singură obiecție** — „unde sunt studiile de caz?", fix înainte de CTA.
+6. **CTA** (blocul roșu).
+
+**Ierarhia textului:** ce trebuie văzut e mare (prețuri, afirmații-cheie, etichete de stadiu); explicațiile sunt scurte și secundare. Corp 17px+, ritm aerisit. Utilizatorul s-a pierdut în versiunea densă — nu se coboară înapoi.
 
 ⚠️ Ordinea nu e testată empiric nicăieri — e tipar convergent (Stark, Designjoy, NanoGlobals), nu dovadă. Măsurate sunt doar cele 10 secunde și avantajul copy-ului scurt (Unbounce: sub ~100 de cuvinte pe secțiune convertește ~2×).
 
