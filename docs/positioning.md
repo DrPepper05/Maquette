@@ -1,7 +1,9 @@
 # Maquette — Poziționare și ofertă
 
 > Document intern. Sursa de adevăr pentru tot ce se scrie pe site, în emailuri și în oferte.
-> Ultima actualizare: Pas 2.
+> Ultima actualizare: 2026-08-24 (redesign).
+
+> **Notă de limbă (2026-08-24):** site-ul se livrează **doar în engleză**, prin decizia utilizatorului. ICP-ul principal rămâne IMM-ul românesc (Segmentul A) — tensiune asumată: engleza servește direct Segmentul B și citește a competență pentru decidentul din Segmentul A. De revizuit dacă outreach-ul românesc suferă din cauza ei. Comunicarea directă (email, telefon, oferte) rămâne în română, după `docs/voice.md`.
 
 ---
 
@@ -9,12 +11,12 @@
 
 **RO**
 > Maquette e un studio de software care transformă idei neclare în sisteme care funcționează.
-> Începem cu macheta: două săptămâni, preț fix — specificație, arhitectură, prototip clicabil și un cost real.
+> Începem cu macheta: cinci zile, preț fix — specificație, arhitectură, prototip clicabil și un cost real.
 > Apoi o construim.
 
 **EN**
 > Maquette is a software studio that turns unclear ideas into working systems.
-> We start with the maquette: two weeks, fixed price — spec, architecture, a clickable prototype, and a real number.
+> We start with the maquette: five days, fixed price — spec, architecture, a clickable prototype, and a real number.
 > Then we build it.
 
 **Testul de 7 cuvinte** (ce trebuie să rămână în cap după ce închide tabul):

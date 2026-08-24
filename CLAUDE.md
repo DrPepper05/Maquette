@@ -2,6 +2,8 @@
 
 Site-ul și fațada firmei **EUDAIMONIA AI TECH S.R.L.**, care operează comercial sub numele **Maquette**.
 
+> **Redesign 2026-08-24.** Utilizatorul a respins integral versiunea „peretele galeriei" — structură, design, mesaj („mesajul e fără sens și stângaci"). Deciziile noi, luate explicit: site **doar în engleză**, **puține pagini scurte**, identitate vizuală **nouă** („prospect tipărit"), iar **Lab-ul se publică** (Declutter + GigTim). Versiunea veche e păstrată în git, commit `pre-redesign`.
+
 ---
 
 ## Ce e firma
@@ -9,9 +11,11 @@ Site-ul și fațada firmei **EUDAIMONIA AI TECH S.R.L.**, care operează comerci
 Studio de software care vinde servicii la contract, în România și internațional. **O singură persoană** — dimensiunea nu se dezvăluie nicăieri, dar **nu se fabrică nimic fals**.
 
 **Povestea, într-o frază:** luăm o idee neclară, îi dăm formă, apoi o construim.
-**Tagline:** „Întâi macheta. Apoi sistemul." / *"First the model. Then the system."*
+**Tagline:** *"First the model. Then the system."* — pe site e kicker deasupra titlului, nu titlu. Un tagline de brand nu spune ce faci și cui; titlul trebuie s-o spună.
 
-Numele vine din macheta pe care arhitectul o construiește înainte de clădire. A fost ales dintre alternative respinse cu motiv: *Vizar* (coliziune cu o agenție web croată și cu SaaS-ul AR „VizAR"), *Contur* (cuvânt prea comun în RO), *Soleia* (domeniul e ocupat de branduri de beachwear și skincare).
+Numele vine din macheta pe care arhitectul o construiește înainte de clădire. Alternative respinse cu motiv: *Vizar* (coliziuni), *Contur* (prea comun), *Soleia* (domeniu ocupat).
+
+**Limba site-ului: engleză.** Decizie 2026-08-24. ICP-ul principal din `docs/positioning.md` rămâne IMM-ul românesc — tensiune asumată: engleza servește Segmentul B și citește a competență pentru decidentul din Segmentul A. De revizuit dacă outreach-ul RO suferă. Boilerplate-ul RO din `docs/voice.md` rămâne pentru email și oferte.
 
 ---
 
@@ -23,7 +27,7 @@ Numele vine din macheta pe care arhitectul o construiește înainte de clădire.
 
 **Permis:** „noi" pe site și în oferte, „eu" în conversație directă (email, telefon, întâlnire). Proces documentat, termene, garanții.
 
-**Consecință de structură:** nu există pagină „Echipa". Există `/cum-lucram`.
+**Consecință de structură:** nu există pagină „Echipa". Răspunsul la „câți sunteți?" stă pe `/contact`, lângă formular.
 
 Motivul e practic, nu moral: piața B2B din România e mică și oamenii vorbesc. În plus, publicitatea înșelătoare e sancționabilă (Legea 158/2008).
 
@@ -37,54 +41,41 @@ Motivul e practic, nu moral: piața B2B din România e mică și oamenii vorbesc
 | **Aplicații și site-uri** | 1.200–2.000 € (Treapta 1) | **Da, ca interval pe scenariu tipic** |
 | **Automatizări** | 800–1.500 € + 80 €/lună | **Da, ca interval pe scenariu tipic** |
 
-**De ce s-a schimbat.** TrustRadius, 2.185 de cumpărători B2B: „preț disponibil pe site" e factorul #1 la **71%**; studiile de caz sunt **ultimele, la 9%**. NN/g: firmele care ascund costul sunt percepute ca „evazive și nedemne de încredere", iar când cifra exactă e imposibilă, prescripția e **interval pe scenariu tipic**. G2: 61% sunt mai puțin probabil să cumpere dacă trebuie să dea date înainte de preț.
-Deci nu „de la X €" (un plafon publicat te blochează șase luni), ci: *„Un catalog căutabil cu panou de administrare, la o firmă de ~50 de angajați: de obicei între 1.200 și 2.000 €. Cifra fermă vine după 30 de minute."*
-⚠️ Seturile alea de date chestionează cumpărători de software la 20–100× dimensiunea unui angajament de 450–2.000 €. Mecanismul se transferă; procentele nu.
+**De ce așa.** TrustRadius, 2.185 de cumpărători B2B: „preț disponibil pe site" e factorul #1 la **71%**; studiile de caz sunt **ultimele, la 9%**. NN/g: firmele care ascund costul sunt percepute ca „evazive"; când cifra exactă e imposibilă, prescripția e **interval pe scenariu tipic**. G2: 61% sunt mai puțin probabil să cumpere dacă trebuie să dea date înainte de preț.
+⚠️ Seturile alea de date chestionează cumpărători la 20–100× dimensiunea unui angajament de 450–2.000 €. Mecanismul se transferă; procentele nu.
 
-**Unde stă cifra.** Homepage-ul nu conține `450 €` nicăieri — duce doar mecanismul. Motivul e ancorarea: prima cifră pe care o vede un vizitator ancorează tot studioul, iar cu 450 pe homepage o construcție de 12.000 € sună a salt. Pe `/blueprint`, unde omul deja s-a decis să evalueze, cifra stă mare și fără scuze — ascunsă acolo, îl trimiți să compare și nu se mai întoarce.
+**Unde stă cifra.** Homepage-ul nu conține `450` nicăieri — duce doar mecanismul. Ancorare: prima cifră văzută ancorează tot studioul; cu 450 pe homepage, o construcție de 12.000 € sună a salt. Pe `/blueprint` cifra stă mare și fără scuze.
 
-**Mecanismul care vinde Blueprint-ul:** taxa se scade **integral** din proiectul de construcție, dacă acesta începe în 60 de zile. Și se spune explicit că, dacă nu construiește cu noi, documentul rămâne al clientului — inclusiv ca să-l ducă la altă firmă. Exact frica asta blochează semnătura.
+**Mecanismul care vinde Blueprint-ul:** taxa se scade **integral** din proiectul de construcție, dacă începe în 60 de zile. Și se spune explicit că documentul rămâne al clientului, inclusiv ca să-l ducă la altă firmă. Exact frica asta blochează semnătura. Reversarea riscului stă **lângă preț și lângă buton**, nu într-o secțiune separată (tiparul Jonathan Stark / roadmapping).
 
-**Scara de prețuri urcă pe dovadă, nu pe dorință.** Treapta 2 se deblochează la 2 studii de caz publicate; Treapta 3 la 5 proiecte + 2 abonamente active. Primele proiecte se fac sub preț **doar** cu clauză în contract: drept de publicare + testimonial semnat în 30 de zile.
+**Scara de prețuri urcă pe dovadă, nu pe dorință.** Treapta 2 la 2 studii de caz publicate; Treapta 3 la 5 proiecte + 2 abonamente. Primele proiecte sub preț **doar** cu clauză în contract: drept de publicare + testimonial semnat în 30 de zile.
 
-**AR / 3D:** capabilitate reală (demo funcțional în `~/Desktop/upwork/Mobila`), dar **nu apare ca serviciu pe site**. Trăiește ca link nelistat, `noindex`, folosit doar în outreach direct. În `/servicii` există o singură propoziție de acoperire, ca demo-ul trimis prin email să nu pară împrumutat.
+**AR / 3D:** capabilitate reală (demo în `~/Desktop/upwork/Mobila`), dar **nu apare ca serviciu**. O singură propoziție de acoperire pe homepage, în secțiunea „What we build", ca demo-ul trimis pe email să nu pară împrumutat.
 
 ---
 
-## Identitatea vizuală — expoziția
+## Identitatea vizuală — prospectul tipărit
 
-**Site-ul e portofoliul.** Nu există niciun studiu de caz, deci singura dovadă că studioul știe să construiască e chiar lucrul pe care îl privește vizitatorul.
+**Conceptul: „printed prospectus, live screens."** Pagină deschisă, ton de hârtie caldă, condusă de tipografie — iar **singurele obiecte întunecate sunt ecranele live**, încadrate ca figuri într-un document de specificație. Site-ul împrumută gramatica vizuală a propriului livrabil: secțiuni numerotate, linii subțiri, etichete mono, figuri cu legendă.
 
-> ⚠️ **Premisa asta nu are suport empiric.** Niciun studiu nu măsoară dacă sofisticarea vizuală semnalează specific *capacitatea de a construi software*. Cele mai apropiate constatări (efectul estetic-utilizabilitate, credibilitatea Stanford) sunt despre utilizabilitate percepută și încredere generală. E logică rezonabilă a proiectului, nu dovadă — și merită ținut minte când tentația e să se investească și mai mult în vizual.
->
-> Ce **e** măsurat, și taie în direcția opusă: complexitatea vizuală mare, privită scurt, strică **specific** capacitatea de a identifica scopul paginii *(Kuric et al., 2023)*. Combinația spre care arată dovezile e **meșteșug înalt + complexitate joasă**, nu meșteșug înalt cu orice preț.
+**De ce ține:** inversează complet site-ul vechi; nu ilustrează numele (capcana care a omorât v1–v3); e diferențiat — registrul implicit al studiourilor de software în 2026 e întunecat; și pune dovada (cod care rulează) în singurul loc întunecat de pe pagină, deci privirea cade pe ea.
 
-**Conceptul: peretele galeriei, cu lucrări montate pe el.** Peretele e granulat și deschis; lucrările sunt panouri întunecate cu colțuri rotunde, iar fâșia de perete vizibilă pe margine e ce le face să pară *montate*, nu lipite. Pagina e zonată: **negru → sală → negru**.
+> ⚠️ **Cinci versiuni au picat. Nu le repeta.**
+> v1 hârtie de calc și axonometrie („site de construcții") · v2 obiect 3D condus de scroll · v3 același obiect randat offline („oribil") · v4 întuneric curat cu carduri (generic) · **v5 peretele galeriei cu plăci montate** — respins de utilizator în bloc: „nu-mi place structura, designul, mesajul; mesajul e fără sens și stângaci". Aglomerat: inventar, cheie de etichete, carteluri, parallax — totul concura cu totul.
+> **Cauza comună la v1–v3: am ilustrat numele.** La v5: prea multe dispozitive. Combinația validată de dovezi rămâne **meșteșug înalt + complexitate joasă** *(Kuric et al., 2023)*.
 
-> ⚠️ **Patru versiuni au picat. Nu le repeta.**
-> v1 hârtie de calc și axonometrie („site de construcții") · v2 obiect 3D condus de scroll („animația nu își are sensul") · v3 același obiect randat offline („oribil, nu-mi place ideea în sine") · v4 întuneric curat cu carduri (corect, dar generic).
-> **Cauza comună la primele trei: am ilustrat numele.** Maquette → machetă → arhitectură → construcții. Numele rămâne un cuvânt pe care nimeni nu îl desenează. Identitatea vine din muncă.
+**Cele trei mișcări de design — listă închisă, nu se adaugă a patra:**
+1. **Secțiuni numerotate ca un document de specificație** — index mono (`01 — MECHANISM`) + linie subțire pe toată lățimea.
+2. **Figuri întunecate cu ecrane live** — `Figure.astro`: ramă întunecată rotunjită, legendă mono (`FIG. 01 · DELIVERABLE — SAMPLE`). Ecranele sunt HTML/SVG care rulează, nu capturi. Câmpul `kind` păstrează exact trei valori (`Deliverable · sample`, `Capability demonstration`, `Delivered project`) — ultima nu se folosește fără acord scris de publicare.
+3. **Roșul doar ca punctuație** — indexuri de secțiune, un singur buton primar pe ecran, sublinierea linkurilor, punctul din wordmark. Atât.
 
-**Ecranele din plăci sunt cod care rulează, nu capturi** — HTML și SVG live, în `src/components/screens/`. Pentru un studio de software, e adevărat într-un fel în care o poză nu e.
+**Paletă:** hârtie `#F4F2ED` · blocuri `#ECE9E2` · cerneală `#141412` · secundar `#5C5A54` · linii `#D8D5CC` · roșu `#B34530` (5,7:1 pe hârtie — are voie să fie text la ≥14px). În rame `.screen`: fundal `#0F1013`, text `#F2F0EC`/`#8B8F94`, roșu `#D9573A`.
 
-**Onestitatea e construită în structură, nu doar afirmată.** Sub fiecare lucrare stă un **cartel** de muzeu, iar câmpul `kind` are exact trei valori (`Livrabil · exemplu`, `Demonstrație de capabilitate`, `Proiect livrat`) — nu e text liber, vine din `copy.gallery.kinds`. Ultima nu se pune pe nicio placă până nu există acord scris de publicare. Peretele mai poartă două dispozitive: **inventarul** (lucrări expuse 03 · demonstrații 02 · livrabile 01 · **proiecte livrate 00**) și **cheia etichetelor**.
+**Tipografie:** Figtree (titluri, text) + JetBrains Mono (etichete, legende — MAJUSCULE, `+0.12em`). Display: `clamp(44px, 7.5vw, 104px)`, `-0.035em`, 700, `text-wrap: balance`. Fonturile se self-hostează (nu CDN Google render-blocking).
 
-**Paletă:** negru `#0A0A0B` · perete `#A9A69F` · placă `#0F1013` · text `#F2F0EC` / `#8B8F94` · roșu `#D9573A`.
+**Mișcare: totul nativ, ~250 de octeți de JS.** `@view-transition` · secvența de deschidere pe homepage (5 elemente, 70ms) · `animation-timeline: view()` cu fallback IntersectionObserver. Reveal-uri subtile: opacitate + 10px. Curbe: `cubic-bezier(.23,1,.32,1)` intrare, `.16,1,.3,1` reveal. UI sub 300ms.
 
-> **Regula de accent pe perete:** `#B34530` pe `#A9A69F` dă contrast **1,9:1**. Pe perete, roșul nu are voie să fie text — doar punct plin sau linie. Textul pe perete e negru. Roșul lucrează pe plăci și pe fundal negru.
-
-**Tipografie:** Figtree (titluri, text), JetBrains Mono (etichete, carteluri, date — MAJUSCULE, `+0.12em`).
-
-**Mișcare: totul nativ, ~250 de octeți de JS.** GSAP, ScrollTrigger și Lenis au fost scoase — erau **50,7 KB gzip pe fiecare pagină** pentru un `classList.add` și un parallax de 40px, adică de 5–10× cât tot restul paginii. Trei tehnici le înlocuiesc:
-1. `@view-transition { navigation: auto }` — tranziții între pagini, o regulă CSS, 0 KB. În Firefox nu face nimic, navigarea rămâne normală.
-2. O secvență de deschidere, doar pe homepage, cinci elemente, decalaj 70ms, sub o secundă. Nu preloader.
-3. `animation-timeline: view()` pentru apariții și pentru deriva plăcilor. Rulează în compozitor, deci nu atinge INP. IntersectionObserver preia doar unde lipsește suportul.
-
-Curbe: `cubic-bezier(.23,1,.32,1)` la intrare, `.16,1,.3,1` la reveal. UI sub 300ms. Stagger 30–80ms.
-
-**Nu se adaugă, cu motiv:** Lenis (semnătura agenției generice din 2021, și luptă cu scroll-ul nativ) · split-text pe caractere (cel mai clar semn de amator) · preloader cu procent (așteptare fabricată, pe un site care vinde viteză) · scroll orizontal · cursor custom · Three.js · Rive/Lottie · Theatre.js (mort din mai 2024). Și nimic care se construiește pe ecran — aia a picat de trei ori.
-
-**GSAP e gratuit dar nu open source** — licență Webflow proprietară și revocabilă. Încă un motiv să nu se întoarcă.
+**Nu se adaugă, cu motiv:** GSAP/ScrollTrigger (50,7 KB gzip pentru un classList.add; licență Webflow revocabilă) · Lenis · split-text · preloader · scroll orizontal · cursor custom · Three.js · Rive/Lottie · nimic care se construiește pe ecran.
 
 Detaliile complete în `docs/brand.md`.
 
@@ -96,42 +87,43 @@ Concret, nu grandios. Propoziții sub 20 de cuvinte. Onest despre limite. Fără
 
 **Listă neagră, fără excepții:** soluții inovatoare · sinergie · transformare digitală · partenerul tău de încredere · pasionați de tehnologie · soluții la cheie · valoare adăugată · de ultimă generație · *innovative solutions · seamless · cutting-edge · leverage · unlock · empower · client-centric*.
 
-**Glosar fix:** Blueprint (mereu majusculă) · *sistem*, nu „soluție" · *construim*, nu „dezvoltăm" · *client*, nu „partener" · *preț*, nu „investiție".
+**Glosar fix (EN):** Blueprint (mereu majusculă) · *system*, nu "solution" · *build*, nu "develop" · *client*, nu "partner" · *price*, nu "investment" · *model*, nu "mockup/wireframe".
 
 ---
 
 ## Stack și structură
 
-**Astro 5 + Tailwind v4**, static, bilingv.
+**Astro 5 + Tailwind v4**, static, **doar engleză**, pagini la rădăcină.
 
 ```
 src/
-  i18n/copy.ts          ← TOT textul, RO și EN. Se editează aici, nu în pagini.
+  copy.ts               ← TOT textul. Se editează aici, nu în pagini.
   styles/global.css     ← tokenii din docs/brand.md + componentele, în @layer components
-  layouts/Base.astro    ← head, hreflang, navigație, subsol, scriptul de desenare
-  components/           ← Hall (sala), Plate (lucrarea + cartel), WallText, SectionHead
-  components/screens/   ← ecranele din plăci: BlueprintDoc, AutoReport, BeforeAfter
-  components/pages/     ← conținutul fiecărei pagini, o singură dată, parametrizat pe limbă
-  pages/ro/ · pages/en/ ← fișiere de 3 linii care doar montează componenta de pagină
+  layouts/Base.astro    ← head, navigație, subsol, fallback-ul IO
+  components/           ← Figure (rama + legenda), SectionHead (index numerotat)
+  components/screens/   ← ecranele live: BlueprintDoc, BeforeAfter
+  pages/                ← index · blueprint · lab · contact · privacy
 ```
 
-**De ce structura asta:** o singură sursă de adevăr pentru text (`copy.ts`) și o singură implementare per pagină. Adăugarea unei limbi noi înseamnă un obiect nou în `copy.ts` + 7 fișiere de 3 linii.
+**De ce structura asta:** o singură sursă de adevăr pentru text (`copy.ts`); cu o singură limbă, conținutul paginii stă direct în fișierul de rută — stratul `components/pages/` a fost eliminat odată cu bilingvismul.
 
-**Atenție la cascadă:** clasele proprii (`.btn`, `.sheet`, `.lbl`…) stau în `@layer components`, ca utilitarele Tailwind să le poată suprascrie. Scoase din layer, `.btn { display:inline-block }` bate `hidden` și butonul apare pe mobil unde nu trebuie.
+**Atenție la cascadă:** clasele proprii (`.btn`, `.lbl`, `.fld`…) stau în `@layer components`, ca utilitarele Tailwind să le poată suprascrie.
 
-**Paginile:** `/` · `/blueprint` · `/servicii` · `/cum-lucram` · `/contact` · `/lab` *(noindex, nelegată)*.
-Navigația: **Blueprint · Servicii · Cum lucrăm · Contact**.
+**Paginile:** `/` · `/blueprint` · `/lab` · `/contact` · `/privacy`.
+Navigația: **Blueprint · Lab · Contact** + butonul CTA.
+`/servicii` s-a pliat în homepage (secțiunea „What we build"); `/cum-lucram` s-a pliat în `/contact` (regulile de lucru + răspunsul la „câți sunteți?"). Vechile URL-uri `/ro/*` și `/en/*` au redirect în `astro.config.mjs`.
 
-**`/lucrari` a fost ștearsă**, 301 → `/blueprint`. Era o dublură exactă a homepage-ului — aceleași trei componente re-agățate — și spunea „nu avem studii de caz" de două ori pe primul ecran. Se reface la primul client cu acord scris de publicare; `Plate.astro` și `gallery.kinds` acceptă deja eticheta `delivered`.
+**Ordinea secțiunilor pe homepage — 6, sub ~400 de cuvinte în total:**
+1. **Hero** — ce facem și pentru cine, în 10 secunde *(NN/g)*. Tagline-ul e kicker, nu titlu.
+2. **Mecanismul** — Blueprint în trei propoziții, fără cifră.
+3. **Ce construim** — cele două servicii cu intervale pe scenariu tipic + propoziția de acoperire AR/3D.
+4. **Dovada** — două carduri de produs (Declutter, GigTim) cu etichete de stadiu adevărate + „al treilea exponat e site-ul ăsta".
+5. **O singură obiecție** — „unde sunt studiile de caz?", răspuns onest, fix înainte de CTA.
+6. **CTA.**
 
-**Ordinea secțiunilor pe homepage**, cu motivul fiecărei poziții:
-1. Hero — 10 secunde ca să spui ce faci și cui *(NN/g, 205.873 de pagini)*
-2. Problema · 3. Mecanismul — cinci zile, preț fix, fără cifră
-4. **Ce construim** — ofertele urcă aici fiindcă 57% din atenție e deasupra pliului și 74% în primele două ecrane. Cu opt secțiuni nu poți avea și dovada înaintea lor.
-5. Procesul · 6. **Dovada** — sala, cu diagrama. Vine **după** ce mecanismul a fost explicat: o secțiune vizual densă pusă înainte ca vizitatorul să fi stabilit scopul paginii îi strică exact înțelegerea scopului.
-7. O singură obiecție, fix înainte de CTA · 8. CTA
+⚠️ Ordinea nu e testată empiric nicăieri — e tipar convergent (Stark, Designjoy, NanoGlobals), nu dovadă. Măsurate sunt doar cele 10 secunde și avantajul copy-ului scurt (Unbounce: sub ~100 de cuvinte pe secțiune convertește ~2×).
 
-⚠️ **Ordinea secțiunilor nu e testată nicăieri** — nici NN/g, nici Baymard, nici corpusul Unbounce de 41.000 de pagini au vreun experiment pe asta. E tipar convergent, nu dovadă. Ce *e* măsurat sunt doar cele 10 secunde și zonele de atenție.
+**`/blueprint` poartă toată greutatea de convingere** (ordinea Stark): durere → vis → ofertă (ce include / ce nu / prețul) → CTA + reversarea riscului lipită de el → **livrabilul-mostră arătat** (BlueprintDoc: „ăsta e ce primești") → toate cele 7 întrebări → al doilea CTA. Pagină lungă e OK aici; concizia e regulă de homepage.
 
 **Comenzi:** `npm run dev` · `npm run build` · `npm run preview`
 
@@ -141,45 +133,44 @@ Navigația: **Blueprint · Servicii · Cum lucrăm · Contact**.
 
 | | Blocat de |
 |---|---|
-| **Logo** (wordmark + monogram „M" axonometric) | Verificarea **OSIM / EUIPO** pe „Maquette". Nu se plătește nimic pe logo înainte. |
-| **Datele din subsol** — nr. ONRC, sediu | De completat de utilizator. Sunt obligatorii legal înainte de publicare. |
-| **Formularul de contact** | Nu trimite nicăieri. De legat la Resend sau Formspree. |
-| **Politica de confidențialitate / cookie-uri** | De scris, nu de copiat. |
-| **`/lucrari`** | Zero studii de caz cu acord scris. Pagina afișează un mesaj onest. Secțiunea de pe homepage a fost scoasă până există unul. |
-| **`/lab`** | Construită, dar `noindex` și **nelegată din navigație**. Nu se publică fără discuție separată. |
-| **Domeniile** | `maquette.ro`, `maquettesoftware.com`, `.studio`, `.dev` + apărare de tipar: `maquete.ro`, `maquett.ro`, `maquettestudio.ro`. |
+| **Logo** (wordmark + monogram) | Verificarea **OSIM / EUIPO** pe „Maquette". Nu se plătește nimic înainte. |
+| **Datele din subsol** — nr. ONRC, sediu | De completat de utilizator. Obligatorii legal înainte de publicare. |
+| **Formularul de contact** | Postează la endpoint-ul din `PUBLIC_FORM_ENDPOINT`; fără variabilă setată, pagina arată adresa de email în loc de formular. De creat cont Formspree/Resend. |
+| **`/privacy`** | Scrisă minimal și adevărat (zero cookie-uri, zero analytics). **De revizuit de utilizator înainte de publicare.** |
+| **Domeniile** | `maquette.ro`, `maquettesoftware.com`, `.studio`, `.dev` + apărare de tipar. |
 | **Email pe domeniu** | Zoho sau Google Workspace. Gmail pe cartea de vizită omoară credibilitatea. |
 
 ---
 
 ## Lab — Declutter și GigTim
 
-**Nu se publică fără discuție.** `/lab` e `noindex` și nelegat din navigație.
+**Publicat din 2026-08-24**, prin decizia explicită a utilizatorului. `/lab` e indexată și legată din navigație. Cardurile de pe homepage trimit aici.
 
 Eticheta de stadiu de pe fiecare proiect **trebuie să rămână adevărată**. Un `/lab` care minte despre stadiu e mai rău decât unul inexistent.
 
+**Rama de mesaj:** produsele proprii nu sunt un pivot — sunt dovada procesului. „Ne trecem propriile idei prin exact Blueprint-ul pe care îl vindem." GigTim, fiind *în conturare*, e demonstrația vie a ofertei plătite.
+
 ### Declutter — *prototip*
 
-Aplicație pentru gândurile pe care vrei să le spui la terapie și pe care le uiți până ajungi acolo. **Declanșatorul e ședința de terapie** — asta e produsul, nu un detaliu. Un gând nu se arhivează, se întoarce înainte de ședință, grupat.
+Aplicație pentru gândurile pe care vrei să le spui la terapie și pe care le uiți până ajungi acolo. **Declanșatorul e ședința de terapie** — asta e produsul. Un gând nu se arhivează, se întoarce înainte de ședință, grupat.
 
 **Stadiu real:** capturarea și gruparea funcționează; reluarea înainte de ședință e în lucru.
 
-**Constrângere serioasă:** conținutul e **dată privind sănătatea**, articolul 9 GDPR. Criptare, stocare în UE, zero tracking publicitar, niciun model antrenat pe conținut. Tratat corect, devine cel mai bun argument din pagină — un terapeut nu întreabă ce funcții ai, întreabă unde stau datele pacienților lui.
+**Constrângere serioasă:** conținutul e **dată privind sănătatea**, articolul 9 GDPR. Criptare, stocare în UE, zero tracking publicitar, niciun model antrenat pe conținut. Tratat corect, e cel mai bun argument din pagină — un terapeut întreabă unde stau datele pacienților lui.
 
-### GigTim — *în conturare*
+### GigTim — *în conturare* ✓ confirmat de utilizator (2026-08-24)
 
-Platformă prin care studenții găsesc joburi scurte. Firmele pun anunțuri pentru ce au nevoie, oamenii le iau. Un Glovo pentru side hustle-uri.
+Platformă prin care studenții găsesc joburi scurte. Firmele pun anunțuri, oamenii le iau.
 
 **Stadiu:** în conturare — trece prin exact procesul pe care îl vindem, Blueprint înainte de prima linie de cod.
-⚠️ *Eticheta asta e presupunerea mea, nu o afirmație confirmată de utilizator. De verificat înainte de publicare.*
 
-**Partea grea nu e aplicația, e primul oraș.** Un marketplace fără densitate locală nu funcționează: un student intră, vede trei anunțuri și nu se mai întoarce. Deci un singur campus și un singur cartier, nu o lansare națională.
+**Partea grea nu e aplicația, e primul oraș.** Marketplace fără densitate locală nu funcționează. Un singur campus și un singur cartier, nu lansare națională.
 
-**Expunere juridică reală:** munca scurtă în România are formă legală — zilier (Legea 52/2011), PFA sau contract pe perioadă determinată, fiecare cu obligații diferite pentru firma care angajează. O platformă care intermediază muncă nu poate ocoli asta. Forma juridică se decide în Blueprint, nu după lansare.
+**Expunere juridică reală:** munca scurtă în România are formă legală — zilier (Legea 52/2011), PFA sau CDD. Forma juridică se decide în Blueprint, nu după lansare.
 
-**Cererea de pe `/lab`, în ordinea asta:** psihoterapeuți testeri pentru Declutter (principal, cu buton) → colaboratori plătiți (secundar) → investiție (o propoziție, fără buton). O cerere de investiție pusă în față sună a nevoie de bani, iar un client de servicii care o citește se întreabă dacă mai ești acolo peste șase luni.
+**Cererea de pe `/lab`, în ordinea asta:** psihoterapeuți testeri pentru Declutter (principal, cu buton) → colaboratori plătiți (secundar) → investiție (o propoziție, fără buton). O cerere de investiție pusă în față sună a nevoie de bani.
 
-> ⚠️ **Riscul crește.** Două produse proprii + servicii + Blueprint = patru lucruri sub un brand. Diluarea încrederii era deja riscul asumat numărul unu; al doilea produs îl mărește. Mitigarea rămâne strictă: o singură promisiune primară pe homepage, Lab-ul apare doar ca dovadă de capacitate, cererile de colaborare și investiție stau exclusiv în `/lab`.
+> ⚠️ **Riscul asumat:** două produse + servicii + Blueprint = patru lucruri sub un brand. Mitigarea rămâne strictă: o singură promisiune primară pe homepage, Lab-ul apare doar ca dovadă de capacitate (o secțiune, două carduri), cererile stau exclusiv în `/lab`.
 
 ---
 
@@ -188,10 +179,8 @@ Platformă prin care studenții găsesc joburi scurte. Firmele pun anunțuri pen
 1. Site-ul terminat și publicat. E simultan fațada, portofoliul și dovada că știi să faci site-uri.
 2. Demo-ul AR pregătit ca link privat.
 3. Email rece către firma de mobilă, cu demo-ul ca deschizător → Blueprint sau proiect direct.
-4. **Primele 2 proiecte cu clauză de publicare + testimonial.** Ăsta e singurul obiectiv real al primelor 3 luni: nu bani, ci dovadă.
+4. **Primele 2 proiecte cu clauză de publicare + testimonial.** Singurul obiectiv real al primelor 3 luni: nu bani, ci dovadă.
 5. Upwork în paralel — finanțare, nu strategie.
-
-**Riscul cel mai mare, asumat conștient:** trei modele de business sub un brand (servicii + lab + conturare idei) diluează încrederea. Mitigarea e strictă — o singură promisiune primară pe homepage, Lab-ul apare doar ca dovadă de capacitate, iar cererile de colaborare și investiție stau exclusiv în `/lab`.
 
 ---
 
@@ -199,7 +188,7 @@ Platformă prin care studenții găsesc joburi scurte. Firmele pun anunțuri pen
 
 - `docs/positioning.md` — ce vindem, cui, la ce preț, politica „noi"
 - `docs/voice.md` — tagline, boilerplate RO/EN, ton, 9 obiecții cu răspuns scris
-- `docs/brand.md` — culoare, tipografie, componente, listă neagră
+- `docs/brand.md` — conceptul „prospect tipărit", culoare, tipografie, componente, listă neagră
 - `docs/site-map.md` — structura fiecărei pagini și copy-ul
 
 Când ceva se schimbă, se schimbă **în documente întâi**, apoi în cod.

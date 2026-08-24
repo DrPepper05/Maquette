@@ -3,6 +3,8 @@
 > Document intern. Orice text public — site, email, ofertă, LinkedIn — se scrie după regulile de aici.
 > Perechea lui e `docs/positioning.md` (ce vindem). Ăsta e *cum vorbim*.
 
+> **Notă (2026-08-24):** site-ul se livrează **doar în engleză**. Variantele RO de mai jos rămân valabile și obligatorii pentru email, telefon, oferte și outreach către clienții români. Regulile de ton și glosarul se aplică identic în ambele limbi.
+
 ---
 
 ## 1. Tagline
