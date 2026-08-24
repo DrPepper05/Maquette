@@ -1,9 +1,11 @@
 ---
-interface Props { title: string; aside?: string; }
-const { title, aside } = Astro.props;
+/** Mișcarea de design nr. 1: antetul de secțiune numerotat, ca într-un
+ *  document de specificație. Index mono roșu + titlu mono + hairline. */
+interface Props { index: string; title: string; }
+const { index, title } = Astro.props;
 ---
-<div class="flex items-baseline gap-4 pb-6">
-  <h2 class="lbl" style="color: var(--hi); font-size: 12.5px; font-weight: 600">{title}</h2>
-  <div class="flex-1 h-px" style="background: var(--edge)"></div>
-  {aside && <span class="lbl">{aside}</span>}
+<div class="sec-head">
+  <span class="idx" aria-hidden="true">{index}</span>
+  <h2 class="ttl">{title}</h2>
+  <div class="rule"></div>
 </div>

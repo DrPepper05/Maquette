@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { copy } from '../copy';
+const t = copy.lab;
+const email = 'contact@maquette.ro';
+---
+<Base route="lab" title={t.title} desc={t.desc}>
+
+  <section class="wrap" style="padding-top: clamp(64px, 8vw, 110px)">
+    <p class="lbl">{t.eyebrow}</p>
+    <h1 class="t-display mt-6 max-w-[16ch]" style="font-size: clamp(38px, 5.6vw, 76px)">{t.h1}</h1>
+    <p class="lede prose-w mt-7">{t.lede}</p>
+  </section>
+
+  <!-- ── 01 · Proiectele — eticheta de stadiu trebuie să rămână adevărată ── -->
+  <section class="wrap sec">
+    <SectionHead index="01" title={t.projLabel} />
+    <div class="grid gap-y-20">
+      {t.projects.map((p) => (
+        <article class="rise">
+          <div class="flex flex-wrap items-baseline gap-x-5 gap-y-2">
+            <h2 class="t-h2">{p.name}</h2>
+            <span class="lbl">{p.stage}</span>
+          </div>
+          <p class="t-h3 mt-4 max-w-[38ch]" style="color: var(--mid); font-weight: 500">{p.h}</p>
+
+          <div class="grid gap-x-14 gap-y-2 md:grid-cols-2 mt-8">
+            {p.blocks.map(([h, body]) => (
+              <div class="row-line">
+                <h3 class="lbl">{h}</h3>
+                <p class="mt-2 text-[15px]">{body}</p>
+              </div>
+            ))}
+          </div>
+
+          <div class="mt-8 pl-5 border-l-2 max-w-[64ch]" style="border-color: var(--hairline)">
+            <h3 class="t-h3 !text-[16px]">{p.noteH}</h3>
+            <p class="mt-2 text-[14.5px]" style="color: var(--mid)">{p.noteP}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- ── 02 · Cererile — exclusiv aici, în ordinea asta ── -->
+  <section class="wrap sec rise">
+    <SectionHead index="02" title={t.askLabel} />
+    <div class="max-w-[64ch]">
+      <h3 class="t-h2 !text-[clamp(24px,3vw,34px)]">{t.ask1H}</h3>
+      <p class="mt-4" style="color: var(--mid)">{t.ask1P}</p>
+      <a href={`mailto:${email}`} class="btn mt-8">{t.ask1Cta}</a>
+
+      <p class="row-line mt-12 text-[15px]" style="color: var(--mid)">{t.ask2}</p>
+      <p class="text-[15px] pt-4" style="color: var(--mid)">{t.ask3} <a href={`mailto:${email}`} class="lnk !text-[14px]">{email}</a></p>
+    </div>
+  </section>
+
+</Base>

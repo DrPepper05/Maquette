@@ -6,9 +6,8 @@
  *  Atenție: stilurile stau ca atribute de prezentare, nu ca <style> în <defs>.
  *  Astro extrage și scopează orice <style> dintr-o componentă, iar selectorii
  *  nu mai ajung la elementele SVG — nodurile ies negre și textul invizibil. */
-import { copy, type Lang } from '../../i18n/copy';
-interface Props { lang: Lang; }
-const f = copy[Astro.props.lang].gallery.screens.flow;
+import { copy } from '../../copy';
+const f = copy.screens.flow;
 
 const MONO = '"JetBrains Mono", ui-monospace, monospace';
 const node = { fill: '#16181C', stroke: '#31343A', rx: 8, width: 140, height: 36 };

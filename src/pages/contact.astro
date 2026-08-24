@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro';
+import { copy } from '../copy';
+const t = copy.contact;
+/* Formularul postează la endpoint-ul din env. Fără el, arătăm emailul —
+   niciodată un formular mort cu action="#". */
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT as string | undefined;
+const email = 'contact@maquette.ro';
+---
+<Base route="contact" title={t.title} desc={t.desc}>
+
+  <section class="wrap" style="padding-top: clamp(64px, 8vw, 110px)">
+    <p class="lbl">{t.eyebrow}</p>
+    <h1 class="t-display mt-6 max-w-[16ch]" style="font-size: clamp(38px, 5.6vw, 76px)">{t.h1}</h1>
+    <p class="lede prose-w mt-7">{t.lede}</p>
+  </section>
+
+  <section class="wrap sec rise grid gap-16 lg:grid-cols-[1.15fr_1fr] items-start">
+    {endpoint ? (
+      <form method="post" action={endpoint} class="grid gap-5 content-start">
+        <div class="grid gap-5 sm:grid-cols-2">
+          <label class="grid gap-2">
+            <span class="lbl">{t.fName}</span>
+            <input class="fld" type="text" name="name" required />
+          </label>
+          <label class="grid gap-2">
+            <span class="lbl">{t.fCompany}</span>
+            <input class="fld" type="text" name="company" />
+          </label>
+        </div>
+        <label class="grid gap-2">
+          <span class="lbl">{t.fEmail}</span>
+          <input class="fld" type="email" name="email" required />
+        </label>
+        <label class="grid gap-2">
+          <span class="lbl">{t.fWhat}</span>
+          <textarea class="fld" name="message" rows="5" placeholder={t.fWhatHint} required></textarea>
+        </label>
+        <label class="grid gap-2">
+          <span class="lbl">{t.fBudget}</span>
+          <input class="fld" type="text" name="budget" placeholder={t.fBudgetHint} />
+        </label>
+        <div class="flex items-center gap-6 mt-2">
+          <button class="btn" type="submit">{t.fSend}</button>
+          <span class="text-[13.5px]" style="color: var(--mid)">{t.after}</span>
+        </div>
+      </form>
+    ) : (
+      <div class="row-line">
+        <p class="t-h3">{t.noFormLead} <a href={`mailto:${email}`} class="lnk">{email}</a></p>
+        <p class="mt-3 text-[14.5px]" style="color: var(--mid)">{t.after}</p>
+      </div>
+    )}
+
+    <aside class="grid content-start">
+      <h2 class="lbl pb-2">{t.howLabel}</h2>
+      {t.how.map(([h, p]) => (
+        <div class="row-line">
+          <h3 class="font-semibold text-[15px]">{h}</h3>
+          <p class="mt-1 text-[14px]" style="color: var(--mid)">{p}</p>
+        </div>
+      ))}
+      <div class="row-line">
+        <h3 class="font-semibold text-[15px]">{t.sizeH}</h3>
+        <p class="mt-1 text-[14px]" style="color: var(--mid)">{t.sizeP}</p>
+      </div>
+    </aside>
+  </section>
+
+</Base>

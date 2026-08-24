@@ -1,0 +1,90 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { copy, routes } from '../copy';
+const t = copy.home;
+---
+<Base route="home" title={t.title} desc={t.desc}>
+
+  <!-- ── Hero — ce facem și pentru cine, în 10 secunde ── -->
+  <section class="wrap" data-seq style="padding-top: clamp(72px, 10vw, 140px)">
+    <p class="lbl" data-seq-i>{t.kicker}</p>
+    <h1 class="t-display prose-w mt-6 max-w-[24ch]" data-seq-i>{t.h1}</h1>
+    <p class="lede prose-w mt-7 max-w-[52ch]" data-seq-i>{t.lede}</p>
+    <div class="flex flex-wrap items-center gap-7 mt-10" data-seq-i>
+      <a href={routes.blueprint} class="btn">{copy.cta}</a>
+      <a href={routes.contact} class="lnk">{t.heroLink}</a>
+    </div>
+  </section>
+
+  <!-- ── 01 · Mecanismul — fără cifră (ancorare, vezi CLAUDE.md) ── -->
+  <section class="wrap sec rise">
+    <SectionHead index="01" title={t.mech.label} />
+    <div class="grid gap-12 lg:grid-cols-[1.2fr_1fr]">
+      <div>
+        <h3 class="t-h2 max-w-[22ch]">{t.mech.h}</h3>
+        <p class="mt-6 prose-w" style="color: var(--mid)">{t.mech.p}</p>
+        <a href={routes.blueprint} class="lnk mt-8">{t.mech.link}</a>
+      </div>
+      <dl class="content-start grid">
+        {t.mech.points.map(([dt, dd]) => (
+          <div class="row-line">
+            <dt class="font-semibold text-[15.5px]">{dt}</dt>
+            <dd class="m-0 mt-1 text-[14.5px]" style="color: var(--mid)">{dd}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <!-- ── 02 · Ce construim — intervale pe scenariu tipic ── -->
+  <section class="wrap sec rise">
+    <SectionHead index="02" title={t.build.label} />
+    <div class="grid gap-x-14 gap-y-12 md:grid-cols-2">
+      {t.build.items.map((it) => (
+        <article>
+          <h3 class="t-h3">{it.h}</h3>
+          <p class="mt-3 text-[15.5px]" style="color: var(--mid)">{it.p}</p>
+          <p class="row-line mt-5 text-[14px] tabular" style="color: var(--ink)">{it.price}</p>
+        </article>
+      ))}
+    </div>
+    <p class="mt-12 text-[14.5px] max-w-[60ch]" style="color: var(--mid)">{t.build.coverage}</p>
+  </section>
+
+  <!-- ── 03 · Dovada — etichetele de stadiu trebuie să rămână adevărate ── -->
+  <section class="wrap sec rise">
+    <SectionHead index="03" title={t.proof.label} />
+    <h3 class="t-h2 max-w-[24ch]">{t.proof.h}</h3>
+    <div class="grid gap-x-14 gap-y-10 md:grid-cols-2 mt-10">
+      {t.proof.cards.map((c) => (
+        <article class="row-line">
+          <div class="flex items-baseline gap-4">
+            <h4 class="t-h3">{c.name}</h4>
+            <span class="lbl">{c.stage}</span>
+          </div>
+          <p class="mt-3 text-[15px]" style="color: var(--mid)">{c.p}</p>
+        </article>
+      ))}
+    </div>
+    <div class="flex flex-wrap items-baseline justify-between gap-6 mt-10">
+      <p class="text-[14.5px] max-w-[48ch]" style="color: var(--mid)">{t.proof.exhibit}</p>
+      <a href={routes.lab} class="lnk">{t.proof.link}</a>
+    </div>
+  </section>
+
+  <!-- ── 04 · O singură obiecție, fix înainte de CTA ── -->
+  <section class="wrap sec rise">
+    <SectionHead index="04" title={t.objection.label} />
+    <h3 class="t-h2">{t.objection.h}</h3>
+    <p class="mt-6 prose-w" style="color: var(--mid)">{t.objection.p}</p>
+  </section>
+
+  <!-- ── CTA final ── -->
+  <section class="wrap sec rise">
+    <h2 class="t-h2 max-w-[20ch]">{t.end.h}</h2>
+    <p class="mt-5 prose-w" style="color: var(--mid)">{t.end.p}</p>
+    <a href={routes.contact} class="btn mt-9">{copy.cta}</a>
+  </section>
+
+</Base>

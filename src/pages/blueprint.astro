@@ -1,0 +1,134 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Figure from '../components/Figure.astro';
+import BeforeAfter from '../components/screens/BeforeAfter.astro';
+import BlueprintDoc from '../components/screens/BlueprintDoc.astro';
+import { copy, routes } from '../copy';
+const t = copy.blueprint;
+---
+<Base route="blueprint" title={t.title} desc={t.desc}>
+
+  <!-- ── Hero + fișa produsului — cifra apare din primul ecran ── -->
+  <section class="wrap" style="padding-top: clamp(64px, 8vw, 110px)">
+    <p class="lbl">{t.eyebrow}</p>
+    <h1 class="t-display mt-6 max-w-[18ch]" style="font-size: clamp(38px, 5.6vw, 76px)">{t.h1}</h1>
+    <p class="lede prose-w mt-7">{t.lede}</p>
+
+    <dl class="grid grid-cols-2 lg:grid-cols-4 gap-x-10 mt-14 border-t" style="border-color: var(--hairline)">
+      {t.facts.map(([dt, dd]) => (
+        <div class="pt-4">
+          <dt class="lbl">{dt}</dt>
+          <dd class="m-0 mt-1.5 font-semibold text-[15.5px] tabular">{dd}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <!-- ── 01 · Durerea — diagrama e durerea făcută vizibilă ── -->
+  <section class="wrap sec rise">
+    <SectionHead index="01" title={t.pain.label} />
+    <h2 class="t-h2 max-w-[22ch]">{t.pain.h}</h2>
+    <p class="mt-6 prose-w" style="color: var(--mid)">{t.pain.p}</p>
+    <div class="mt-12">
+      <Figure index="01" title={t.pain.fig.title} kind="demo" tech={t.pain.fig.tech}>
+        <BeforeAfter />
+      </Figure>
+    </div>
+  </section>
+
+  <!-- ── 02 · Ce primești — cinci livrabile ── -->
+  <section class="wrap sec rise">
+    <SectionHead index="02" title={t.get.label} />
+    <ol class="m-0 p-0 list-none grid">
+      {t.get.deliverables.map(([h, p], i) => (
+        <li class="row-line grid gap-x-10 gap-y-1 md:grid-cols-[44px_240px_1fr]">
+          <span class="lbl tabular pt-0.5">{String(i + 1).padStart(2, '0')}</span>
+          <h3 class="t-h3 !text-[17px]">{h}</h3>
+          <p class="text-[15px]" style="color: var(--mid)">{p}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- ── 03 · Cele cinci zile ── -->
+  <section class="wrap sec rise">
+    <SectionHead index="03" title={t.days.label} />
+    <dl class="m-0 grid">
+      {t.days.rows.map(([d, p]) => (
+        <div class="row-line grid gap-x-10 gap-y-1 md:grid-cols-[120px_1fr]">
+          <dt class="lbl pt-0.5">{d}</dt>
+          <dd class="m-0 text-[15.5px]">{p}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <!-- ── 04 · Prețul + reversarea riscului, lipite (tiparul Stark) ── -->
+  <section class="wrap sec rise">
+    <SectionHead index="04" title={t.price.label} />
+    <div class="grid gap-12 lg:grid-cols-[auto_1fr] items-start">
+      <p class="t-display tabular" style="font-size: clamp(56px, 8vw, 104px)">{t.price.dim}</p>
+      <div class="max-w-[52ch] lg:pt-3">
+        <p class="text-[16.5px] font-semibold">{t.price.p}</p>
+        <div class="row-line mt-7">
+          <h3 class="t-h3 !text-[17px]">{t.price.keepH}</h3>
+          <p class="mt-2 text-[15px]" style="color: var(--mid)">{t.price.keepP}</p>
+        </div>
+        <a href={routes.contact} class="btn mt-9">{copy.cta}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 05 · Livrabilul-mostră — „ăsta e ce primești" ── -->
+  <section class="wrap sec rise">
+    <SectionHead index="05" title={t.sample.label} />
+    <h2 class="t-h2">{t.sample.h}</h2>
+    <div class="mt-10 max-w-[720px]">
+      <Figure index="02" title={t.sample.fig.title} kind="deliverable" tech={t.sample.fig.tech}>
+        <BlueprintDoc />
+      </Figure>
+    </div>
+  </section>
+
+  <!-- ── 06 · Pentru cine e / nu e ── -->
+  <section class="wrap sec rise">
+    <SectionHead index="06" title={t.fit.label} />
+    <div class="grid gap-x-14 gap-y-8 md:grid-cols-2">
+      <ul class="m-0 p-0 list-none grid content-start">
+        {t.fit.yes.map((li) => (
+          <li class="row-line text-[15px] pl-7 relative">
+            <span class="absolute left-0 top-[19px] lbl" aria-hidden="true">—</span>{li}
+          </li>
+        ))}
+      </ul>
+      <ul class="m-0 p-0 list-none grid content-start">
+        {t.fit.no.map((li) => (
+          <li class="row-line text-[15px] pl-7 relative" style="color: var(--mid)">
+            <span class="absolute left-0 top-[19px] lbl" aria-hidden="true">×</span>{li}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── 07 · Toate cele șapte întrebări ── -->
+  <section class="wrap sec rise">
+    <SectionHead index="07" title={t.q.label} />
+    <div class="grid max-w-[74ch]">
+      {t.q.items.map(([q, a]) => (
+        <div class="row-line">
+          <h3 class="t-h3 !text-[17px]">{q}</h3>
+          <p class="mt-2 text-[15px]" style="color: var(--mid)">{a}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ── CTA final ── -->
+  <section class="wrap sec rise">
+    <h2 class="t-h2 max-w-[20ch]">{t.end.h}</h2>
+    <a href={routes.contact} class="btn mt-9">{copy.cta}</a>
+  </section>
+
+</Base>
