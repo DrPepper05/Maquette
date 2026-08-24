@@ -1,0 +1,77 @@
+---
+import Base from '../../layouts/Base.astro';
+import SectionHead from '../SectionHead.astro';
+import { copy, routes, type Lang } from '../../i18n/copy';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = copy[lang];
+const c = t.lab;
+---
+<Base lang={lang} route="lab" title={c.title} desc={c.desc} noindex={true}>
+
+  <section class="wrap pt-32 md:pt-36 pb-4">
+    <p class="lbl lbl-red">{c.eyebrow}</p>
+    <h1 class="t-display mt-5" style="max-width: 15ch">{c.h1}</h1>
+    <p class="mt-7 lede prose-w">{c.lede}</p>
+  </section>
+
+  <!-- ═══ PRODUSELE ═══
+       Eticheta de stadiu trebuie să rămână adevărată. Un /lab care minte
+       despre stadiu e mai rău decât unul inexistent. Vezi CLAUDE.md. -->
+  <section class="wrap pt-20">
+    <SectionHead title={c.projLabel} aside={String(c.projects.length).padStart(2, '0')} />
+
+    <div class="grid gap-6 mt-8">
+      {c.projects.map((pr, i) => (
+        <article class="card p-7 md:p-10">
+          <div class="flex flex-wrap items-baseline justify-between gap-4">
+            <div class="flex items-baseline gap-4">
+              <span class="lbl tabular">{String(i + 1).padStart(2, '0')}</span>
+              <h2 class="t-h2" style="font-size: clamp(24px,2.9vw,34px)">{pr.name}</h2>
+            </div>
+            <span class="chip">{pr.stage}</span>
+          </div>
+
+          <p class="mt-5 text-[18px] prose-w" style="color: var(--hi)">{pr.h}</p>
+
+          <div class="grid gap-6 md:grid-cols-2 mt-8">
+            {pr.blocks.map(([h, p]) => (
+              <div>
+                <h3 class="lbl" style="color: var(--hi)">{h}</h3>
+                <p class="mt-2.5 text-[15px]" style="color: var(--mid)">{p}</p>
+              </div>
+            ))}
+          </div>
+
+          <div class="mt-8 pt-6" style="border-top: 1px solid var(--edge)">
+            <h3 class="t-h3">{pr.noteH}</h3>
+            <p class="mt-3 text-[15px] prose-w" style="color: var(--mid)">{pr.noteP}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- ═══ CERERILE — în ordinea asta, deliberat.
+       Testeri întâi. Investiția ultima, fără buton: pusă în față sună
+       a nevoie de bani, iar un client de servicii care o citește se
+       întreabă dacă mai ești acolo peste șase luni. ═══ -->
+  <section class="wrap pt-20">
+    <SectionHead title={c.askLabel} />
+    <div class="grid gap-5 md:grid-cols-3 mt-8">
+      <div class="card p-7 md:col-span-2">
+        <h3 class="t-h3">{c.ask1H}</h3>
+        <p class="mt-3 text-[15px]" style="color: var(--mid)">{c.ask1P}</p>
+        <a class="btn btn-red mt-6" href={routes.contact[lang]}>{c.ask1Cta}</a>
+      </div>
+      <div class="card p-7">
+        <p class="text-[15px]" style="color: var(--mid)">{c.ask2}</p>
+      </div>
+    </div>
+    <p class="mt-6 text-[15px]" style="color: var(--low)">
+      {c.ask3} <a href={routes.contact[lang]} class="underline" style="text-underline-offset:4px">{routes.contact[lang]}</a>
+    </p>
+  </section>
+
+</Base>

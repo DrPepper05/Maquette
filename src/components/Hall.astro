@@ -1,0 +1,26 @@
+---
+/**
+ * Sala — peretele granulat pe care se montează lucrările.
+ * Antetul vine prin props: sala nu mai poartă titlu propriu, e o secțiune
+ * de dovadă în fluxul paginii, nu o galerie de sine stătătoare.
+ */
+interface Props { label: string; title: string; lede?: string; note?: string; }
+const { label, title, lede, note } = Astro.props;
+---
+<section class="hall">
+  <div class="hall-head">
+    <div>
+      <p class="lbl">{label}</p>
+      <h2 class="t-h2 mt-4" style="max-width: 22ch">{title}</h2>
+      {lede && <p class="mt-5 text-[16.5px]" style="color: var(--on-wall-mid); max-width: 50ch">{lede}</p>}
+    </div>
+  </div>
+
+  <div class="salon" style="margin-top: clamp(44px, 5vw, 74px)">
+    <slot />
+  </div>
+
+  {note && (
+    <p class="hall-note" style="color: var(--on-wall-mid)">{note}</p>
+  )}
+</section>

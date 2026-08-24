@@ -1,0 +1,121 @@
+---
+import Base from '../../layouts/Base.astro';
+import SectionHead from '../SectionHead.astro';
+import Hall from '../Hall.astro';
+import Plate from '../Plate.astro';
+import BlueprintDoc from '../screens/BlueprintDoc.astro';
+import { copy, routes, type Lang } from '../../i18n/copy';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = copy[lang]; const c = t.blueprint; const g = t.gallery;
+---
+<Base lang={lang} route="blueprint" title={c.title} desc={c.desc}>
+
+  <section class="wrap pt-32 md:pt-36 pb-4">
+    <p class="lbl lbl-red">{c.eyebrow}</p>
+    <h1 class="t-display mt-4" style="max-width: 17ch">{c.h1}</h1>
+    <p class="mt-6 prose-w text-[17px]" style="color: var(--mid)">{c.lede}</p>
+
+    <!-- Fișa produsului: cele patru lucruri pe care le caută oricine,
+         înainte să citească orice altceva. -->
+    <dl class="grid gap-0 sm:grid-cols-2 lg:grid-cols-4 mt-12 border-t" style="border-color: var(--edge)">
+      {c.facts.map(([k, v]) => (
+        <div class="py-5 lg:pr-8">
+          <dt class="lbl">{k}</dt>
+          <dd class="m-0 mt-2 text-[16px] font-semibold tabular">{v}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <!-- 3 — problema, în două propoziții -->
+  <section class="wrap pt-8">
+    <p class="prose-w text-[17px]" style="color: var(--mid)">{t.home.thesisP}</p>
+  </section>
+
+  <section class="wrap pt-20">
+    <SectionHead title={c.getLabel} aside={c.getAside} />
+    <ol class="grid gap-4 md:grid-cols-2 list-none p-0 m-0">
+      {c.deliverables.map(([h, p], i) => (
+        <li class="card p-6">
+          <span class="lbl lbl-red tabular">{String(i + 1).padStart(2, '0')}</span>
+          <h3 class="t-h3 mt-3">{h}</h3>
+          <p class="mt-2 text-[15px]" style="color: var(--mid)">{p}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <div class="mt-20">
+    <Hall label={g.label} title={t.home.proofH} lede={t.home.proofP} note={t.home.proofNote}>
+      <Plate index="01" col={1} span={9} off={0} speed={1}
+             title={g.plates.doc.title} kind={g.kinds.deliverable} tech={g.plates.doc.tech}>
+        <BlueprintDoc lang={lang} />
+      </Plate>
+    </Hall>
+  </div>
+
+  <section class="wrap pt-20">
+    <SectionHead title={c.daysLabel} />
+    <div class="grid gap-0">
+      {c.days.map(([d, p]) => (
+        <div class="grid md:grid-cols-[130px_1fr] gap-2 md:gap-8 py-5" style="border-bottom: 1px solid var(--edge)">
+          <span class="lbl" style="color: var(--hi)">{d}</span>
+          <p class="m-0 prose-w text-[16px]" style="color: var(--mid)">{p}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="wrap pt-20">
+    <SectionHead title={c.priceLabel} />
+    <div class="card p-8 md:p-10 grid gap-7 md:grid-cols-[auto_minmax(0,1fr)] md:gap-12 md:items-baseline">
+      <strong class="tabular" style="font-size: clamp(52px,7vw,88px); font-weight:700; letter-spacing:-.04em; line-height:1; color: var(--red)">{c.priceDim}</strong>
+      <p class="m-0 text-[17px]" style="color: var(--mid); max-width: 46ch">{c.priceP}</p>
+    </div>
+
+    <!-- Obiecția care blochează semnătura, pusă lângă cifră — nu doar
+         jos în lista de întrebări, unde ajunge cine a decis deja. -->
+    <div class="mt-5 p-7 md:p-8" style="border-left: 2px solid var(--red); background: var(--red-soft)">
+      <h3 class="t-h3" style="max-width: 40ch">{c.questions[0][0]}</h3>
+      <p class="mt-3 mb-0 prose-w text-[16px]" style="color: var(--mid)">{c.questions[0][1]}</p>
+    </div>
+  </section>
+
+  <section class="wrap pt-12">
+    <div class="card p-7 md:p-8">
+      <h2 class="t-h3 m-0" style="max-width: 34ch">{c.keepH}</h2>
+      <p class="mt-3 mb-0 prose-w" style="color: var(--mid)">{c.keepP}</p>
+    </div>
+  </section>
+
+  <section class="wrap pt-20">
+    <SectionHead title={c.fitLabel} />
+    <div class="grid gap-5 md:grid-cols-2 mt-8">
+      <ul class="card p-7 list-none m-0 grid gap-4">
+        {c.fitYes.map((li) => (
+          <li class="flex gap-3 text-[15px]"><span aria-hidden="true" style="color: var(--hi)">—</span><span>{li}</span></li>
+        ))}
+      </ul>
+      <ul class="card p-7 list-none m-0 grid gap-4" style="background: transparent">
+        {c.fitNo.map((li) => (
+          <li class="flex gap-3 text-[15px]" style="color: var(--mid)"><span aria-hidden="true" style="color: var(--red)">×</span><span>{li}</span></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="wrap pt-20">
+    <SectionHead title={c.qLabel} />
+    <div class="grid gap-0">
+      {c.questions.slice(1).map(([q, a]) => (
+        <div class="py-6" style="border-bottom: 1px solid var(--edge)">
+          <h3 class="t-h3" style="max-width: 44ch">{q}</h3>
+          <p class="mt-3 mb-0 prose-w text-[16px]" style="color: var(--mid)">{a}</p>
+        </div>
+      ))}
+    </div>
+    <a class="btn btn-red mt-10 inline-block" href={routes.contact[lang]}>{t.cta}</a>
+  </section>
+
+</Base>

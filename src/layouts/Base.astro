@@ -1,0 +1,111 @@
+---
+import '../styles/global.css';
+import { copy, routes, type Lang, type RouteKey } from '../i18n/copy';
+
+interface Props { lang: Lang; route: RouteKey; title: string; desc: string; noindex?: boolean; }
+const { lang, route, title, desc, noindex = false } = Astro.props;
+const t = copy[lang];
+const other: Lang = lang === 'ro' ? 'en' : 'ro';
+const site = 'https://maquette.ro';
+---
+<html lang={t.htmlLang}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={desc} />
+  <meta name="theme-color" content="#0A0A0B" />
+  {noindex && <meta name="robots" content="noindex, nofollow" />}
+  <link rel="canonical" href={site + routes[route][lang]} />
+  <link rel="alternate" hreflang="ro" href={site + routes[route].ro} />
+  <link rel="alternate" hreflang="en" href={site + routes[route].en} />
+  <link rel="alternate" hreflang="x-default" href={site + routes[route].ro} />
+  <script is:inline>
+    // Înainte de primul paint. Elementele pornesc ascunse doar dacă avem
+    // cu ce să le arătăm înapoi — fie scroll-driven nativ, fie JS.
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('js-anim');
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" />
+</head>
+<body>
+
+<header class="absolute top-0 left-0 right-0 z-20">
+  <div class="wrap flex items-center justify-between gap-6 py-6">
+    <a href={routes.home[lang]} class="text-[18px] font-bold tracking-[-.02em]">
+      Maquette<span style="color: var(--red)">.</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-8">
+      {t.nav.map(([key, label]) => (
+        <a href={routes[key][lang]} class="text-[14.5px] transition-colors hover:opacity-100"
+           style={route === key ? 'color: var(--red)' : 'color: var(--mid)'}>{label}</a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-5">
+      <a href={routes[route][other]} class="lbl">{t.switchTo}</a>
+      <a href={routes.contact[lang]} class="btn hidden sm:inline-flex !py-3 !px-6 !text-[14px]">{t.cta}</a>
+    </div>
+  </div>
+
+  <nav class="md:hidden wrap flex flex-wrap gap-5 pb-2">
+    {t.nav.map(([key, label]) => (
+      <a href={routes[key][lang]} class="text-[14px]"
+         style={route === key ? 'color: var(--red)' : 'color: var(--mid)'}>{label}</a>
+    ))}
+  </nav>
+</header>
+
+<main><slot /></main>
+
+<footer class="mt-32 border-t" style="border-color: var(--edge)">
+  <div class="wrap py-14 grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
+    <div class="grid gap-3 content-start">
+      <span class="text-[18px] font-bold tracking-[-.02em]">Maquette<span style="color: var(--red)">.</span></span>
+      <p class="text-[13.5px] max-w-[34ch]" style="color: var(--mid)">{t.footer.brandNote}</p>
+    </div>
+
+    <div class="grid gap-1.5 text-[13px] content-start" style="color: var(--mid)">
+      <span>{t.footer.legalName}</span>
+      <span class="tabular">{t.footer.cui}</span>
+      <span class="tabular">{t.footer.onrc}</span>
+      <span>{t.footer.seat}</span>
+    </div>
+
+    <div class="grid gap-1.5 text-[13px] content-start" style="color: var(--mid)">
+      <a href={routes.how[lang]} class="hover:text-[var(--hi)]">{t.footer.how}</a>
+      <a href="#" class="hover:text-[var(--hi)]">{t.footer.privacy}</a>
+      <a href="#" class="hover:text-[var(--hi)]">{t.footer.cookies}</a>
+      <div class="flex gap-4 pt-2">
+        <a href="https://anpc.ro" rel="noopener" target="_blank">{t.footer.anpc}</a>
+        <a href="https://ec.europa.eu/consumers/odr" rel="noopener" target="_blank">{t.footer.sol}</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* Singurul JavaScript de animație rămas: un fallback pentru browserele
+     fără scroll-driven animations (Firefox, azi). ~250 de octeți.
+     GSAP + ScrollTrigger + Lenis erau 50,7 KB gzip pe fiecare pagină,
+     pentru un classList.add și un parallax. Vezi docs/brand.md § Mișcarea. */
+  if (!CSS.supports('animation-timeline: view()')) {
+    const els = document.querySelectorAll('.rise');
+    if (els.length) {
+      const io = new IntersectionObserver((entries, obs) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          e.target.classList.add('in');
+          obs.unobserve(e.target);
+        }
+      }, { rootMargin: '0px 0px -12% 0px' });
+      els.forEach((el) => io.observe(el));
+    }
+  }
+</script>
+</body>
+</html>

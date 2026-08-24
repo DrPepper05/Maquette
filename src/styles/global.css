@@ -1,0 +1,491 @@
+@import "tailwindcss";
+
+/* ═══ Maquette v3 — negru angajat. Sursa: docs/brand.md ═══════════ */
+:root {
+  color-scheme: dark;
+
+  --ink:     #0A0A0B;   /* fundalul paginii */
+  --surface: #121316;   /* carduri */
+  --raised:  #17181C;   /* carduri peste carduri */
+  --edge:    #24262A;   /* chenare, hairline */
+
+  --hi:  #F2F0EC;       /* titluri, text principal */
+  --mid: #8B8F94;       /* text secundar, al doilea rând din titlu */
+  --low: #5C6066;       /* etichete mono */
+
+  --red:      #D9573A;  /* accent */
+  --red-deep: #B34530;  /* buton, fundal plin */
+  --red-soft: rgba(217, 87, 58, .10);
+  --on-red:   #FFF6F3;
+
+  --r: 999px;           /* pastile */
+  --r-card: 16px;
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-edge: var(--edge);
+  --color-hi: var(--hi);
+  --color-mid: var(--mid);
+  --color-low: var(--low);
+  --color-red: var(--red);
+  --font-sans: Figtree, ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+@layer base {
+  html { background: var(--ink); }
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--hi);
+    font-family: var(--font-sans);
+    font-size: 16px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  ::selection { background: var(--red-soft); color: var(--hi); }
+  /* stă în @layer base ca .btn din components să-i poată suprascrie culoarea */
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: 2px solid var(--red); outline-offset: 3px; border-radius: 4px; }
+}
+
+/* ═══ Tranziții între pagini — o regulă CSS, 0 KB ═══
+   Nativ în Chrome 126+ și Safari 18.2+. În Firefox nu face nimic:
+   navigarea rămâne normală. Progressive enhancement fără cod de fallback. */
+@view-transition { navigation: auto; }
+
+@layer components {
+  .wrap { max-width: 1280px; margin-inline: auto; padding-inline: clamp(20px, 4vw, 64px); }
+  .prose-w { max-width: 58ch; }
+
+  /* ── eticheta mono ── */
+  .lbl {
+    font-family: var(--font-mono);
+    font-size: 11px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: .12em;
+    color: var(--low);
+  }
+  .lbl-red { color: var(--red); }
+
+  /* ── tipografie ── */
+  h1, h2, h3 { margin: 0; text-wrap: balance; }
+  .t-display {
+    font-size: clamp(40px, 6.4vw, 88px); font-weight: 700;
+    letter-spacing: -.034em; line-height: 1.06;
+  }
+  .t-display .soft { color: var(--mid); }
+  .t-h2 {
+    font-size: clamp(28px, 3.6vw, 46px); font-weight: 700;
+    letter-spacing: -.028em; line-height: 1.16;
+  }
+  .t-h3 { font-size: 20px; font-weight: 600; letter-spacing: -.016em; }
+  .lede { color: var(--mid); font-size: clamp(16px, 1.3vw, 19px); line-height: 1.6; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  /* ── butoane pastilă ── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    border-radius: var(--r); border: 1px solid transparent;
+    padding: 14px 28px; font-size: 15px; font-weight: 600;
+    font-family: inherit; cursor: pointer;
+    background: var(--hi); color: var(--ink);
+    transition: transform .18s ease, opacity .18s ease, border-color .18s ease;
+  }
+  .btn:hover { opacity: .88; }
+  .btn:active { transform: scale(.98); }
+  .btn-red { background: var(--red-deep); color: var(--on-red); }
+  .btn-red:hover { background: var(--red); opacity: 1; }
+  .btn-ghost { background: transparent; color: var(--hi); border-color: var(--edge); }
+  .btn-ghost:hover { border-color: var(--low); opacity: 1; }
+
+  /* ── chip-uri ── */
+  .chips { display: flex; flex-wrap: wrap; gap: 9px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 9px;
+    border-radius: var(--r); border: 1px solid var(--edge);
+    padding: 9px 17px; font-size: 13.5px; color: var(--mid);
+    transition: border-color .18s ease, color .18s ease;
+  }
+  .chip:hover { border-color: var(--low); color: var(--hi); }
+  .chip i { font-style: normal; color: var(--red); font-size: 12px; }
+
+  /* ── carduri ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--edge);
+    border-radius: var(--r-card);
+    transition: border-color .2s ease, background .2s ease;
+  }
+  a.card:hover { border-color: var(--low); background: var(--raised); }
+
+  /* ── asset-ul: fără chenar, fără mască, iese din cadru ── */
+  .art { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .art img { position: absolute; height: auto; display: block; }
+  .art-hero img { top: -10%; right: -8%; width: 68%; max-width: 1400px; }
+  @media (max-width: 900px) {
+    .art-hero img { top: -2%; right: -34%; width: 132%; opacity: .42; }
+  }
+
+  /* ── antet de secțiune ── */
+  .sec-head { display: flex; align-items: baseline; gap: 16px; }
+  .sec-head .rule { flex: 1; height: 1px; background: var(--edge); }
+
+  /* ── formular ── */
+  .fld {
+    width: 100%; border-radius: 12px;
+    border: 1px solid var(--edge); background: var(--surface);
+    color: var(--hi); padding: 13px 15px; font: inherit; font-size: 15px;
+  }
+  .fld::placeholder { color: var(--low); }
+  .fld:focus { border-color: var(--red); outline: none; }
+
+  /* ── linkul text, alternativa la al doilea buton ── */
+  .lnk {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 15px; font-weight: 600; color: var(--hi);
+    border-bottom: 1px solid var(--edge);
+    padding-bottom: 3px;
+    transition: border-color .16s ease;
+  }
+  .lnk:hover { border-color: var(--red); }
+  .lnk::after { content: "\2192"; color: var(--red); }
+
+  /* ── taglineul, singurul loc cu serif ── */
+  .t-serif {
+    font-family: ui-serif, Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-size: clamp(17px, 1.9vw, 23px);
+    color: var(--mid);
+    letter-spacing: -.01em;
+  }
+
+  .hall-note {
+    position: relative; z-index: 2;
+    margin-top: clamp(40px, 5vw, 68px);
+    font-size: 14px; max-width: 54ch;
+    padding-top: 16px; border-top: 1px solid var(--wall-rule);
+  }
+
+  /* ── dezvăluiri la scroll ──
+     Ascunderea e condiționată de .js-anim. Fără JS, conținutul e vizibil. */
+  html.js-anim .rise { opacity: 0; transform: translateY(16px); }
+  html.js-anim .rise.in {
+    opacity: 1; transform: none;
+    transition: opacity .62s ease-out, transform .62s cubic-bezier(.16,1,.3,1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise { opacity: 1 !important; transform: none !important; }
+  * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SALA — peretele de galerie, lucrările montate, cartelurile.
+   Vezi docs/brand.md § Expoziția.
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  --wall:      #A9A69F;   /* peretele sălii */
+  --on-wall:   #161613;   /* text pe perete — 6.3:1 */
+  --on-wall-mid:#33322E;  /* text secundar pe perete — 4.6:1 */
+  --wall-rule: rgba(22, 22, 19, .22);
+
+  --plate:      #0F1013;
+  --plate-edge: rgba(255, 255, 255, .09);
+
+  --r-hall: 32px;
+  --r-plate: 14px;
+  --hall-pad: clamp(20px, 4.4vw, 72px);
+}
+
+@layer components {
+
+  /* ── sala: panou granulat, full-bleed, colțuri rotunde ── */
+  .hall {
+    position: relative;
+    margin-inline: auto;
+    max-width: 1600px;
+    width: calc(100% - clamp(16px, 3vw, 40px));
+    background: var(--wall);
+    border-radius: var(--r-hall);
+    padding: clamp(48px, 6vw, 88px) var(--hall-pad) clamp(64px, 8vw, 116px);
+    color: var(--on-wall);
+    isolation: isolate;
+    overflow: hidden;
+  }
+  /* granulația: feTurbulence inline, ~400 de octeți, zero cereri de rețea */
+  .hall::after {
+    content: ""; position: absolute; inset: 0; z-index: 3;
+    pointer-events: none; border-radius: inherit;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.68' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: .34; mix-blend-mode: multiply;
+  }
+
+  .hall-head {
+    position: relative; z-index: 2;
+    display: grid; gap: 40px; align-items: start;
+    grid-template-columns: minmax(0, 62ch) auto;
+  }
+  .hall-head h2 {
+    font-size: clamp(26px, 3.3vw, 42px);
+    font-weight: 700; letter-spacing: -.028em; line-height: 1.18;
+  }
+  .hall-head .lbl, .legend .lbl, .walltext .lbl { color: var(--on-wall-mid); }
+
+  /* ── plăcuța de sală: inventarul, spus cu cifre ── */
+  .legend { justify-self: end; min-width: 230px; }
+  .legend div {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 20px;
+    padding: 9px 0; border-top: 1px solid var(--wall-rule);
+  }
+  .legend dt {
+    font-family: var(--font-mono); font-size: 10.5px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: .12em; color: var(--on-wall-mid);
+  }
+  .legend dd {
+    margin: 0; font-family: var(--font-mono); font-size: 15px; font-weight: 600;
+    color: var(--on-wall); font-variant-numeric: tabular-nums;
+  }
+  .legend dd.zero { opacity: .42; }
+
+  /* ── salonul: grilă de 12, agățare la înălțimi diferite ── */
+  .salon {
+    position: relative; z-index: 2;
+    display: grid; grid-template-columns: repeat(12, 1fr);
+    column-gap: clamp(18px, 2.4vw, 34px);
+  }
+  .hang {
+    grid-column: var(--col) / span var(--span);
+    margin-top: var(--off, 0px);
+    min-width: 0;
+  }
+  .hang.bleed-r { margin-right: calc(-1 * var(--hall-pad)); }
+  .hang.bleed-l { margin-left: calc(-1 * var(--hall-pad)); }
+  .hang.bleed-r .plate { border-right: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; }
+  .hang.bleed-l .plate { border-left: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; }
+
+  /* ── lucrarea montată ── */
+  .plate {
+    background: var(--plate);
+    border: 1px solid var(--plate-edge);
+    border-radius: var(--r-plate);
+    overflow: hidden;
+    color: var(--hi);
+    box-shadow: 0 24px 48px -28px rgba(0, 0, 0, .62);
+  }
+
+  /* ── cartelul de perete ── */
+  .cartel { margin-top: 20px; max-width: 38ch; }
+  .cartel .row { display: flex; align-items: center; gap: 12px; }
+  .cartel .idx {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+    letter-spacing: .12em; color: var(--on-wall);
+  }
+  .cartel .rule { flex: 1; height: 1px; background: var(--wall-rule); }
+  .cartel h3 {
+    margin-top: 11px;
+    font-family: var(--font-mono); font-size: 12.5px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .12em; line-height: 1.5;
+    color: var(--on-wall);
+  }
+  .cartel .kind, .cartel .tech {
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .04em;
+    color: var(--on-wall-mid);
+  }
+  .cartel .kind { margin-top: 6px; }
+  .cartel .tech { margin-top: 3px; opacity: .72; }
+
+  /* ── textul de perete: pictat direct, fără placă ── */
+  .walltext {
+    grid-column: var(--col) / span var(--span);
+    grid-row: var(--row);
+    margin-top: var(--off, 0px);
+    min-width: 0;
+  }
+  .walltext dt {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .12em; color: var(--on-wall);
+    padding-top: 14px; border-top: 1px solid var(--wall-rule);
+  }
+  .walltext dd { margin: 5px 0 16px; font-size: 13.5px; line-height: 1.55; color: var(--on-wall-mid); }
+  .walltext dd b { color: var(--on-wall); font-weight: 600; }
+
+  /* ═══ ECRANELE DIN PLĂCI ═══ */
+  .scr { font-size: 13px; line-height: 1.55; }
+  .scr-bar {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 13px 18px; border-bottom: 1px solid var(--edge);
+    font-family: var(--font-mono); font-size: 10.5px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: .12em; color: var(--low);
+  }
+  .scr-bar b { color: var(--mid); font-weight: 500; }
+  .scr-body { padding: 22px 22px 26px; }
+
+  /* — documentul Blueprint — */
+  .doc h4 { font-size: 16.5px; font-weight: 700; letter-spacing: -.015em; }
+  .doc .sub {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--low); margin-bottom: 9px;
+  }
+  .doc ol { margin: 16px 0 0; padding: 0; list-style: none; counter-reset: s; }
+  .doc ol li {
+    counter-increment: s; position: relative;
+    padding: 9px 0 9px 40px; border-top: 1px solid var(--edge);
+    color: var(--mid); font-size: 13px;
+  }
+  .doc ol li::before {
+    content: counter(s, decimal-leading-zero);
+    position: absolute; left: 0; top: 9px;
+    font-family: var(--font-mono); font-size: 10.5px; color: var(--low); letter-spacing: .06em;
+  }
+  .doc ol li b { color: var(--hi); font-weight: 600; }
+  .doc ol li em {
+    font-style: normal; font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--low);
+    margin-left: 8px; padding: 2px 7px; border: 1px solid var(--edge); border-radius: 999px;
+    white-space: nowrap;
+  }
+  .doc .out {
+    margin-top: 20px; padding: 14px 16px;
+    border: 1px solid var(--edge); border-radius: 10px; background: rgba(255, 255, 255, .02);
+  }
+  .doc .out .t {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--red);
+  }
+  .doc .out ul { margin: 9px 0 0; padding: 0; list-style: none; display: grid; gap: 5px; }
+  .doc .out li { color: var(--mid); font-size: 12.5px; padding-left: 16px; position: relative; }
+  .doc .out li::before { content: "—"; position: absolute; left: 0; color: var(--low); }
+
+  /* — raportul de automatizare — */
+  .rep .big { display: flex; align-items: baseline; gap: 12px; }
+  .rep .big strong {
+    font-size: 44px; font-weight: 700; letter-spacing: -.04em; line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .rep .big span {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--low);
+  }
+  .rep .delta { color: var(--red); font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; }
+  .rep .chart { display: flex; align-items: flex-end; gap: 5px; height: 64px; margin: 22px 0 6px; }
+  .rep .chart i { flex: 1; background: #2A2D33; border-radius: 2px 2px 0 0; display: block; }
+  .rep .chart i.on { background: var(--red-deep); }
+  .rep .axis {
+    display: flex; justify-content: space-between;
+    font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .1em;
+    color: var(--low); text-transform: uppercase;
+  }
+  .rep table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+  .rep th {
+    text-align: left; padding: 0 0 8px;
+    font-family: var(--font-mono); font-size: 9.5px; font-weight: 500;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--low);
+    border-bottom: 1px solid var(--edge);
+  }
+  .rep td { padding: 9px 0; border-bottom: 1px solid var(--edge); color: var(--mid); font-variant-numeric: tabular-nums; }
+  .rep td:first-child { color: var(--hi); }
+  .rep td:last-child, .rep th:last-child { text-align: right; }
+  .rep .ok::before, .rep .er::before {
+    content: ""; display: inline-block; width: 6px; height: 6px;
+    border-radius: 50%; margin-right: 8px; vertical-align: middle;
+  }
+  .rep .ok::before { background: #4B7F5C; }
+  .rep .er::before { background: var(--red); }
+
+  /* — diagrama: derulare proprie, nu micșorare până devine ilizibilă — */
+  .dgm { padding: 26px 22px 22px; overflow-x: auto; }
+  .dgm svg { width: 100%; height: auto; display: block; min-width: 680px; }
+  .dgm-hint { display: none; }
+}
+
+@media (max-width: 900px) {
+  .hall-head { grid-template-columns: 1fr; }
+  .legend { justify-self: start; min-width: 0; width: 100%; max-width: 420px; }
+  .salon { grid-template-columns: 1fr; row-gap: 44px; }
+  .hang, .walltext {
+    grid-column: 1 / -1 !important;
+    grid-row: auto !important;
+    margin-top: 0 !important;
+  }
+  .hang.bleed-r, .hang.bleed-l { margin-inline: 0; }
+  .hang.bleed-r .plate, .hang.bleed-l .plate {
+    border: 1px solid var(--plate-edge); border-radius: var(--r-plate);
+  }
+  .hang:nth-child(even) { margin-left: 22px; }
+  .rep .big strong { font-size: 34px; }
+  .dgm { padding: 20px 0 18px 18px; }
+  .dgm-hint {
+    display: block; margin: 12px 18px 0;
+    font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--low);
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   MIȘCAREA — trei tehnici, toate native, ~250 de octeți de JS.
+   GSAP + ScrollTrigger + Lenis erau 50,7 KB gzip pe fiecare pagină.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 1. Secvența de deschidere, doar pe homepage ──
+   Cinci elemente, decalaj 70ms, sub o secundă în total. Nu preloader. */
+@keyframes seq-in {
+  from { opacity: 0; transform: translateY(9px); }
+  to   { opacity: 1; transform: none; }
+}
+html.js-anim [data-seq] [data-seq-i] {
+  opacity: 0;
+  animation: seq-in .52s cubic-bezier(.23, 1, .32, 1) forwards;
+}
+html.js-anim [data-seq] [data-seq-i]:nth-child(1) { animation-delay: .04s; }
+html.js-anim [data-seq] [data-seq-i]:nth-child(2) { animation-delay: .11s; }
+html.js-anim [data-seq] [data-seq-i]:nth-child(3) { animation-delay: .18s; }
+html.js-anim [data-seq] [data-seq-i]:nth-child(4) { animation-delay: .25s; }
+html.js-anim [data-seq] [data-seq-i]:nth-child(5) { animation-delay: .32s; }
+
+/* ── 2. Dezvăluirile, conduse de scroll, nativ ──
+   Rulează în compozitor: nu ating main thread-ul, deci nu ating INP.
+   IntersectionObserver din Base.astro preia doar unde asta lipsește. */
+@supports (animation-timeline: view()) {
+  @keyframes rise-in {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: none; }
+  }
+  html.js-anim .rise {
+    opacity: 0; transform: none;
+    animation: rise-in linear both;
+    animation-timeline: view();
+    animation-range: entry 8% cover 26%;
+  }
+  html.js-anim .rise.in { transition: none; }
+}
+
+/* ── 3. Deriva lucrărilor din salon ──
+   Fiecare placă la altă viteză. Diferența dintre ele dă adâncimea.
+   Sub 900px plăcile sunt într-o coloană: acolo ar fi doar zgomot. */
+@supports (animation-timeline: view()) {
+  @media (min-width: 901px) {
+    @keyframes hang-drift {
+      from { translate: 0 var(--drift, 0px); }
+      to   { translate: 0 calc(-1 * var(--drift, 0px)); }
+    }
+    .hang[data-speed] {
+      animation: hang-drift linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js-anim [data-seq] [data-seq-i],
+  html.js-anim .rise { opacity: 1 !important; transform: none !important; animation: none !important; }
+  .hang[data-seq], .hang[data-speed] { animation: none !important; translate: none !important; }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
+}

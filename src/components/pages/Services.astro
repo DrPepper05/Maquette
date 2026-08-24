@@ -1,0 +1,62 @@
+---
+import Base from '../../layouts/Base.astro';
+import SectionHead from '../SectionHead.astro';
+import Hall from '../Hall.astro';
+import Plate from '../Plate.astro';
+import AutoReport from '../screens/AutoReport.astro';
+import { copy, routes, type Lang } from '../../i18n/copy';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = copy[lang]; const c = t.services; const g = t.gallery;
+---
+<Base lang={lang} route="services" title={c.title} desc={c.desc}>
+
+  <section class="wrap pt-32 md:pt-36 pb-4">
+    <p class="lbl lbl-red">{c.eyebrow}</p>
+    <h1 class="t-display mt-4">{c.h1}</h1>
+    <p class="mt-6 prose-w text-[17px]" style="color: var(--mid)">{c.lede}</p>
+  </section>
+
+  <section class="wrap pt-16 grid gap-5">
+    {c.items.map((it) => (
+      <article class="card p-7 md:p-9 grid gap-5 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+        <div>
+          <span class="lbl">{it.label}</span>
+          <h2 class="t-h2 mt-3" style="font-size: clamp(24px,2.8vw,32px)">{it.h}</h2>
+          <p class="mt-4 text-[16px]" style="color: var(--mid)">{it.p}</p>
+        </div>
+        <div class="md:pl-8 md:border-l" style="border-color: var(--edge)">
+          <ul class="list-none p-0 m-0 grid gap-3">
+            {it.list.map((li) => (
+              <li class="flex gap-3 text-[15px]">
+                <span aria-hidden="true" style="color: var(--red)">—</span>
+                <span>{li}</span>
+              </li>
+            ))}
+          </ul>
+          <p class="lbl mt-6">{it.price}</p>
+        </div>
+      </article>
+    ))}
+  </section>
+
+  <div class="mt-20">
+    <Hall label={g.label} title={c.howSold} lede={c.howSoldP}>
+      <Plate index="01" col={1} span={5} off={0} speed={1}
+             title={g.plates.report.title} kind={g.kinds.demo} tech={g.plates.report.tech}>
+        <AutoReport lang={lang} />
+      </Plate>
+    </Hall>
+  </div>
+
+  <section class="wrap pt-20">
+    <SectionHead title={c.howSold} />
+    <p class="prose-w text-[17px]" style="color: var(--mid)">{c.howSoldP}</p>
+  </section>
+
+  <section class="wrap pt-16">
+    <p class="prose-w text-[15px]" style="color: var(--low)">{c.catchAll}</p>
+    <a class="btn mt-10 inline-block" href={routes.contact[lang]}>{t.cta}</a>
+  </section>
+
+</Base>

@@ -1,0 +1,22 @@
+---
+/** Ecran real, nu captură: o pagină din specificația funcțională. */
+import { copy, type Lang } from '../../i18n/copy';
+interface Props { lang: Lang; }
+const d = copy[Astro.props.lang].gallery.screens.doc;
+---
+<div class="scr doc">
+  <div class="scr-bar"><span>{d.bar}</span><b>{d.page}</b></div>
+  <div class="scr-body">
+    <p class="sub">{d.sec}</p>
+    <h4>{d.h}</h4>
+    <ol>
+      {d.steps.map(([lead, rest, tag]) => (
+        <li><b>{lead}</b> {rest} <em>{tag}</em></li>
+      ))}
+    </ol>
+    <div class="out">
+      <p class="t">{d.outT}</p>
+      <ul>{d.out.map((li) => <li>{li}</li>)}</ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+---
+import Base from '../../layouts/Base.astro';
+import { copy, type Lang } from '../../i18n/copy';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = copy[lang]; const c = t.contact;
+---
+<Base lang={lang} route="contact" title={c.title} desc={c.desc}>
+  <section class="wrap pt-32 md:pt-36 pb-4">
+    <p class="lbl lbl-red">{c.eyebrow}</p>
+    <h1 class="t-display mt-4" style="max-width: 16ch">{c.h1}</h1>
+    <p class="mt-6 prose-w text-[17px]" style="color: var(--mid)">{c.lede}</p>
+  </section>
+
+  <section class="wrap pt-12 grid gap-10 md:grid-cols-[minmax(0,1fr)_260px]">
+    <form class="card p-7 md:p-9 grid gap-5" method="post" action="#">
+      <div class="grid gap-5 md:grid-cols-2">
+        <label class="grid gap-2">
+          <span class="lbl">{c.fName}</span>
+          <input required name="name" type="text" class="fld" />
+        </label>
+        <label class="grid gap-2">
+          <span class="lbl">{c.fCompany}</span>
+          <input name="company" type="text" class="fld" />
+        </label>
+      </div>
+      <label class="grid gap-2">
+        <span class="lbl">{c.fEmail}</span>
+        <input required name="email" type="email" class="fld" />
+      </label>
+      <label class="grid gap-2">
+        <span class="lbl">{c.fWhat}</span>
+        <textarea required name="what" rows="5" class="fld"></textarea>
+        <span class="text-[13px]" style="color: var(--low)">{c.fWhatHint}</span>
+      </label>
+      <label class="grid gap-2">
+        <span class="lbl">{c.fBudget}</span>
+        <input name="budget" type="text" class="fld" />
+        <span class="text-[13px]" style="color: var(--low)">{c.fBudgetHint}</span>
+      </label>
+      <button class="btn justify-self-start" type="submit">{c.fSend}</button>
+    </form>
+
+    <aside class="grid gap-3 content-start">
+      <p class="lbl">{c.after}</p>
+      <p class="text-[15px]" style="color: var(--mid)">
+        <a href="mailto:contact@maquette.ro" style="color: var(--red)">contact@maquette.ro</a>
+      </p>
+    </aside>
+  </section>
+</Base>
+
+<style is:global>
+  .fld {
+    width: 100%; border-radius: 0;
+    border: 1px solid var(--edge);
+    background: var(--ink);
+    color: var(--hi);
+    padding: 10px 12px; font: inherit; font-size: 15px;
+  }
+  .fld:focus { border-color: var(--red); outline: none; }
+</style>

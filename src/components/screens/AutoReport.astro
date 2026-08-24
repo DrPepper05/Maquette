@@ -1,0 +1,27 @@
+---
+/** Ecran real: raportul lunar pe care îl primește un client cu abonament.
+ *  Cifrele sunt simulate — cartelul o spune explicit. */
+import { copy, type Lang } from '../../i18n/copy';
+interface Props { lang: Lang; }
+const r = copy[Astro.props.lang].gallery.screens.report;
+const bars = [38, 52, 44, 61, 57, 72, 68, 88];
+---
+<div class="scr rep">
+  <div class="scr-bar"><span>{r.bar}</span><b>{r.month}</b></div>
+  <div class="scr-body">
+    <div class="big"><strong>{r.big}</strong><span>{r.unit}</span></div>
+    <p class="delta">{r.delta}</p>
+
+    <div class="chart" aria-hidden="true">
+      {bars.map((h, i) => <i class={i === bars.length - 1 ? 'on' : ''} style={`height:${h}%`}></i>)}
+    </div>
+    <div class="axis"><span>{r.axisA}</span><span>{r.axisB}</span></div>
+
+    <table>
+      <tr><th>{r.thRun}</th><th>{r.thDur}</th></tr>
+      {r.rows.map(([name, dur, ok]) => (
+        <tr><td class={ok ? 'ok' : 'er'}>{name}</td><td>{dur}</td></tr>
+      ))}
+    </table>
+  </div>
+</div>

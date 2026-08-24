@@ -1,0 +1,20 @@
+---
+/**
+ * Asset-ul de fundal. Fără chenar, fără mască — iese din cadru și se topeşte în negru.
+ * Dacă fişierul nu există încă (Midjourney), pagina se construieşte fără el.
+ * Vezi docs/assets-brief.md.
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props { name: string; variant?: 'hero' | 'wide' | 'corner'; }
+const { name, variant = 'hero' } = Astro.props;
+
+const candidates = ['webp', 'png', 'jpg'].map((e) => `${name}.${e}`);
+const found = candidates.find((f) => fs.existsSync(path.join(process.cwd(), 'public', 'img', f)));
+---
+{found && (
+  <div class={`art art-${variant}`} aria-hidden="true">
+    <img src={`/img/${found}`} alt="" loading="eager" decoding="async" />
+  </div>
+)}
