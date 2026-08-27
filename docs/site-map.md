@@ -31,7 +31,7 @@ Site **doar în engleză**, pagini la rădăcină. Șase rute:
 
 ## 2. Homepage — 6 secțiuni, ≤400 de cuvinte
 
-Prezentare (2026-08-27): hero tipografic pe hârtie (id `hero`), apoi **§01–§04 ca CARDURI întunecate** în limbajul `/projects` (`.card-page float-card home-card`), alternate stânga-dreapta, cu `SectionHead` + filigran pe hârtie și pagina 3D blurată a secțiunii în fundal, pe partea goală. Id-urile `s01`–`s04` rămân — canvas-ul își ancorează companionii pe ele (wrapper-ele `s0N-inner` au dispărut).
+Scheletul de slide-uri și id-urile (`hero`, `s01`–`s04`, `cta`, `s0N-inner`) **nu se schimbă** — canvas-ul își măsoară cronologia din ele.
 
 ### 01 — Hero
 

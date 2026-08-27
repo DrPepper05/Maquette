@@ -1,31 +1,992 @@
 ---
 /**
- * MaquetteCanvas.astro — ambient backdrop mount + capability gate.
- * ────────────────────────────────────────────────────────────────
- * Five dark prospectus pages float BLURRED behind the paper — backdrop
- * only, the homepage echo of AmbientCards. The content never leaves the
- * document; scrolling is fully native. (The old dive/park system was
- * removed 2026-08-26 — docs/brand.md §6.)
- *
- * Rendered from index.astro only. The heavy Three.js chunk is loaded
- * via dynamic import behind the gate below, so phones, coarse pointers
- * and reduced-motion never download it at all.
+ * MaquetteCanvas.astro — "Pages of the prospectus"
+ * ────────────────────────────────────────────────────────────────────────
+ * 4 dark pages float scattered in 3D, BLURRED — abstract smudges of text.
+ * Each diving page carries its section's REAL copy (canvas texture, drawn
+ * from copy.ts). Per section, its page flies in and PARKS at text size
+ * (computed park pose — never full-screen), the blur resolves to crisp
+ * text, then blurs back and the page leaves WITH the text. The HTML inners
+ * are hidden while the canvas runs (visible for no-JS/reduced-motion) —
+ * the page texture is the only visible text for §01–§03. The 4th page is
+ * a table of contents; the finale connects everything before the CTA.
  */
 ---
 
 <div id="mq-wrap" class="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
   <canvas id="mq-c" class="w-full h-full block"></canvas>
-  <!-- Static paper vignette — keeps the backdrop faint toward the edges. -->
+  <!-- Paper vignette — fades out while a card covers the screen, so the
+       dark background stays flat instead of greying at the edges. -->
   <div id="mq-vig" class="absolute inset-0 pointer-events-none"
-       style="background: radial-gradient(ellipse 90% 80% at 55% 40%, transparent 0%, rgba(244,242,237,0.25) 40%, rgba(244,242,237,0.82) 100%);"></div>
+       style="background: radial-gradient(ellipse 90% 80% at 55% 40%, transparent 0%, rgba(244,242,237,0.25) 40%, rgba(244,242,237,0.82) 100%); will-change: opacity;"></div>
+  <div id="mq-hud" class="absolute bottom-5 right-6 hidden md:flex items-center gap-4 font-mono text-[10.5px] tracking-[.14em] uppercase"
+       style="color: var(--mid,#5C5A54); opacity:0; transition:opacity .8s;">
+    <span class="inline-block w-1.5 h-1.5 rounded-full animate-pulse" style="background:var(--red,#B34530);"></span>
+    <span id="mq-hs">WIREFRAME</span>
+    <span style="color:var(--hairline,#D8D5CC);">│</span>
+    <span id="mq-hp">0 %</span>
+  </div>
+
+</div>
+
+<!-- DOM twins of the parked pages. While a page is exactly parked, its
+     twin — the section's REAL reparented HTML, recolored to the screen
+     palette — fades in over the (static) card: native-sharp, clickable,
+     selectable. It fades out before the card ever moves again. The
+     inners are moved here at boot; without JS they stay in their
+     sections and the page renders normally. -->
+<div id="mq-pages">
+  <div class="mq-page" id="mq-page-0" style="--pg-h: 72px"><div class="mq-page-scale"></div></div>
+  <div class="mq-page" id="mq-page-1" style="--pg-h: 52px"><div class="mq-page-scale"></div></div>
+  <div class="mq-page" id="mq-page-2" style="--pg-h: 48px"><div class="mq-page-scale"></div></div>
+  <div class="mq-page" id="mq-page-3" style="--pg-h: 48px"><div class="mq-page-scale"></div></div>
 </div>
 
 <script>
-  function start() {
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    if (!matchMedia('(min-width: 768px) and (pointer: fine)').matches) return;
-    import('../scripts/maquette-ambient').then((m) => m.boot());
+import * as THREE from 'three';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { copy } from '../copy';
+
+gsap.registerPlugin(ScrollTrigger);
+
+function boot() {
+  const cv = document.getElementById('mq-c') as HTMLCanvasElement | null;
+  if (!cv || (cv as any).__mq) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  // Cronologia e cuplată la secțiunile homepage-ului (s01…cta). Pe orice
+  // altă pagină (Base injectează componenta peste tot) nu pornim nimic —
+  // altfel o pagină-geamăn goală parchează peste conținut.
+  if (!document.getElementById('s01') || !document.getElementById('s01-inner')) return;
+  (cv as any).__mq = true;
+
+  // ─── Palette ───
+  const P = { paper: 0xF4F2ED, ink: 0x141412, mid: 0x5C5A54, hl: 0xD8D5CC, red: 0xB34530, scr: 0x0F1013, scrHi: 0xF2F0EC, scrRed: 0xD9573A };
+
+  // ─── Renderer / Scene / Camera / Lights ───
+  // alpha:true + no scene background: the document's real --paper shows
+  // through, so the canvas "paper" can't drift from the CSS paper via tone
+  // mapping. dpr capped at 1.5 — retina fill cost drops ~44%, MSAA stays.
+  const R = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true, powerPreference: 'high-performance' });
+  R.setSize(innerWidth, innerHeight);
+  R.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+  R.toneMapping = THREE.ACESFilmicToneMapping;
+  R.toneMappingExposure = 1.15;
+
+  const S = new THREE.Scene();
+  S.fog = new THREE.FogExp2(P.paper, 0.008);
+
+  const cam = new THREE.PerspectiveCamera(32, innerWidth / innerHeight, 0.1, 400);
+  S.add(new THREE.AmbientLight(0xffffff, 0.95));
+  const sun = new THREE.DirectionalLight(0xfff8ee, 2.0); sun.position.set(20, 35, 25); S.add(sun);
+  const fill = new THREE.DirectionalLight(0xe0e6ff, 0.6); fill.position.set(-15, 12, -10); S.add(fill);
+  const rPt = new THREE.PointLight(P.red, 0, 45); rPt.position.set(0, 2, 0); S.add(rPt);
+
+  const root = new THREE.Group();
+  S.add(root);
+
+  // ═══════════════════════════════════════════════════════════════
+  //  CARD FACES — each diving card is its own section in miniature:
+  //  REAL copy (imported from copy.ts, honesty rule respected), drawn
+  //  small with the site's own faces. Zooming in reads as "the small
+  //  text on the card came close and became the section". The 4th card
+  //  is a table-of-contents page — the whole scene is the prospectus.
+  // ═══════════════════════════════════════════════════════════════
+
+  const SCR = { bg: '#0F1013', hi: '#F2F0EC', body: '#C7CACF', mid: '#8B8F94', ln: '#262B33', red: '#D9573A' };
+  // Astro's font loader registers faces under HASHED family names — the
+  // canvas must use the same resolved names or it silently falls back to
+  // a metrically different system font (and the DOM crossfade reflows).
+  function realFamily(cssVar: string, fb: string) {
+    const probe = document.createElement('span');
+    probe.style.fontFamily = `var(${cssVar})`;
+    document.body.appendChild(probe);
+    const fam = getComputedStyle(probe).fontFamily.split(',')[0].trim().replace(/^["']|["']$/g, '');
+    probe.remove();
+    return fam ? `"${fam}", ${fb}` : fb;
   }
-  start();
-  document.addEventListener('astro:page-load', start);
+  const F_HEAD = realFamily('--font-figtree', 'system-ui, sans-serif');
+  const F_MONO = realFamily('--font-jbmono', 'ui-monospace, monospace');
+  type Ctx = CanvasRenderingContext2D;
+  function bar(c: Ctx, x: number, y: number, w: number, h: number, r: number, fill: string) {
+    c.beginPath(); c.roundRect(x, y, w, h, r); c.fillStyle = fill; c.fill();
+  }
+  function wrapText(c: Ctx, text: string, maxW: number): string[] {
+    const out: string[] = []; let cur = '';
+    for (const w of text.split(' ')) {
+      const t = cur ? cur + ' ' + w : w;
+      if (c.measureText(t).width > maxW && cur) { out.push(cur); cur = w; }
+      else cur = t;
+    }
+    if (cur) out.push(cur);
+    return out;
+  }
+  // Numbered kicker + hairline — same furniture as SectionHead.
+  function kicker(c: Ctx, x: number, y: number, idx: string, label: string, W: number, MR: number, size = 15) {
+    (c as any).letterSpacing = '2px';
+    c.font = `600 ${size}px ${F_MONO}`;
+    c.fillStyle = SCR.red; c.fillText(idx, x, y);
+    const iw = c.measureText(idx).width + size;
+    c.fillStyle = SCR.mid; c.fillText(label.toUpperCase(), x + iw, y);
+    const lw = c.measureText(label.toUpperCase()).width;
+    (c as any).letterSpacing = '0px';
+    c.strokeStyle = SCR.ln; c.lineWidth = 2;
+    c.beginPath(); c.moveTo(x + iw + lw + 28, y - size * .3); c.lineTo(W - MR, y - size * .3); c.stroke();
+  }
+  function heading(c: Ctx, x: number, y: number, text: string, size: number, maxW: number, color = SCR.hi): number {
+    // letter-spacing matches the DOM twin's .t-h2 (-.028em) so canvas and
+    // CSS break the same lines — the park crossfade must not reflow.
+    // Returns the block BOTTOM (top + lines·lineHeight), which is exact
+    // regardless of the ascent approximation used for baselines.
+    (c as any).letterSpacing = `${(size * -.028).toFixed(1)}px`;
+    c.font = `700 ${size}px ${F_HEAD}`;
+    c.fillStyle = color;
+    const lh = Math.round(size * 1.14);
+    const top = y - ASC(size);
+    const lines = wrapText(c, text, maxW);
+    for (const line of lines) { c.fillText(line, x, y); y += lh; }
+    (c as any).letterSpacing = '0px';
+    return top + lines.length * lh;
+  }
+  function leader(c: Ctx, x1: number, x2: number, y: number) {
+    c.strokeStyle = SCR.ln; c.lineWidth = 2; c.setLineDash([2, 8]);
+    c.beginPath(); c.moveTo(x1, y); c.lineTo(x2, y); c.stroke();
+    c.setLineDash([]);
+  }
+
+  // Shared layout constants, derived from the DOM twin's own metrics so
+  // the park crossfade texture ⇄ HTML doesn't shift: top padding 4% of
+  // the page width (was 7% — trimmed so the parked card fits below the
+  // sticky header without shrinking the text; the twin shell's top
+  // padding stays exactly 3%·W less), kicker row 25px tall, 42px below
+  // it the heading. Baselines approximate first-line baseline as
+  // top + .80em (ascent + half-leading at the used line-heights).
+  const ASC = (size: number) => Math.round(size * .91);
+  function pageTop(c: Ctx, W: number, MR: number, idx: string, label: string, hSize: number) {
+    const ML = Math.round(W * .15), PT = Math.round(W * .04);
+    kicker(c, ML, PT + 19, idx, label, W, MR);
+    return { ML, hBase: PT + 25 + 42 + ASC(hSize) };
+  }
+  function drawLink(c: Ctx, x: number, base: number, text: string, alignRight = 0) {
+    c.font = `600 15px ${F_HEAD}`;
+    const lw = c.measureText(text).width;
+    if (alignRight) x = alignRight - lw - 24;
+    c.fillStyle = SCR.hi; c.fillText(text, x, base);
+    c.fillStyle = SCR.red; c.fillText('→', x + lw + 10, base);
+    c.strokeStyle = SCR.ln; c.lineWidth = 1.5;
+    c.beginPath(); c.moveTo(x, base + 9); c.lineTo(x + lw + 24, base + 9); c.stroke();
+  }
+
+  // ── §01 page — the what-we-build menu (tags, not prices) ──
+  function paintSec01(c: Ctx, W: number, H: number) {
+    const t = copy.home.build, MR = Math.round(W * .15);
+    const { ML, hBase } = pageTop(c, W, MR, '01', t.label, 72);
+    const hBottom = heading(c, ML, hBase, t.h, 72, W - ML - MR);
+    const rowsTop = hBottom + 48;                     // .rate mt-12
+    const rows: [string, string, string][] = [...t.rows, [t.customWhat, t.customCta + ' →', '']];
+    c.lineWidth = 2;
+    for (let i = 0; i < rows.length; i++) {
+      const top = rowsTop + i * 62, y = top + 36;     // 16 pad + half-leading + ascent
+      c.strokeStyle = SCR.ln;
+      c.beginPath(); c.moveTo(ML, top); c.lineTo(W - MR, top); c.stroke();
+      const last = i === rows.length - 1;
+      (c as any).letterSpacing = '-0.2px';
+      c.font = `600 17px ${F_HEAD}`; c.fillStyle = SCR.hi;
+      c.fillText(rows[i][0], ML, y);
+      (c as any).letterSpacing = '0px';
+      const ww = c.measureText(rows[i][0]).width;
+      c.font = `600 17px ${F_MONO}`; c.fillStyle = last ? SCR.red : SCR.hi;
+      const pw = c.measureText(rows[i][1]).width;
+      c.fillText(rows[i][1], W - MR - pw, y);
+      leader(c, ML + ww + 24, W - MR - pw - 24, y - 5);
+      if (rows[i][2]) {
+        c.font = `500 11px ${F_MONO}`; c.fillStyle = SCR.mid;
+        const sw = c.measureText(rows[i][2].toUpperCase()).width;
+        c.fillText(rows[i][2].toUpperCase(), W - MR - sw, y + 20);
+      }
+    }
+    const rateBottom = rowsTop + rows.length * 62;
+    c.strokeStyle = SCR.ln;
+    c.beginPath(); c.moveTo(ML, rateBottom); c.lineTo(W - MR, rateBottom); c.stroke();
+    c.font = `400 15.5px ${F_HEAD}`; c.fillStyle = SCR.mid;
+    let ny = rateBottom + 32 + 19;                    // note mt-8 + half-leading + ascent
+    const noteW = c.measureText('0').width * 60;      // = DOM max-w-[60ch]
+    for (const line of wrapText(c, t.note, noteW)) { c.fillText(line, ML, ny); ny += 26; }
+  }
+
+  // ── §02 page — the Blueprint sentence ──
+  function paintSec02(c: Ctx, W: number, H: number) {
+    const t = copy.home.mech, MR = Math.round(W * .15);
+    const { ML, hBase } = pageTop(c, W, MR, '02', t.label, 52);
+    const hBottom = heading(c, ML, hBase, t.h, 52, W - ML - MR);
+    drawLink(c, ML, hBottom + 32 + 19, t.link);       // .lnk mt-8
+  }
+
+  // ── §03 page — proof, landscape: heading left, stamp right, the two
+  // product columns beneath (full real paragraphs, no truncation) ──
+  function paintSec03(c: Ctx, W: number, H: number) {
+    const t = copy.home.proof, MR = Math.round(W * .15);
+    const { ML, hBase } = pageTop(c, W, MR, '03', t.label, 48);
+    const hBottom = heading(c, ML, hBase, t.h, 48, W - ML - MR - 282);
+    // the honesty stamp, miniature, top-right of the heading row
+    c.save();
+    c.translate(W - MR - 130, hBase + 22); c.rotate(-.04);
+    c.strokeStyle = SCR.red; c.lineWidth = 2.5;
+    c.beginPath(); c.roundRect(-125, -46, 250, 92, 10); c.stroke();
+    (c as any).letterSpacing = '1.5px';
+    c.font = `600 12px ${F_MONO}`; c.fillStyle = SCR.red; c.textAlign = 'center';
+    c.fillText(t.stamp[0].toUpperCase(), 0, -18);
+    c.font = `700 32px ${F_MONO}`; c.fillText(t.stamp[1], 0, 16);
+    c.font = `600 10px ${F_MONO}`; c.fillText(t.stamp[2].toUpperCase(), 0, 36);
+    c.textAlign = 'left'; (c as any).letterSpacing = '0px';
+    c.restore();
+    // product columns (.row-line: border-top + 22px padding; p mt-3 16px/26)
+    const gap = 56, colW = (W - ML - MR - gap) / 2;
+    const colsTop = hBottom + 40;
+    let gridBottom = colsTop;
+    t.cards.forEach((card, i) => {
+      const x = ML + i * (colW + gap);
+      c.strokeStyle = SCR.ln; c.lineWidth = 2;
+      c.beginPath(); c.moveTo(x, colsTop); c.lineTo(x + colW, colsTop); c.stroke();
+      c.font = `700 28px ${F_HEAD}`; c.fillStyle = SCR.hi;
+      const nBase = colsTop + 22 + 46;
+      c.fillText(card.name, x, nBase);
+      const nw = c.measureText(card.name).width;
+      (c as any).letterSpacing = '1.5px';
+      c.font = `600 11px ${F_MONO}`; c.fillStyle = SCR.mid;
+      c.fillText(card.stage.toUpperCase(), x + nw + 18, nBase - 2);
+      (c as any).letterSpacing = '0px';
+      c.font = `400 16px ${F_HEAD}`; c.fillStyle = SCR.mid;
+      let py = colsTop + 22 + 52 + 12 + 20;
+      for (const line of wrapText(c, card.p, colW)) { c.fillText(line, x, py); py += 26; }
+      gridBottom = Math.max(gridBottom, py - 26 + 8 + 22);
+    });
+    // bottom row: exhibit note left, link right (justify-between, mt-10)
+    const bBase = gridBottom + 62 + 19;
+    c.font = `400 15.5px ${F_HEAD}`; c.fillStyle = SCR.mid;
+    let ey = bBase;
+    for (const line of wrapText(c, t.exhibit, 470)) { c.fillText(line, ML, ey); ey += 26; }
+    drawLink(c, 0, bBase, t.link, W - MR);
+  }
+
+  // ── §04 page — the objection, before the CTA ──
+  function paintSec04(c: Ctx, W: number, H: number) {
+    const t = copy.home.objection, MR = Math.round(W * .15);
+    const { ML, hBase } = pageTop(c, W, MR, '04', t.label, 48);
+    const hBottom = heading(c, ML, hBase, t.h, 48, W - ML - MR);
+    c.font = `400 17px ${F_HEAD}`; c.fillStyle = SCR.mid;
+    const proseW = c.measureText('0').width * 62;   // = DOM .prose-w (62ch)
+    let py = hBottom + 24 + 20;                     // p mt-6 + half-leading + ascent
+    for (const line of wrapText(c, t.p, proseW)) { c.fillText(line, ML, py); py += 28; }
+  }
+
+  // ── TOC page — the prospectus contents ──
+  function paintToc(c: Ctx, W: number, H: number) {
+    const ML = Math.round(W * .16), MR = ML;
+    bar(c, ML, 74, 22, 22, 7, SCR.red);
+    c.font = `700 26px ${F_HEAD}`; c.fillStyle = SCR.hi;
+    c.fillText('Maquette.', ML + 36, 95);
+    (c as any).letterSpacing = '2px';
+    c.font = `600 12px ${F_MONO}`; c.fillStyle = SCR.mid;
+    c.fillText('CONTENTS', ML, 190);
+    (c as any).letterSpacing = '0px';
+    c.strokeStyle = SCR.ln; c.lineWidth = 2;
+    c.beginPath(); c.moveTo(ML + 92, 186); c.lineTo(W - MR, 186); c.stroke();
+    const items: [string, string][] = [
+      ['01', copy.home.build.label],
+      ['02', copy.home.mech.label],
+      ['03', copy.home.proof.label],
+      ['04', copy.home.objection.label],
+    ];
+    let y = 260;
+    for (const [idx, label] of items) {
+      c.font = `500 15px ${F_MONO}`; c.fillStyle = SCR.red;
+      c.fillText(idx, ML, y);
+      c.font = `500 19px ${F_HEAD}`; c.fillStyle = SCR.body;
+      c.fillText(label, ML + 44, y);
+      const lw = c.measureText(label).width;
+      leader(c, ML + 44 + lw + 18, W - MR, y - 5);
+      y += 64;
+    }
+    c.font = `500 15px ${F_HEAD}`; c.fillStyle = SCR.red;
+    c.fillText(copy.cta + '  →', ML, H - 84);
+  }
+
+  // Rounded-corner shape/box — replaces BoxGeometry for every panel
+  // silhouette, so the screens read as rounded cards, not slabs.
+  function roundedShape(w: number, h: number, r: number) {
+    const rr = Math.min(r, w / 2, h / 2);
+    const hw = w / 2 - rr, hh = h / 2 - rr;
+    const shape = new THREE.Shape();
+    shape.moveTo(-hw, -h / 2);
+    shape.lineTo(hw, -h / 2);
+    shape.absarc(hw, -hh, rr, -Math.PI / 2, 0, false);
+    shape.lineTo(w / 2, hh);
+    shape.absarc(hw, hh, rr, 0, Math.PI / 2, false);
+    shape.lineTo(-hw, h / 2);
+    shape.absarc(-hw, hh, rr, Math.PI / 2, Math.PI, false);
+    shape.lineTo(-w / 2, -hh);
+    shape.absarc(-hw, -hh, rr, Math.PI, Math.PI * 1.5, false);
+    return shape;
+  }
+  function roundedBox(w: number, h: number, depth: number, r: number, seg = 6) {
+    const geo = new THREE.ExtrudeGeometry(roundedShape(w, h, r), { depth, bevelEnabled: false, curveSegments: seg });
+    geo.translate(0, 0, -depth / 2);
+    return geo;
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  //  PANEL FACTORY
+  // ═══════════════════════════════════════════════════════════════
+
+  interface Panel {
+    group: THREE.Group;
+    bMat: THREE.MeshPhysicalMaterial;
+    eMat: THREE.LineBasicMaterial;
+    fMatB: THREE.MeshBasicMaterial;   // blurred page face (the abstract state)
+    fMatS: THREE.MeshBasicMaterial;   // sharp page face (the parked state)
+    w: number; h: number; texW: number;
+    seed: number;
+  }
+
+  // Painted page textures, one SHARP + one BLURRED per page. The blurred
+  // variant is what floats in space — abstract, unreadable smudges of a
+  // page — and the sharp one takes over only when the page parks at text
+  // size. Per-panel px-per-unit so parked texture pixels map ≈1:1 to
+  // screen pixels. Canvases + painters are kept so both variants repaint
+  // once the real fonts finish loading.
+  function mkTex(cnv: HTMLCanvasElement) {
+    const tex = new THREE.CanvasTexture(cnv);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = Math.min(8, R.capabilities.getMaxAnisotropy());
+    return tex;
+  }
+  interface TexJob {
+    cnv: HTMLCanvasElement; bcnv: HTMLCanvasElement;
+    paint: (c: Ctx, W: number, H: number) => void;
+    sharp: THREE.CanvasTexture; blur: THREE.CanvasTexture; blurPx: number;
+  }
+  // Textures are painted at 2× the logical resolution (painters keep
+  // logical coordinates via setTransform), so the parked page stays crisp
+  // on high-dpr screens and survives the slight park enlargement.
+  const RES = 2;
+  const texJobs: TexJob[] = [];
+  function paintJob(j: TexJob) {
+    const c = j.cnv.getContext('2d')!;
+    c.setTransform(RES, 0, 0, RES, 0, 0);
+    const W = j.cnv.width / RES, H = j.cnv.height / RES;
+    c.fillStyle = SCR.bg; c.fillRect(0, 0, W, H);
+    j.paint(c, W, H);
+    const bc = j.bcnv.getContext('2d')!;
+    bc.setTransform(1, 0, 0, 1, 0, 0);
+    bc.filter = 'none';
+    bc.fillStyle = SCR.bg; bc.fillRect(0, 0, j.bcnv.width, j.bcnv.height);
+    bc.filter = `blur(${j.blurPx * RES}px)`;
+    bc.drawImage(j.cnv, 0, 0);
+    bc.filter = 'none';
+    j.sharp.needsUpdate = true; j.blur.needsUpdate = true;
+  }
+  function screenTex(w: number, h: number, ppu: number, paint: (c: Ctx, W: number, H: number) => void) {
+    const cnv = document.createElement('canvas');
+    cnv.width = Math.round(w * ppu * RES); cnv.height = Math.round(h * ppu * RES);
+    const bcnv = document.createElement('canvas');
+    bcnv.width = cnv.width; bcnv.height = cnv.height;
+    const job: TexJob = { cnv, bcnv, paint, sharp: mkTex(cnv), blur: mkTex(bcnv), blurPx: Math.round(ppu / 11) };
+    paintJob(job);
+    texJobs.push(job);
+    return job;
+  }
+  function repaintTextures() { for (const j of texJobs) paintJob(j); }
+
+  // ShapeGeometry UVs are raw x/y coords — normalize to 0…1 so the
+  // texture maps the rounded face exactly.
+  function faceGeo(w: number, h: number, r: number) {
+    const g = new THREE.ShapeGeometry(roundedShape(w, h, r), 8);
+    const uv = g.attributes.uv;
+    for (let i = 0; i < uv.count; i++) uv.setXY(i, (uv.getX(i) + w / 2) / w, (uv.getY(i) + h / 2) / h);
+    return g;
+  }
+
+  function mkPanel(w: number, h: number, d: number, ppu: number, paint: (c: Ctx, W: number, H: number) => void): Panel {
+    const g = new THREE.Group();
+    const bMat = new THREE.MeshPhysicalMaterial({
+      color: P.scr, roughness: .18, metalness: .7, clearcoat: .05,
+      emissive: P.scr, emissiveIntensity: 0,
+      transparent: true, opacity: 0, side: THREE.DoubleSide,
+      polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1,
+    });
+    const eMat = new THREE.LineBasicMaterial({ color: P.ink, transparent: true, opacity: .75 });
+    const rad = Math.min(w, h) * .07;
+    const box = roundedBox(w, h, d, rad);
+    g.add(new THREE.Mesh(box, bMat));
+    g.add(new THREE.LineSegments(new THREE.EdgesGeometry(box), eMat));
+    // Two page faces, blurred under sharp — un-tonemapped so the palette
+    // is exact. Their opacities crossfade as the page parks (resolve).
+    const job = screenTex(w, h, ppu, paint);
+    const fGeo = faceGeo(w, h, rad);
+    const fMatB = new THREE.MeshBasicMaterial({ map: job.blur, toneMapped: false, transparent: true, opacity: 0 });
+    const fMatS = new THREE.MeshBasicMaterial({ map: job.sharp, toneMapped: false, transparent: true, opacity: 0 });
+    const faceB = new THREE.Mesh(fGeo, fMatB);
+    faceB.position.z = d / 2 + .008;
+    const faceS = new THREE.Mesh(fGeo, fMatS);
+    faceS.position.z = d / 2 + .012;
+    g.add(faceB); g.add(faceS);
+    root.add(g);
+    // texW is LOGICAL texture width (park sizing maps it ≈1:1 to screen px)
+    return { group: g, bMat, eMat, fMatB, fMatS, w, h, texW: Math.round(w * ppu), seed: Math.random() * 100 };
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  //  CREATE PANELS
+  // ═══════════════════════════════════════════════════════════════
+
+  // Diving panels are 0.03·w shorter than their old 3:5-ish cuts — the
+  // painted top padding dropped from 7% to 4% of W, and the geometry
+  // sheds the same 3%·w so the parked card fits under the sticky header
+  // at unchanged text scale.
+  const pMain = mkPanel(10, 5.7, .12, 128, paintSec01);
+  const pAdm  = mkPanel(7, 4.3, .10, 160, paintSec02);
+  const pSide = mkPanel(2.8, 6, .10, 192, paintToc);
+  // §03's page is landscape (was a portrait "phone") — it parks over a
+  // landscape section, and every floating object is a page now anyway.
+  const pMobi = mkPanel(7.5, 4.37, .08, 160, paintSec03);
+  const pObj  = mkPanel(7.5, 4.37, .08, 160, paintSec04);
+  const panels = [pMain, pAdm, pSide, pMobi, pObj];
+
+  // ═══════════════════════════════════════════════════════════════
+  //  MEASURED TIMELINE — every section is a 100vh slide, every dive is
+  //  centered on its own slide's measured center.
+  //  Row: [scrollT, px,py,pz, rx,ry,rz, fillOpacity, edgeOpacity, uiOpacity, scale]
+  //
+  //  Scroll fractions hard-coded at one window size drift on every other
+  //  one — both document height and each section's position depend on the
+  //  viewport. So all timelines are generated from the real DOM (at boot
+  //  and on every ScrollTrigger refresh): each slide's center is a snap
+  //  point, and each dive's phases sit at fixed viewport-height fractions
+  //  around that center. Snap, peak and text reveal coincide on any screen
+  //  by construction. Scroll → animation is RIGID (scrub: true, no lerp).
+  // ═══════════════════════════════════════════════════════════════
+
+  type KF = number[];
+  const kfMain: KF[] = [], kfAdm: KF[] = [], kfSide: KF[] = [], kfMobi: KF[] = [], kfObj: KF[] = [];
+  const allKF = [kfMain, kfAdm, kfSide, kfMobi, kfObj];
+  const camKF: [number, number, number, number][] = [];
+
+  const secEls = ['s01', 's02', 's03', 's04', 'cta'].map((id) => document.getElementById(id));
+  const innerEls = ['s01-inner', 's02-inner', 's03-inner', 's04-inner'].map((id) => document.getElementById(id));
+  const pageEls = [0, 1, 2, 3].map((i) => document.getElementById(`mq-page-${i}`));
+  // Reparent each section's real HTML into its fixed page twin. The
+  // sections stay behind as empty 100vh scroll spacers (the timeline's
+  // measurements don't change), and without JS the untouched server HTML
+  // renders normally. The twin is shown only while its card is parked.
+  innerEls.forEach((el, k) => {
+    const shell = pageEls[k]?.querySelector('.mq-page-scale');
+    if (el && shell) shell.appendChild(el);
+  });
+
+  // Poses: [px,py,pz, rx,ry,rz, scale]. One dive per content section —
+  // each section's page flies in and PARKS at text size (parkPose, computed
+  // from the live camera every frame — never full-screen). The TOC page
+  // rides along and moves aside during §03's dive.
+  // closeup = the blend's start pose: FAR and SMALL (behind the origin),
+  // so the page's apparent size grows monotonically up to park size and
+  // never overshoots it — the page must never look bigger than its text.
+  const DIVES = [
+    { panel: 0, closeup: [0, .30, -9, 0, .08, 0, .8],    angle: 1.35 },
+    { panel: 1, closeup: [0, .40, -9, .02, -.06, 0, .9], angle: 1.55 },
+    { panel: 3, closeup: [0, .20, -9, 0, -.05, 0, .9],   angle: 1.75 },
+    { panel: 4, closeup: [0, .30, -9, 0, .06, 0, .9],    angle: 1.92 },
+  ];
+  const SCATTER = [
+    [9, 3.5, -5, .12, .35, -.06, 1],
+    [-8, 5.5, -6, -.08, .22, .04, 1],
+    [-10, -2, 4, .05, -.25, -.08, 1],
+    [11, 4, 7, .06, -.32, .10, .7],
+    [-11, 1.5, 6, .08, .28, -.06, .7],
+  ];
+  const ASIDE = [
+    [5.5, 1.5, -3.5, 0, .10, 0, 1],
+    [-4.5, 3, -3.5, .08, .10, 0, 1],
+    [-7.2, .5, 1.2, 0, .18, 0, 1],
+    [7.8, -.4, 2.8, 0, -.22, 0, .6],
+    [-8.6, 2.2, 2.4, 0, .24, 0, .55],
+  ];
+  const FINAL = [
+    [0, .5, 0, 0, 0, 0, 1],
+    [-1.5, 5.8, -3, .12, .08, 0, 1],
+    [-7.2, .5, 1.2, 0, .18, 0, 1],
+    [7.8, -.4, 2.8, 0, -.22, 0, .6],
+    [-8.6, 2.2, 2.4, 0, .24, 0, .55],
+  ];
+  const OP = { hidden: [0, .65, .22], solid: [.92, .50, 1], dim: [.75, .28, .35] };
+  const row = (t: number, pose: number[], op: number[]): KF =>
+    [t, pose[0], pose[1], pose[2], pose[3], pose[4], pose[5], op[0], op[1], op[2], pose[6]];
+
+  let pcs: number[] = [.2, .4, .6, .78];     // dive centers (progress space)
+  let pcCta = .95, finStart = .84;           // CTA center / finale begins
+  let holds: [number, number, number, number][] = [];
+  let hudCuts: number[] = [.1, .3, .5, .7];
+
+  // interpKF needs strictly ascending scrollT — measured bounds could
+  // collide on extreme viewports.
+  function mono(rows: number[][]) {
+    for (let i = 1; i < rows.length; i++)
+      if (rows[i][0] <= rows[i - 1][0]) rows[i][0] = rows[i - 1][0] + .003;
+  }
+
+  // The parked card lives in the region BELOW the opaque sticky header —
+  // centered on the full viewport its top slid under the header (cut).
+  // Both parkPose and the DOM twins center on this region and cap the
+  // card height to it (small breathing margin included).
+  const headEl = document.querySelector('.site-head') as HTMLElement | null;
+  let headH = 0;
+  const maxCardH = () => Math.max(innerHeight - headH - 24, 200);
+
+  // Size each DOM page twin with the SAME formula as parkPose, in CSS px:
+  // the twin sits exactly on the parked card. Runs on every refresh.
+  function layoutPages() {
+    headH = headEl?.offsetHeight ?? 0;
+    for (let k = 0; k < pageEls.length; k++) {
+      const pg = pageEls[k]; if (!pg) continue;
+      const pnl = panels[DIVES[k].panel];
+      let wPx = Math.min(pnl.texW * 1.12, .94 * innerWidth);
+      if (wPx * pnl.h / pnl.w > maxCardH()) wPx = maxCardH() * pnl.w / pnl.h;
+      const hPx = wPx * pnl.h / pnl.w;
+      pg.style.width = `${wPx.toFixed(2)}px`;
+      pg.style.height = `${hPx.toFixed(2)}px`;
+      // centered in the visible region below the header, like parkPose
+      pg.style.top = `calc(50% + ${(headH / 2).toFixed(1)}px)`;
+      pg.style.borderRadius = `${Math.round(Math.min(pnl.w, pnl.h) * .07 / pnl.w * wPx)}px`;
+      pg.style.setProperty('--pgs', (wPx / pnl.texW).toFixed(5));
+      const sc = pg.querySelector('.mq-page-scale') as HTMLElement;
+      sc.style.width = `${pnl.texW}px`;
+      // logical-px padding (CSS % would resolve against the parent's
+      // scaled width). Top = painter PT (4%) − 3% — the twin's own line
+      // boxes above the kicker make up the difference; measured, not
+      // derived. Sides 10%, bottom 3%.
+      sc.style.padding = `${Math.round(pnl.texW * .01)}px ${Math.round(pnl.texW * .10)}px ${Math.round(pnl.texW * .03)}px`;
+    }
+  }
+
+  function buildTimeline() {
+    layoutPages();
+    const max = Math.max(document.documentElement.scrollHeight - innerHeight, 1);
+    const centers = secEls.map((el, i) => el
+      ? Math.min(Math.max((el.offsetTop + el.offsetHeight / 2 - innerHeight / 2) / max, 0), 1)
+      : .2 + i * .19);
+    pcs = centers.slice(0, 4);
+    pcCta = centers[4];
+    const F = innerHeight / max;             // one viewport-height, in progress units
+    // The page parks at TEXT size (never full screen). Park blend runs
+    // [pc-C → pc-PK], holds parked across [pc-PK → pc+PK] — kept short:
+    // the blur-resolve fills the approach/leave, so something is always
+    // changing while scrolling.
+    const A = .55 * F;                       // approach begins / aside reached
+    const C = .36 * F;                       // close-up reached / park blend starts
+    const PK = .16 * F;                      // parked at text size
+
+    holds   = pcs.map((pc) => [pc - C, pc - PK, pc + PK, pc + C] as [number, number, number, number]);
+    finStart = pcs[3] + A;                   // the finale begins after §04's page departs
+    hudCuts = [pcs[0] - A, (pcs[0] + pcs[1]) / 2, (pcs[1] + pcs[2]) / 2, (pcs[2] + pcs[3]) / 2, (pcs[3] + pcCta) / 2];
+
+    DIVES.forEach((d, k) => {
+      const pc = pcs[k], i = d.panel, kf = allKF[i];
+      kf.length = 0;
+      kf.push(
+        row(0, SCATTER[i], OP.hidden),
+        row(pc - A, SCATTER[i], OP.hidden),
+        row(pc - C, d.closeup, OP.solid),
+        row(pc + C, d.closeup, OP.solid),
+        row(pc + A, ASIDE[i], OP.dim),
+        row(pcCta - .6 * F, ASIDE[i], OP.dim),
+        row(pcCta, FINAL[i], OP.solid),
+        row(1, FINAL[i], OP.solid),
+      );
+      mono(kf);
+    });
+
+    // Sidebar — rides along §03's approach, parks aside during the dive.
+    {
+      const pc = pcs[2];
+      kfSide.length = 0;
+      kfSide.push(
+        row(0, SCATTER[2], OP.hidden),
+        row(pc - A, SCATTER[2], OP.hidden),
+        row(pc - C, [-2.5, 0, 1.5, 0, .15, 0, 1], OP.solid),
+        row(pc - PK, ASIDE[2], OP.dim),
+        row(pcCta, FINAL[2], OP.solid),
+        row(1, FINAL[2], OP.solid),
+      );
+      mono(kfSide);
+    }
+
+    // Camera: one continuous path — dolly into each dive, pull back to a
+    // single mid-point between consecutive dives (never a full return to
+    // orbit, which would collide with the next dive's approach).
+    camKF.length = 0;
+    camKF.push([0, 40, 22, 0], [Math.max(.02, pcs[0] - A, .02), 28, 12, DIVES[0].angle - .35]);
+    DIVES.forEach((d, k) => {
+      const pc = pcs[k];
+      camKF.push([pc - PK, 7, 2.5, d.angle], [pc + PK, 7, 2.5, d.angle]);
+      if (k < DIVES.length - 1)
+        camKF.push([(pc + pcs[k + 1]) / 2, 16, 6, (d.angle + DIVES[k + 1].angle) / 2]);
+    });
+    camKF.push([pcs[3] + A, 30, 14, DIVES[3].angle + .08]);
+    camKF.push([pcCta, 36, 15, 1.95], [1, 34, 14, 2.0]);
+    mono(camKF);
+  }
+  buildTimeline();
+
+  // ═══════════════════════════════════════════════════════════════
+  //  CONNECTIONS (draw themselves in Phase 4)
+  // ═══════════════════════════════════════════════════════════════
+
+  interface Conn { curve: THREE.CatmullRomCurve3; line: THREE.Line; mat: THREE.LineBasicMaterial; nPts: number; }
+  const conns: Conn[] = [];
+  const CONN_PTS = 60;
+
+  function mkConn(pts: THREE.Vector3[]): Conn {
+    const curve = new THREE.CatmullRomCurve3(pts);
+    const mat = new THREE.LineBasicMaterial({ color: P.red, transparent: true, opacity: 0 });
+    const geom = new THREE.BufferGeometry().setFromPoints(curve.getPoints(CONN_PTS));
+    const line = new THREE.Line(geom, mat);
+    line.geometry.setDrawRange(0, 0);
+    root.add(line);
+    return { curve, line, mat, nPts: CONN_PTS + 1 };
+  }
+
+  conns.push(mkConn([new THREE.Vector3(-5,.5,.06), new THREE.Vector3(-5.8,1.5,.8), new THREE.Vector3(-7.2,.5,1.2)]));
+  conns.push(mkConn([new THREE.Vector3(5,.5,.06), new THREE.Vector3(6.5,-.5,1.8), new THREE.Vector3(7.8,-.4,2.8)]));
+  conns.push(mkConn([new THREE.Vector3(0,3.5,0), new THREE.Vector3(-.5,4.5,-1.2), new THREE.Vector3(-1.5,5.8,-3)]));
+  conns.push(mkConn([new THREE.Vector3(-7.2,3.5,1.2), new THREE.Vector3(-5.5,5,-0.5), new THREE.Vector3(-1.5,5.8,-3)]));
+
+  // ─── Data particles ───
+  interface Ptcl { mesh: THREE.Mesh; ci: number; ph: number; spd: number; }
+  const ptcls: Ptcl[] = [];
+  const ptclGeo = new THREE.SphereGeometry(.1, 8, 8);
+  for (let ci = 0; ci < conns.length; ci++) {
+    for (let j = 0; j < 3; j++) {
+      const m = new THREE.Mesh(
+        ptclGeo,
+        new THREE.MeshStandardMaterial({ color: P.red, emissive: P.scrRed, emissiveIntensity: 0, transparent: true, opacity: 0, roughness: .2, metalness: .3 })
+      );
+      root.add(m);
+      ptcls.push({ mesh: m, ci, ph: j / 3, spd: .12 + Math.random() * .06 });
+    }
+  }
+
+  // ─── Grid ───
+  const gm1 = new THREE.LineBasicMaterial({ color: P.red, transparent: true, opacity: .2 });
+  const gm2 = new THREE.LineBasicMaterial({ color: P.hl, transparent: true, opacity: .12 });
+  const grid = new THREE.GridHelper(40, 40, gm1.color, gm2.color);
+  // @ts-ignore
+  grid.material = [gm1, gm2];
+  grid.position.y = -3.8;
+  root.add(grid);
+
+  // ─── Datum crosses ───
+  const NC = 30;
+  const ca = new Float32Array(NC * 18);
+  for (let i = 0; i < NC; i++) {
+    const cx=(Math.random()-.5)*50, cy=(Math.random()-.5)*28+4, cz=(Math.random()-.5)*50, sz=.25+Math.random()*.2, o=i*18;
+    ca[o]=cx-sz; ca[o+1]=cy; ca[o+2]=cz;  ca[o+3]=cx+sz; ca[o+4]=cy; ca[o+5]=cz;
+    ca[o+6]=cx; ca[o+7]=cy-sz; ca[o+8]=cz; ca[o+9]=cx; ca[o+10]=cy+sz; ca[o+11]=cz;
+    ca[o+12]=cx; ca[o+13]=cy; ca[o+14]=cz-sz; ca[o+15]=cx; ca[o+16]=cy; ca[o+17]=cz+sz;
+  }
+  const cg = new THREE.BufferGeometry(); cg.setAttribute('position', new THREE.BufferAttribute(ca, 3));
+  const cm = new THREE.LineBasicMaterial({ color: P.mid, transparent: true, opacity: .15 });
+  const crosses = new THREE.LineSegments(cg, cm);
+  S.add(crosses);
+
+  // ═══════════════════════════════════════════════════════════════
+  //  INPUT — ScrollTrigger scrubs a proxy tween; sp is the eased progress.
+  //  No snap (removed 2026-08-25 — the "click" felt bad) and no DOM portal:
+  //  the card itself is the background at each dive's peak.
+  // ═══════════════════════════════════════════════════════════════
+
+  let sp = 0, tmx = 0, tmy = 0, smx = 0, smy = 0;
+  const hs = document.getElementById('mq-hs'), hp = document.getElementById('mq-hp'), hb = document.getElementById('mq-hud');
+  const vig = document.getElementById('mq-vig');
+
+  // Set whenever something outside the scroll loop invalidates the frame
+  // (resize clears the GL buffer, refresh moves keyframes, fonts repaint
+  // textures) — otherwise the demand-rendering skip would show a stale or
+  // blank canvas until the next scroll.
+  let needsFrame = true;
+  const onMM = (e: MouseEvent) => { tmx = (e.clientX/innerWidth-.5)*2; tmy = (e.clientY/innerHeight-.5)*2; };
+  addEventListener('mousemove', onMM, { passive: true });
+  function onR() { cam.aspect = innerWidth/innerHeight; cam.updateProjectionMatrix(); R.setSize(innerWidth,innerHeight); needsFrame = true; }
+  addEventListener('resize', onR);
+
+  // No snap — the user scrolls freely; the wide flat window in the timeline
+  // is what makes each section's covered state easy to rest in. Scrub is a
+  // short catch-up (0.35s), so discrete wheel steps read as one continuous
+  // motion instead of stepped jumps. A numeric scrub only smooths a linked
+  // animation (a standalone trigger reports raw progress), so the trigger
+  // scrubs a proxy tween and the render loop reads the eased value.
+  const prox = { p: 0 };
+  const tw = gsap.to(prox, {
+    p: 1,
+    ease: 'none',
+    scrollTrigger: {
+      start: 0,
+      end: () => ScrollTrigger.maxScroll(window),
+      scrub: 0.35,
+      onRefresh: () => { buildTimeline(); needsFrame = true; },
+    },
+  });
+  // Layout settles late (fonts) — remeasure everything once they're in,
+  // and repaint the card pages with the real faces.
+  (document as any).fonts?.ready?.then(() => { repaintTextures(); ScrollTrigger.refresh(); needsFrame = true; });
+
+  cv.style.opacity = '1'; if (hb) hb.style.opacity = '.5';
+
+  // ═══════════════════════════════════════════════════════════════
+  //  INTERPOLATION
+  // ═══════════════════════════════════════════════════════════════
+
+  const cl = (v: number) => Math.max(0, Math.min(1, v));
+  const eio = (t: number) => t < .5 ? 4*t*t*t : 1 - (-2*t+2)**3/2;
+  const eo = (t: number) => 1 - (1 - t) ** 3;
+
+  // Trapezoid: 0 → 1 ramp [a,b], flat 1 [b,c], 1 → 0 ramp [c,d]. Drives every
+  // induced stop — the parallax damp and the portal crossfade share this.
+  function trap(v: number, a: number, b: number, c: number, d: number) {
+    if (v <= a || v >= d) return 0;
+    if (v < b) return (v - a) / (b - a);
+    if (v <= c) return 1;
+    return 1 - (v - c) / (d - c);
+  }
+
+  // Interpolate a keyframe array at scroll position t into a preallocated
+  // buffer (no per-frame slice/map allocations — GC churn drops frames).
+  const kfOut = new Float64Array(10);
+  function interpKF(kfs: number[][], t: number): Float64Array {
+    let i = 0;
+    while (i < kfs.length - 1 && kfs[i + 1][0] <= t) i++;
+    if (i >= kfs.length - 1) {
+      const l = kfs[kfs.length - 1];
+      for (let j = 1; j < l.length; j++) kfOut[j - 1] = l[j];
+      return kfOut;
+    }
+    const a = kfs[i], b = kfs[i + 1];
+    const e = eio(cl((t - a[0]) / (b[0] - a[0])));
+    for (let j = 1; j < a.length; j++) kfOut[j - 1] = a[j] + (b[j] - a[j]) * e;
+    return kfOut;
+  }
+
+  function interpCam(kfs: [number,number,number,number][], t: number): [number,number,number] {
+    let i = 0;
+    while (i < kfs.length - 1 && kfs[i + 1][0] <= t) i++;
+    if (i >= kfs.length - 1) return [kfs[kfs.length-1][1], kfs[kfs.length-1][2], kfs[kfs.length-1][3]];
+    const a = kfs[i], b = kfs[i + 1];
+    const e = eio(cl((t - a[0]) / (b[0] - a[0])));
+    return [a[1]+(b[1]-a[1])*e, a[2]+(b[2]-a[2])*e, a[3]+(b[3]-a[3])*e];
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  //  RENDER LOOP
+  // ═══════════════════════════════════════════════════════════════
+
+  const clock = new THREE.Clock();
+  let fid: number;
+  let lastHud = -1, lastPct = -1, lastSp = -1, idleTick = 0;
+  const lastPg = [false, false, false, false];
+  const C_MID = new THREE.Color(P.mid), C_INK = new THREE.Color(P.ink);
+  const tmpC = new THREE.Color();
+  const parkBy = [0, 0, 0, 0, 0];            // per-panel park blend, 0…1
+
+  // PARK pose, computed from the LIVE camera: the page floats at PARK_DIST
+  // in front of it, dead-parallel, scaled so texture pixels map ≈1:1 to
+  // screen pixels (its text arrives at real display size) — and centered
+  // on the region BELOW the sticky header, clamped to fit it: paper stays
+  // visible around the parked page and the header never cuts its top.
+  const _dir = new THREE.Vector3(), _covPos = new THREE.Vector3(), _covQ = new THREE.Quaternion();
+  const _up = new THREE.Vector3();
+  const PARK_DIST = 5;
+  let _covS = 1;
+  function parkPose(pnl: Panel) {
+    cam.getWorldDirection(_dir);
+    _covPos.copy(cam.position).addScaledVector(_dir, PARK_DIST);
+    _covQ.copy(cam.quaternion);
+    const vhW = 2 * PARK_DIST * Math.tan(THREE.MathUtils.degToRad(cam.fov / 2));
+    const vwW = vhW * cam.aspect;
+    const pxW = vhW / innerHeight;           // world units per CSS px at PARK_DIST
+    // shift down by half the header height — center of the VISIBLE region
+    _up.set(0, 1, 0).applyQuaternion(cam.quaternion);
+    _covPos.addScaledVector(_up, -headH / 2 * pxW);
+    // ×1.12: the page parks a touch closer/larger than exact 1:1 (user
+    // feedback 2026-08-26) — the 2× texture keeps it crisp regardless.
+    const fracW = Math.min((pnl.texW * 1.12) / innerWidth, .94);
+    let s = fracW * vwW / pnl.w;
+    const maxH = maxCardH() * pxW;
+    if (s * pnl.h > maxH) s = maxH / pnl.h;
+    _covS = s;
+  }
+
+  function render() {
+    fid = requestAnimationFrame(render);
+    const dt = clock.getDelta();
+    const t = clock.getElapsedTime();
+
+    // Eased scroll progress from the scrubbed proxy tween — GSAP catches
+    // the playhead up to the scrollbar over ~0.35s, so wheel steps blend.
+    sp = prox.p;
+
+    // Only the mouse parallax keeps its own easing (it isn't scroll).
+    smx += (tmx - smx) * 0.04;
+    smy += (tmy - smy) * 0.04;
+
+    // Dive hold, 0 → 1 → 0 across whichever section's window sp is in.
+    // Damps mouse parallax (the page goes rock-still), biases the camera
+    // head-on and drives each panel's park blend. The HTML text needs no
+    // per-frame work at all — the page texture IS the text.
+    let diveHold = 0;
+    for (let k = 0; k < holds.length; k++) {
+      const h = trap(sp, holds[k][0], holds[k][1], holds[k][2], holds[k][3]);
+      if (h > diveHold) diveHold = h;
+      parkBy[DIVES[k].panel] = h;
+      // DOM page twin: on only while the card is exactly parked (the
+      // trapezoid's flat plateau) — both layers static, so the crossfade
+      // is a pure focus shift and links/selection work on real HTML.
+      const on = h >= .999;
+      if (on !== lastPg[k]) { lastPg[k] = on; pageEls[k]?.classList.toggle('on', on); }
+    }
+
+    // ── Camera (pure function of scroll — rigid) ──
+    const [cR, cH, cAoff] = interpCam(camKF, sp);
+    const parX = smx * .12 * (1 - diveHold);
+    const parY = smy * (1 - diveHold);
+    const cA = cAoff + parX;
+    cam.position.set(Math.cos(cA) * cR, cH + parY * -2, Math.sin(cA) * cR);
+    cam.lookAt(0, 2 - diveHold * 1.5, 0);
+
+    // ── Panels — authored pose from the timeline, then blended toward the
+    // computed cover pose by the section's cover value. The camera is
+    // already posed above, so the cover pose tracks it exactly. ──
+    for (let i = 0; i < panels.length; i++) {
+      const pnl = panels[i];
+      const v = interpKF(allKF[i], sp);
+      // v = [px, py, pz, rx, ry, rz, fill, edge, ui, scale]
+      pnl.group.position.set(v[0], v[1], v[2]);
+      pnl.group.rotation.set(v[3], v[4], v[5]);
+      const s0 = v[9] || 1;
+      pnl.group.scale.setScalar(s0);
+
+      const cT = parkBy[i];
+      if (cT > 0) {
+        parkPose(pnl);
+        const e = eio(cT);
+        pnl.group.position.lerp(_covPos, e);
+        pnl.group.quaternion.slerp(_covQ, e);
+        pnl.group.scale.setScalar(s0 + (_covS - s0) * e);
+      }
+
+      const fillT = v[6];
+      // Pages not diving fade OUT while another page is parked, so the
+      // parked page and its text own the screen alone.
+      const damp = cT > 0 ? 1 : 1 - diveHold;
+      // The "text appearing" animation: blur resolves to crisp as the
+      // page parks, and blurs back as it leaves — the page carries its
+      // text away instead of the text scrolling off.
+      const resolve = eo(cl((cT - .55) / .35));
+      const faceVis = v[8] * damp;
+      pnl.bMat.opacity = fillT * damp;
+      pnl.eMat.opacity = v[7] * damp;
+      pnl.fMatB.opacity = faceVis * (1 - resolve);
+      pnl.fMatS.opacity = faceVis * resolve;
+
+      // Edge color shifts to subtler when filled
+      pnl.eMat.color.copy(tmpC.copy(C_INK).lerp(C_MID, fillT * .5));
+
+      // Subtle emissive glow when fully filled (color preset in mkPanel)
+      pnl.bMat.emissiveIntensity = fillT > .8 ? (fillT - .8) * .6 : 0;
+    }
+
+    // ── Convergence: connections draw between §04 and the CTA ──
+    const connP = cl((sp - finStart) / Math.max(pcCta - finStart, .001));
+    const connDraw = eo(connP);
+    for (const cn of conns) {
+      cn.mat.opacity = connP * .65;
+      cn.line.geometry.setDrawRange(0, Math.floor(cn.nPts * connDraw));
+    }
+
+    // ── Data particles (appear after connections) ──
+    const ptclVis = cl((sp - (finStart + pcCta) / 2) / Math.max((1 - finStart) / 2, .001));
+    for (const pt of ptcls) {
+      const m = pt.mesh.material as THREE.MeshStandardMaterial;
+      m.opacity = eo(ptclVis) * .85;
+      m.emissiveIntensity = ptclVis * 3;
+      if (ptclVis > 0) {
+        pt.ph = (pt.ph + dt * pt.spd) % 1;
+        pt.mesh.position.copy(conns[pt.ci].curve.getPointAt(pt.ph));
+        pt.mesh.scale.setScalar(1 + Math.sin(t * 6 + pt.ph * 10) * .25);
+      }
+    }
+
+    // ── Grid ──
+    gm1.opacity = .15 + sp * .15;
+    gm2.opacity = .08 + sp * .10;
+
+    // ── Red point light (grows in Phase 4) ──
+    rPt.intensity = connP * 5;
+    rPt.distance = 25 + connP * 30;
+    if (sp > .9) { rPt.intensity = 5 + (Math.sin((sp - .9) * 80) * .5 + .5) * 4; }
+
+    // ── Datum crosses — scroll-driven, so an idle page is truly static;
+    // faded during dives (some sit closer to the camera than the card) ──
+    crosses.rotation.y = -sp * 1.2;
+    cm.opacity = .15 * (1 - diveHold);
+
+    // ── HUD + paper vignette (fade while a card covers the screen) ──
+    if (hb) {
+      const ho = Math.round(.5 * (1 - diveHold) * 100) / 100;
+      if (ho !== lastHud) {
+        lastHud = ho;
+        hb.style.opacity = String(ho);
+        if (vig) vig.style.opacity = String(Math.round((1 - diveHold) * 100) / 100);
+      }
+    }
+    if (hs && hp) {
+      const pct = Math.round(sp * 100);
+      if (pct !== lastPct) {
+        lastPct = pct;
+        hp.textContent = `${pct} %`;
+        if (sp < hudCuts[0])      hs.textContent = 'PROSPECTUS // 5 PAGES';
+        else if (sp < hudCuts[1]) hs.textContent = 'SECTION 01 // SERVICES';
+        else if (sp < hudCuts[2]) hs.textContent = 'SECTION 02 // BLUEPRINT';
+        else if (sp < hudCuts[3]) hs.textContent = 'SECTION 03 // PROOF';
+        else if (sp < hudCuts[4]) hs.textContent = 'SECTION 04 // OBJECTION';
+        else                      hs.textContent = 'SYSTEM // CONNECTED';
+      }
+    }
+
+    // Demand rendering: when the scene is genuinely static (no scrub
+    // catch-up in flight, parallax settled, no particles, nothing external
+    // invalidated the frame), drop to a ~2fps heartbeat instead of a full
+    // stop — a page that presents zero frames stalls screenshot/capture
+    // pipelines and similar tooling.
+    const moving = needsFrame || sp !== lastSp
+      || Math.abs(tmx - smx) > .002 || Math.abs(tmy - smy) > .002
+      || ptclVis > 0;
+    if (moving || ++idleTick >= 30) { R.render(S, cam); needsFrame = false; idleTick = 0; }
+    lastSp = sp;
+  }
+
+  render();
+
+  // Cleanup
+  document.addEventListener('astro:before-swap', () => {
+    cancelAnimationFrame(fid);
+    tw.scrollTrigger?.kill();
+    tw.kill();
+    removeEventListener('resize', onR);
+    removeEventListener('mousemove', onMM);
+    R.dispose();
+    (cv as any).__mq = false;
+  }, { once: true });
+}
+
+boot();
+document.addEventListener('astro:page-load', boot);
 </script>

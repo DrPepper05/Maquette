@@ -1,20 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
 import SectionHead from '../components/SectionHead.astro';
-import AmbientCards from '../components/AmbientCards.astro';
-import MaquetteCanvas from '../components/MaquetteCanvas.astro';
 import { copy, routes } from '../copy';
 const t = copy.home;
 ---
 <Base route="home" title={t.title} desc={t.desc}>
 
-  <!-- fundalul ambient — paginile blurate ale prospectului: intro-ul
-       „împărțirea paginilor" + companionii ancorați pe secțiuni;
-       gate-uit pe lățime/pointer/reduced-motion în componentă -->
-  <MaquetteCanvas />
-
   <!-- ── Hero — ce facem și pentru cine, în 10 secunde ── -->
-  <section id="hero" class="wrap slide relative" data-seq>
+  <section class="wrap slide relative" data-seq>
     <div class="slide-inner">
       <p class="lbl" data-seq-i>{t.kicker}</p>
       <h1 class="t-display prose-w mt-6 max-w-[24ch]" data-seq-i>{t.h1a}<span class="h1-mono">{t.h1mono}</span>{t.h1b}</h1>
@@ -33,16 +26,13 @@ const t = copy.home;
     </div>
   </section>
 
-  <!-- ── Secțiunile ca CARDURI (2026-08-27): limbajul /projects, alternate
-       stânga-dreapta; SectionHead + filigranul stau pe hârtie, cardul
-       plutește, pagina 3D blurată a secțiunii stă în fundal pe partea
-       goală (maquette-ambient o ancorează pe id-ul secțiunii). ── -->
-
-  <!-- ── 01 · Ce construim — card pe STÂNGA, pagina 3D pe dreapta ── -->
-  <section id="s01" class="wrap sec rise">
-    <SectionHead index="01" title={t.build.label} />
-    <AmbientCards n={0} />
-    <article class="card-page float-card home-card" data-tilt="1.5">
+  <!-- ── 01 · Ce construim — aceleași rânduri cu puncte de ghidaj, dar
+       coloana din dreapta e etichetă de categorie, nu preț (2026-08-25).
+       Fiecare secțiune e un „slide" de 100vh; cardul 3D al secțiunii se
+       apropie și devine fundal exact când slide-ul e centrat. ── -->
+  <section id="s01" class="wrap sec slide">
+    <div id="s01-inner" class="slide-inner">
+      <SectionHead index="01" title={t.build.label} />
       <h3 class="t-h2 max-w-[24ch]">{t.build.h}</h3>
       <div class="rate mt-12">
         {t.build.rows.map(([what, tag, sub]) => (
@@ -59,24 +49,22 @@ const t = copy.home;
         </a>
       </div>
       <p class="mt-8 text-[15.5px] max-w-[60ch]" style="color: var(--mid)">{t.build.note}</p>
-    </article>
+    </div>
   </section>
 
-  <!-- ── 02 · Blueprint-ul — card pe DREAPTA, pagina 3D pe stânga ── -->
-  <section id="s02" class="wrap sec rise mark-left">
-    <SectionHead index="02" title={t.mech.label} />
-    <AmbientCards n={1} />
-    <article class="card-page float-card home-card right" data-tilt="1.5">
+  <!-- ── 02 · Blueprint-ul — o propoziție; mecanismul stă pe /blueprint ── -->
+  <section id="s02" class="wrap sec slide">
+    <div id="s02-inner" class="slide-inner">
+      <SectionHead index="02" title={t.mech.label} />
       <h3 class="t-h2 max-w-[26ch]">{t.mech.h}</h3>
       <a href={routes.blueprint} class="lnk mt-8">{t.mech.link}</a>
-    </article>
+    </div>
   </section>
 
-  <!-- ── 03 · Dovada — card pe STÂNGA; etichetele de stadiu rămân adevărate ── -->
-  <section id="s03" class="wrap sec rise">
-    <SectionHead index="03" title={t.proof.label} />
-    <AmbientCards n={2} />
-    <article class="card-page float-card home-card" data-tilt="1.5">
+  <!-- ── 03 · Dovada — etichetele de stadiu trebuie să rămână adevărate ── -->
+  <section id="s03" class="wrap sec slide">
+    <div id="s03-inner" class="slide-inner">
+      <SectionHead index="03" title={t.proof.label} />
       <div class="flex flex-wrap items-start justify-between gap-8">
         <h3 class="t-h2 max-w-[24ch]">{t.proof.h}</h3>
         <!-- ștampila onestității — singura instanță de pe site -->
@@ -101,21 +89,20 @@ const t = copy.home;
         <p class="text-[15.5px] max-w-[48ch]" style="color: var(--mid)">{t.proof.exhibit}</p>
         <a href={routes.projects} class="lnk">{t.proof.link}</a>
       </div>
-    </article>
+    </div>
   </section>
 
-  <!-- ── 04 · O singură obiecție — card pe DREAPTA, fix înainte de CTA ── -->
-  <section id="s04" class="wrap sec rise mark-left">
-    <SectionHead index="04" title={t.objection.label} />
-    <AmbientCards n={0} />
-    <article class="card-page float-card home-card right" data-tilt="1.5">
+  <!-- ── 04 · O singură obiecție, fix înainte de CTA ── -->
+  <section id="s04" class="wrap sec slide">
+    <div id="s04-inner" class="slide-inner">
+      <SectionHead index="04" title={t.objection.label} />
       <h3 class="t-h2">{t.objection.h}</h3>
       <p class="mt-6 prose-w" style="color: var(--mid)">{t.objection.p}</p>
-    </article>
+    </div>
   </section>
 
   <!-- ── CTA final — singurul bloc roșu de pe pagină ── -->
-  <section id="cta" class="block-red sec rise">
+  <section id="cta" class="block-red sec rise slide">
     <div class="wrap">
       <h2 class="t-h2 max-w-[20ch]">{t.end.h}</h2>
       <p class="mt-5 prose-w" style="color: var(--mid)">{t.end.p}</p>

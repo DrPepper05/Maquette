@@ -85,7 +85,7 @@ export const copy = {
           p: 'Short shifts for students. It goes through its own Blueprint first: spec, architecture and numbers before the first line of code.',
         },
       ],
-      exhibit: 'The third exhibit is this site — static, hand-written, and it works with JavaScript turned off.',
+      exhibit: 'The third exhibit is this site — static, hand-written, about 250 bytes of JavaScript.',
       link: 'See the exhibition',
       /* Ștampila onestității — o singură instanță pe site. Se actualizează
          când realitatea se schimbă; nu se șterge cât timp e adevărată. */

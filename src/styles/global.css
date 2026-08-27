@@ -81,10 +81,9 @@
   .prose-w { max-width: 62ch; }
   .sec { margin-top: var(--sec); position: relative; }
 
-  /* ── slide: DOAR hero-ul (2026-08-26) — umple un viewport, conținut
-     centrat vertical. min-height (nu height): pe ecrane mici conținutul
-     mai înalt decât viewportul crește secțiunea în loc s-o taie.
-     Secțiunile §01–§04 sunt HTML normal, pe ritmul .sec. ── */
+  /* ── slide-uri: fiecare secțiune de homepage umple exact un viewport,
+     cu conținutul centrat vertical. min-height (nu height): pe ecrane mici
+     conținutul mai înalt decât viewportul crește secțiunea în loc s-o taie. ── */
   .slide {
     min-height: 100vh; min-height: 100svh;
     display: flex; flex-direction: column; justify-content: center;
@@ -94,6 +93,9 @@
      stretch-ul și îl strâng pe conținut; forțăm lățimea plină înapoi. */
   .slide > .wrap, .slide > .slide-inner { width: 100%; }
   .slide-inner { position: relative; } /* .sec-mark din SectionHead se ancorează aici, nu de cutia înaltă */
+  /* Cele trei secțiuni cu dive: cât timp rulează canvasul, textul vizibil
+     e pagina PICTATĂ a cardului (MaquetteCanvas) — JS ascunde inner-ele o
+     singură dată la boot. Fără JS / cu reduced-motion rămân vizibile. */
 
   /* ── indiciul de scroll de pe hero ── */
   .scroll-cue {
@@ -177,19 +179,6 @@
     padding: clamp(24px, 3.5vw, 52px);
   }
 
-  /* ── cardurile de secțiune de pe homepage (2026-08-27): limbajul
-     /projects, alternate stânga-dreapta; pagina 3D blurată a secțiunii
-     plutește în fundal pe partea goală (maquette-ambient). ── */
-  .home-card { width: min(780px, 100%); }
-  .home-card.right { margin-left: auto; }
-  @media (max-width: 900px) { .home-card { width: 100%; } }
-  /* pe secțiunile cu cardul pe dreapta, filigranul numeric trece pe stânga */
-  .mark-left .sec-mark { right: auto; left: 0; }
-  /* punctele de ghidaj din .rate-row, pe întunericul cardului */
-  .card-page .rate-row .dots {
-    background: radial-gradient(circle, rgb(139 143 148 / .4) .8px, transparent .95px)
-                repeat-x left center / 8px 2px;
-  }
 
   /* ── mini-cardurile ambientale: carduri mici, GOALE, care plutesc în
      hârtia din jurul cardului mare — ecoul paginilor blurate de pe
@@ -241,6 +230,42 @@
   }
   .album-body { padding: clamp(28px, 4.5vw, 64px); }
   .album-inset { max-width: 440px; border: 1px solid var(--hairline); border-radius: 12px; overflow: hidden; }
+
+  /* ── paginile-geamăn din DOM (MaquetteCanvas): textul REAL — clicabil,
+     selectabil, nativ de clar — apare fix peste cardul parcat și dispare
+     înainte ca acesta să se mute. Layout la dimensiunile logice ale
+     texturii pictate (px ficși, nu clamp-uri), scalat cu --pgs. ── */
+  #mq-pages .mq-page {
+    position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    z-index: 30; overflow: hidden;
+    background: var(--scr-bg);
+    visibility: hidden; opacity: 0; pointer-events: none;
+    transition: opacity .15s ease, visibility 0s linear .16s;
+    --ink: var(--scr-hi); --mid: var(--scr-mid); --hairline: var(--scr-edge); --red: var(--scr-red);
+    color: var(--ink);
+  }
+  #mq-pages .mq-page.on {
+    visibility: visible; opacity: 1; pointer-events: auto;
+    transition: opacity .15s ease;
+  }
+  .mq-page-scale { transform: scale(var(--pgs, 1)); transform-origin: top left; } /* padding logic-px, setat din JS */
+  .mq-page .t-h3 { font-size: 28px; }
+  .mq-page .sec-mark { display: none; }
+  .mq-page .sec-head { margin-bottom: 42px; }
+  .mq-page .sec-head .idx, .mq-page .sec-head .ttl { font-size: 15px; }
+  .mq-page .sec-head .ttl { color: var(--mid); }
+  .mq-page :is(h2, h3) { max-width: none !important; text-wrap: initial; }
+  /* §03: heading capped la lățimea pictorului, ca ștampila să încapă pe
+     același rând (flex) și frângerile de rând să coincidă cu textura */
+  #mq-page-2 .t-h2 { max-width: 558px !important; }
+  .mq-page .t-h2 { font-size: var(--pg-h, 52px); line-height: 1.14; letter-spacing: -.028em; }
+  .mq-page .rate-row { padding-block: 16px; }
+  .mq-page .rate-row .what { font-size: 17px; }
+  .mq-page .rate-row .price { font-size: 17px; }
+  .mq-page .rate-row .dots {
+    background: radial-gradient(circle, rgb(139 143 148 / .4) .8px, transparent .95px)
+                repeat-x left center / 8px 2px;
+  }
 
   /* ── mobilierul documentului: header sticky + rigla de progres ── */
   .site-head {
