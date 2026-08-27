@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import AmbientCards from '../components/AmbientCards.astro';
 import { copy } from '../copy';
 const t = copy.contact;
 /* Formularul postează la endpoint-ul din env. Fără el, arătăm emailul —
@@ -15,7 +16,9 @@ const email = 'contact@maquette.ro';
     <p class="lede prose-w mt-7">{t.lede}</p>
   </section>
 
-  <section class="wrap sec rise grid gap-16 lg:grid-cols-[1.15fr_1fr] items-start">
+  <section class="wrap sec rise">
+    <AmbientCards n={1} />
+    <article class="card-page float-card grid gap-16 lg:grid-cols-[1.15fr_1fr] items-start" data-tilt="1.2">
     {endpoint ? (
       <form method="post" action={endpoint} class="grid gap-5 content-start">
         <div class="grid gap-5 sm:grid-cols-2">
@@ -65,6 +68,7 @@ const email = 'contact@maquette.ro';
         <p class="mt-1 text-[15px]" style="color: var(--mid)">{t.sizeP}</p>
       </div>
     </aside>
+    </article>
   </section>
 
 </Base>

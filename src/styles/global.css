@@ -62,6 +62,7 @@
   :focus-visible { outline: 2px solid var(--red); outline-offset: 3px; border-radius: 4px; }
   h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
   p { margin: 0; text-wrap: pretty; }
+  main, footer { position: relative; z-index: 1; }
 }
 
 /* Tranziții între pagini — o regulă CSS, 0 KB. Firefox: navigare normală.
@@ -79,6 +80,167 @@
   .wrap { max-width: 1200px; margin-inline: auto; padding-inline: clamp(20px, 4vw, 56px); }
   .prose-w { max-width: 62ch; }
   .sec { margin-top: var(--sec); position: relative; }
+
+  /* ── slide: DOAR hero-ul (2026-08-26) — umple un viewport, conținut
+     centrat vertical. min-height (nu height): pe ecrane mici conținutul
+     mai înalt decât viewportul crește secțiunea în loc s-o taie.
+     Secțiunile §01–§04 sunt HTML normal, pe ritmul .sec. ── */
+  .slide {
+    min-height: 100vh; min-height: 100svh;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .slide.sec { margin-top: 0; } /* ritmul dintre secțiuni vine din înălțimea slide-ului */
+  /* .wrap are margin-inline auto — ca item de flex, marginile auto îi anulează
+     stretch-ul și îl strâng pe conținut; forțăm lățimea plină înapoi. */
+  .slide > .wrap, .slide > .slide-inner { width: 100%; }
+  .slide-inner { position: relative; } /* .sec-mark din SectionHead se ancorează aici, nu de cutia înaltă */
+
+  /* ── indiciul de scroll de pe hero ── */
+  .scroll-cue {
+    /* hero-ul începe sub headerul sticky, deci ultimii ~85-140px ai lui
+       stau sub fold la scroll 0 — offsetul compensează headerul */
+    position: absolute; left: 50%; bottom: clamp(108px, 16vh, 150px);
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 7px;
+    color: var(--mid);
+  }
+  .scroll-cue .arr { animation: cue-bob 1.9s cubic-bezier(.45, 0, .55, 1) infinite; }
+  @keyframes cue-bob {
+    0%, 100% { transform: translateY(0); opacity: .55; }
+    50%      { transform: translateY(7px); opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) { .scroll-cue .arr { animation: none; } }
+
+  /* ── cardurile plutitoare — restul taburilor păstrează limbajul de
+     card, static: legănare lentă + tilt spre cursor (JS-ul din Base).
+     Niciodată pe un element cu .rise (ambele scriu transform). ── */
+  .float-card { will-change: transform; position: relative; }
+  /* Reflexia „holo" (gen carte Pokémon), foarte subtilă: un luciu care
+     urmărește cursorul + un strat de PUNCTE (halftone) dezvăluit doar în
+     jurul lui. Ambele conduse de --glare/--mx/--my din JS-ul din Base. */
+  .float-card::before,
+  .float-card::after {
+    content: ''; position: absolute; inset: 0; z-index: 3;
+    border-radius: inherit; pointer-events: none;
+  }
+  .float-card::before {   /* punctele */
+    background: radial-gradient(circle, rgb(255 255 255 / .5) .7px, transparent 1px) 0 0 / 7px 7px;
+    mask-image: radial-gradient(circle 300px at var(--mx, 50%) var(--my, 50%), black, transparent 72%);
+    -webkit-mask-image: radial-gradient(circle 300px at var(--mx, 50%) var(--my, 50%), black, transparent 72%);
+    mix-blend-mode: screen;   /* overlay ≈ invizibil pe #0F1013 */
+    opacity: calc(var(--glare, 0) * .35);
+  }
+  .float-card::after {    /* luciul */
+    background: radial-gradient(circle 360px at var(--mx, 50%) var(--my, 50%), rgb(255 255 255 / .22), transparent 70%);
+    mix-blend-mode: screen;
+    opacity: calc(var(--glare, 0) * .9);
+  }
+  .card-page-lite.float-card::before {  /* pe hârtie: puncte de cerneală, blend normal */
+    background: radial-gradient(circle, rgb(20 20 18 / .3) .7px, transparent 1px) 0 0 / 7px 7px;
+    mix-blend-mode: normal;
+    opacity: calc(var(--glare, 0) * .3);
+  }
+  .card-page-lite.float-card::after {   /* pe hârtie: luciu alb, blend normal */
+    background: radial-gradient(circle 360px at var(--mx, 50%) var(--my, 50%), rgb(255 255 255 / .55), transparent 70%);
+    mix-blend-mode: normal;
+    opacity: calc(var(--glare, 0) * .8);
+  }
+
+  /* ── cardul-pagină: TOT blocul de conținut al unei secțiuni e un card.
+     Două suprafețe, împărțite pe taburi până alege utilizatorul:
+     .card-page (întunecat, ca paginile parcate de pe homepage) pe
+     /projects și /contact; .card-page-lite (hârtie ridicată) pe
+     /services și /blueprint. Schimbarea = un singur nume de clasă. ── */
+  .card-page {
+    position: relative; z-index: 1;
+    background: var(--scr-bg);
+    border-radius: clamp(28px, 4vw, 56px);
+    padding: clamp(28px, 4.5vw, 64px);
+    --ink: var(--scr-hi); --mid: var(--scr-mid); --hairline: var(--scr-edge); --red: var(--scr-red);
+    color: var(--ink);
+    box-shadow:
+      0 1px 2px rgb(20 20 18 / .18),
+      0 6px 18px rgb(20 20 18 / .12),
+      0 24px 48px rgb(20 20 18 / .12);
+  }
+  .card-page .fld {
+    background: rgb(255 255 255 / .06);
+    border-color: var(--hairline);
+    color: var(--ink);
+  }
+  .card-page .fld::placeholder { color: var(--mid); }
+  .card-page-lite {
+    position: relative; z-index: 1;
+    background: var(--paper-2);
+    border: 1px solid var(--hairline);
+    border-radius: clamp(20px, 2.6vw, 36px);
+    padding: clamp(24px, 3.5vw, 52px);
+  }
+
+  /* ── cardurile de secțiune de pe homepage (2026-08-27): limbajul
+     /projects, alternate stânga-dreapta; pagina 3D blurată a secțiunii
+     plutește în fundal pe partea goală (maquette-ambient). ── */
+  .home-card { width: min(780px, 100%); }
+  .home-card.right { margin-left: auto; }
+  @media (max-width: 900px) { .home-card { width: 100%; } }
+  /* pe secțiunile cu cardul pe dreapta, filigranul numeric trece pe stânga */
+  .mark-left .sec-mark { right: auto; left: 0; }
+  /* punctele de ghidaj din .rate-row, pe întunericul cardului */
+  .card-page .rate-row .dots {
+    background: radial-gradient(circle, rgb(139 143 148 / .4) .8px, transparent .95px)
+                repeat-x left center / 8px 2px;
+  }
+
+  /* ── mini-cardurile ambientale: carduri mici, GOALE, care plutesc în
+     hârtia din jurul cardului mare — ecoul paginilor blurate de pe
+     homepage. Pur decorative, pur CSS. ── */
+  .mini-card {
+    position: absolute; z-index: 0;
+    border-radius: 14px;
+    background: var(--scr-bg);
+    opacity: .12;
+    filter: blur(3px);
+    pointer-events: none;
+    animation: mini-bob var(--mb-dur, 9s) ease-in-out var(--mb-delay, 0s) infinite;
+  }
+  .mini-card.lite {
+    background: var(--paper-2);
+    border: 1px solid var(--hairline);
+    opacity: .8;
+  }
+  @keyframes mini-bob {
+    0%, 100% { translate: 0 0; }
+    50%      { translate: 0 -14px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .mini-card { animation: none; } }
+  @media (max-width: 640px) { .mini-card.md-only { display: none; } }
+
+  /* ── cardul-album de pe /projects: coperta sus (foto sau ecranul live,
+     interimar), numele pe scrim, banda de info dedesubt ── */
+  .album { padding: 0; overflow: hidden; }
+  .album-cover {
+    position: relative; overflow: hidden;
+    height: clamp(300px, 42vw, 460px);
+    background: var(--scr-bg);
+  }
+  .album-cover .cover-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .album-cover .cover-live {
+    position: absolute; left: 50%; top: 0; translate: -50% 0;
+    width: min(920px, 96%);
+    filter: brightness(.85);
+    pointer-events: none;
+  }
+  .album-scrim {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgb(15 16 19 / .94) 0%, rgb(15 16 19 / .5) 34%, transparent 62%);
+  }
+  .album-title {
+    position: absolute;
+    left: clamp(24px, 4.5vw, 64px); right: clamp(24px, 4.5vw, 64px); bottom: clamp(20px, 3vw, 40px);
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 24px;
+  }
+  .album-body { padding: clamp(28px, 4.5vw, 64px); }
+  .album-inset { max-width: 440px; border: 1px solid var(--hairline); border-radius: 12px; overflow: hidden; }
 
   /* ── mobilierul documentului: header sticky + rigla de progres ── */
   .site-head {
@@ -284,6 +446,30 @@
   }
   .stamp b { font-size: 28px; font-weight: 600; letter-spacing: .04em; font-variant-numeric: tabular-nums; }
 
+  /* ── exponatul de pe /projects: un proiect pe ecran, ca la expoziție ──
+     min-height (nu height): pe ecrane mici conținutul crește secțiunea. */
+  .exhibit {
+    min-height: 100vh; min-height: 100svh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding-block: clamp(32px, 5vh, 64px);
+  }
+  .exhibit.sec { margin-top: 0; }
+
+  /* acțiunile exponatului: Contact (.btn roșu) + Like/Comment (.act mono) */
+  .ex-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 32px; }
+  .act {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 18px; border-radius: var(--r);
+    border: 1px solid var(--hairline); background: transparent;
+    font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--mid);
+    cursor: pointer;
+    transition: color .18s ease, border-color .18s ease;
+  }
+  .act:hover, .act.on { color: var(--red); border-color: var(--red); }
+  .act b { font-weight: 600; font-size: 12px; }
+  .ex-thread { max-width: 680px; }
+
   /* ── cuprinsul cu puncte de ghidaj, în subsol ── */
   .toc-row { display: flex; align-items: baseline; gap: 10px; padding-block: 5px; font-size: 13.5px; }
   .toc-row .no {
@@ -360,6 +546,30 @@
   .doc .out li { color: var(--mid); font-size: 12.5px; padding-left: 16px; position: relative; }
   .doc .out li::before { content: "—"; position: absolute; left: 0; color: var(--low); }
 
+  /* — aplicația Declutter (UI-ul prototipului) — */
+  .dcl .cap {
+    padding: 12px 14px; border: 1px dashed var(--edge); border-radius: 10px;
+    color: var(--low); font-size: 13px;
+  }
+  .dcl .grp { margin-top: 18px; }
+  .dcl .g {
+    font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--low);
+  }
+  .dcl ul { margin: 4px 0 0; padding: 0; list-style: none; }
+  .dcl ul li {
+    padding: 9px 0; border-top: 1px solid var(--edge);
+    color: var(--mid); font-size: 13px;
+  }
+  .dcl ul li::before { content: "“"; color: var(--low); }
+  .dcl ul li::after { content: "”"; color: var(--low); }
+  .dcl .strip {
+    margin-top: 20px; padding: 12px 14px;
+    border: 1px solid var(--edge); border-left: 2px solid var(--red);
+    border-radius: 10px; background: rgba(255, 255, 255, .02);
+    font-family: var(--font-mono); font-size: 10.5px; font-weight: 500;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--hi);
+  }
 }
 
 /* ═══ MIȘCAREA — totul nativ, ~250 de octeți de JS (fallback-ul IO). ═══ */

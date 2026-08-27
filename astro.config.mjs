@@ -4,20 +4,22 @@ import tailwind from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://maquette.ro',
 
-  /* Vechile rute bilingve. Site-ul e doar în engleză din 2026-08-24. */
+  /* Vechile rute bilingve (site doar în engleză din 2026-08-24)
+     + /lab → /projects (redenumit 2026-08-25). */
   redirects: {
     '/ro': '/',
     '/en': '/',
     '/ro/blueprint': '/blueprint',
     '/en/blueprint': '/blueprint',
-    '/ro/servicii': '/',
-    '/en/services': '/',
+    '/ro/servicii': '/services',
+    '/en/services': '/services',
     '/ro/cum-lucram': '/contact',
     '/en/how-we-work': '/contact',
     '/ro/contact': '/contact',
     '/en/contact': '/contact',
-    '/ro/lab': '/lab',
-    '/en/lab': '/lab',
+    '/lab': '/projects',
+    '/ro/lab': '/projects',
+    '/en/lab': '/projects',
     '/ro/lucrari': '/blueprint',
     '/en/work': '/blueprint',
   },

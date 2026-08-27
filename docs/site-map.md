@@ -1,221 +1,195 @@
 # Maquette — Arhitectura site-ului și textele
 
-> Document intern. Structura fiecărei pagini + textele finale, în engleză (limba site-ului din 2026-08-24).
+> Document intern. Structura fiecărei pagini + direcția de copy, în engleză (limba site-ului din 2026-08-24).
 > Scris după regulile din `docs/voice.md`. Ofertele din `docs/positioning.md`. Vizualul din `docs/brand.md`.
+> **Revizuit 2026-08-25:** zero prețuri și zero termene autoimpuse pe site · `/services` separat · `/lab` → `/projects` (expoziție cu Contact/Comment/Like) · AR ca ofertă numită.
 
 ---
 
 ## 1. Structura
 
-Site **doar în engleză**, pagini la rădăcină. Cinci rute:
+Site **doar în engleză**, pagini la rădăcină. Șase rute:
 
 | Rută | Rol | Buget de text |
 |---|---|---|
-| `/` | Vitrina: ce facem, mecanismul, serviciile, dovada, o obiecție, CTA | 6 secțiuni, ≤400 de cuvinte |
-| `/blueprint` | Pagina de vânzare. Toată greutatea de convingere + cifra de 450 € | ~1.400 de cuvinte |
-| `/lab` | Cele două produse în profunzime + cererile | ~600 de cuvinte |
+| `/` | Vitrina: ce facem, Blueprint-ul, dovada, o obiecție, CTA | 6 secțiuni, ≤400 de cuvinte |
+| `/services` | Cele trei tipuri de propuneri + mecanismul de preț | ~450 de cuvinte |
+| `/blueprint` | Pagina de vânzare a primului pas. Fără cifră, fără zile | ~1.200 de cuvinte |
+| `/projects` | Expoziția: Declutter și GigTim, un exponat pe ecran + cererile | ~500 de cuvinte |
 | `/contact` | Formular + regulile de lucru + „câți sunteți?" | ~200 de cuvinte |
-| `/privacy` | Politica minimă și adevărată | scurtă |
+| `/privacy` | Politica minimă și adevărată (acoperă și comentariile/like-urile) | scurtă |
 
-**Navigație — trei intrări + butonul:** Blueprint · Lab · Contact · **[Start with a Blueprint]** (singurul buton roșu de pe ecran).
+**Navigație — patru intrări + butonul:** Services · Blueprint · Projects · Contact · **[Start with a Blueprint]** (singurul buton roșu de pe ecran). **Toate butoanele roșii CTA duc la `/contact`**; `/blueprint` se atinge prin linkuri text.
 
-**În subsol:** datele firmei · Privacy · ANPC / ODR.
+**În subsol:** cuprinsul (Services · Blueprint · Projects · Contact · Privacy) · datele firmei · ANPC / ODR.
 
-**Redirecturi:** tot ce era `/ro/*` și `/en/*` trimite la echivalentul nou (vezi `astro.config.mjs`). `/ro/servicii` și `/en/services` → `/`; `/ro/cum-lucram` și `/en/how-we-work` → `/contact`.
+**Redirecturi** (`astro.config.mjs`): `/lab` → `/projects` · `/ro/lab`, `/en/lab` → `/projects` · `/ro/servicii`, `/en/services` → `/services` · restul `/ro/*`, `/en/*` ca înainte.
 
-**Nu există:** pagină „Echipa", pagină „Tehnologii", blog, pagină de AR, comutator de limbă.
+**Nu există:** pagină „Echipa", pagină „Tehnologii", blog, comutator de limbă, **nicio cifră de preț și niciun termen autoimpus**.
 
 ---
 
 ## 2. Homepage — 6 secțiuni, ≤400 de cuvinte
 
+Prezentare (2026-08-27): hero tipografic pe hârtie (id `hero`), apoi **§01–§04 ca CARDURI întunecate** în limbajul `/projects` (`.card-page float-card home-card`), alternate stânga-dreapta, cu `SectionHead` + filigran pe hârtie și pagina 3D blurată a secțiunii în fundal, pe partea goală. Id-urile `s01`–`s04` rămân — canvas-ul își ancorează companionii pe ele (wrapper-ele `s0N-inner` au dispărut).
+
 ### 01 — Hero
 
-> `FIRST THE MODEL. THEN THE SYSTEM.` *(kicker mono — tagline-ul, demis din poziția de titlu)*
+> `FIRST THE MODEL. THEN THE SYSTEM.` *(kicker mono)*
 >
 > # We build web apps and automations for companies that have outgrown spreadsheets.
 >
-> We start with the model, not the code — a fixed-price Blueprint before anything big.
+> We start with the model, not the code — a Blueprint before anything big.
 >
-> **[Start with a Blueprint]**  [Talk to us →]
+> **[Start with a Blueprint → /contact]**  [How every build starts → /blueprint]
 
-Titlul spune **ce + pentru cine**. Tagline-ul singur nu trece testul de 10 secunde (NN/g) — un vizitator nu află din el că e un studio de software pentru firme.
+### 02 — WHAT WE BUILD *(revizuit 2026-08-25: fără prețuri — coloana dreaptă e etichetă mono de categorie)*
 
-### 02 — WHAT WE BUILD · rate card *(revizuit 2026-08-24: meniu de prețuri, nu proză)*
-
-> ## What we build, and what it typically costs.
+> ## Automation, web systems, and apps.
 >
-> | Presentation website, CMS included | €1,200 – 1,500 |
-> | Catalogue or client portal, with admin panel | €1,500 – 2,000 |
-> | Two systems connected — ERP ↔ website ↔ email | €800 – 1,100 · +€80/mo |
-> | Quotes, invoices and reports that run themselves | €1,100 – 1,500 · +€80/mo |
-> | Something specific — a configurator, 3D/AR, an unusual automation | **Talk to us** |
+> | Quotes, invoices and reports that run themselves | AUTOMATION |
+> | Two systems connected — ERP, website, email | AUTOMATION |
+> | Presentation websites, catalogues, client portals | WEB BUILD |
+> | Mobile apps and AR product viewers — your product at true scale | APP · AR/3D |
+> | Something specific — a configurator, an integration, an unusual system | **See the services** |
 >
-> Every figure is a typical scenario. The firm number comes after a 30-minute call — and it stays firm.
+> No menu prices — every build is scoped and quoted for the client it is for. The firm number comes after a 30-minute call, and it stays firm.
 
-Rândurile au puncte de ghidaj (ca la cuprins), prețul mare în mono. Sub-intervalele sunt împărțiri ale Treaptei 1 (positioning.md). Rândul catch-all acoperă și demo-ul AR trimis pe email.
+### 03 — THE BLUEPRINT *(o propoziție; mecanismul complet pe /blueprint)*
 
-### 03 — THE BLUEPRINT *(comprimat: o propoziție, nu o secțiune grea — mecanismul complet stă pe /blueprint)*
-
-> ## Every build starts with a Blueprint: five days, a fixed price, and a document that stays yours even if you build elsewhere.
+> ## Every build starts with a Blueprint: a spec, an architecture, a clickable prototype, and a document that stays yours even if you build elsewhere.
 >
 > [See what's in it →](/blueprint)
 
-Fără cifră — ancorarea rămâne regulă (vezi CLAUDE.md).
-
 ### 04 — PROOF
 
-> ## We run our own ideas through the process we sell.
->
-> **Declutter** — `PROTOTYPE` — The things you meant to say in therapy, and forget by the time you get there. What you write there is health data, and we treat it that way: encrypted, stored in the EU, no model trained on it.
->
-> **GigTim** — `BEING SCOPED` — Short shifts for students. It goes through its own Blueprint first: spec, architecture and numbers before the first line of code.
->
-> The third exhibit is this site — static, hand-written, about 250 bytes of JavaScript.
->
-> [See the Lab →](/lab)
-
-Etichetele de stadiu vin din realitate și se actualizează când realitatea se schimbă.
+Neschimbat în substanță: cele două carduri (Declutter `PROTOTYPE`, GigTim `BEING SCOPED`) + ștampila `DELIVERED PROJECTS · 00` + „the third exhibit is this site". Linkul: **[See the exhibition →](/projects)**.
 
 ### 05 — THE QUESTION EVERYONE ASKS
 
-> ## Where are the case studies?
-> There aren't any yet — none we could publish with written client consent, and we don't publish without it. Until then we show working deliverables instead: a real Blueprint sample, two products of our own, and this site. The first delivered project goes up the day a client signs off.
+Neschimbat: „Where are the case studies?" + răspunsul onest.
 
-### 06 — CTA
+### 06 — CTA (blocul roșu)
 
 > ## Thirty minutes, and you leave with a number.
 > No strings and no sales deck. You tell us what hurts, we tell you what it would cost and how long it would take — even if we never work together.
 >
-> **[Start with a Blueprint]**
+> **[Start with a Blueprint → /contact]**
 
 ---
 
-## 3. `/blueprint` — pagina de vânzare (ordinea Stark)
+## 3. `/services` — cele trei propuneri *(pagină nouă, 2026-08-25)*
 
-Durere → vis → ofertă → CTA + reversarea riscului → livrabilul-mostră → întrebări → CTA.
+Gramatica prospectului, **doar text — fără figuri** (niciun ecran AR fals; singurele ecrane de pe site rămân pe `/blueprint` și `/projects`). Un bloc roșu: CTA-ul final.
+
+> `SERVICES`
+> # Automation, web systems, and apps — each built from a model first.
+> Three kinds of work, one process: we define the system with you, then build it in phases. No menu prices — every build is quoted for the client it is for.
+
+**01 — Automations** — munca făcută de mână, făcută de sistem: oferte/facturi/rapoarte care se generează singure, două sisteme legate (ERP ↔ site ↔ email ↔ sheets), stocuri și notificări sincronizate. Se vinde în ore economisite (positioning.md). Link „Talk to us →" → `/contact`.
+
+**02 — Websites & web apps** — site de prezentare cu CMS editabil de client, cataloage și portaluri de client cu panou de administrare, aplicații web pe procesul clientului, performanță reală pe telefon. Link → `/contact`.
+
+**03 — Apps, including AR product viewers** — aplicații mobile și desktop; vizualizatorul AR numit direct: „your product in the customer's room, at true scale — a couch seen from the product page, before it is bought". Configuratoare 3D legate de opțiunile reale de produs. Link → `/contact`.
+
+**04 — How pricing works** — înlocuitorul rate card-ului: niciun build nu costă la fel, deci site-ul nu are meniu de prețuri; 30 de minute → un interval de care putem răspunde; cifra exactă → din Blueprint, „quoted up front, fixed once agreed". Link → `/blueprint`.
+
+**CTA roșu:** „Thirty minutes, and you leave with a number." → `/contact`.
+
+---
+
+## 4. `/blueprint` — pagina de vânzare *(revizuită 2026-08-25: fără 450 €, fără „5 zile")*
+
+Ordinea Stark: durere → ce primești → procesul → **garanția (blocul roșu) + CTA lipit** → livrabilul-mostră → întrebări → CTA.
 
 ### Hero + fișa produsului
 
-> `FIXED PRICE · 5 WORKING DAYS`
-> # Pay a little to find out exactly what it will cost.
+> `HOW EVERY BUILD STARTS`
+> # Find out exactly what it will cost before you commit to it.
 > The Blueprint is the model of your project: a spec, an architecture, a clickable prototype and a real number. You do it before committing to anything large.
 >
-> | Commitment | 5 working days |
-> | Price | **€450** |
+> | Scope | One system, defined together |
 > | Who works on it | One person, start to finish |
-> | Result | Spec, architecture, prototype, figure |
+> | Result | Spec, architecture, prototype, estimate |
+> | The price | Quoted up front, fixed once agreed |
 
-Cifra apare aici din primul ecran — pe pagina de evaluare se afișează mare și fără scuze.
+Fișa spune **mecanismul** prețului, nu cifra. Rândurile `Commitment / 5 working days` și `Price / €450` au fost șterse.
 
-### Durerea
+### 01 Durerea · 02 Cele cinci livrabile — neschimbate.
 
-> ## Software projects don't fail in the coding.
-> They fail at the start, when nobody has written down clearly what needs to exist. It begins with a conversation and a rough estimate, and three months later the unspoken assumptions surface. That is why the first thing we sell is not code.
+### 03 Procesul *(fost „The five days" — pași mono, fără zile)*
 
-*(Diagrama Before/After a fost scoasă — decizie utilizator, 2026-08-24. Secțiunea e doar text.)*
+> | 01 | A long conversation. We ask the uncomfortable questions now, not in three months. |
+> | 02 | We write the spec and the architecture. You get a draft and you correct it. |
+> | 03 | The prototype. |
+> | 04 | The estimate, the plan, the risks. We walk through them together, point by point. |
 
-### Ce primești — cinci livrabile
+### 04 Garanția *(blocul roșu — fost „The price")*
 
-1. **Functional spec** — what the system does, for whom, in what order. Written in your language, not in jargon.
-2. **Technical architecture** — which components, which technologies, what integrates with what.
-3. **Clickable prototype** — not a picture. You click through it and show it to your team.
-4. **Phased estimate** — a range, not a single number. A single number is always a lie.
-5. **Execution plan and risks** — what can break, and what we do when it does.
-
-### Cele cinci zile
-
-| Day 1 | A long conversation. We ask the uncomfortable questions now, not in three months. |
-| Day 2–3 | We write the spec and the architecture. You get a draft and you correct it. |
-| Day 4 | The prototype. |
-| Day 5 | The estimate, the plan, the risks. We walk through them together, point by point. |
-
-### Prețul + reversarea riscului (lipite)
-
-> # €450
-> It comes off the build entirely, if the build starts within 60 days. If we go on together, the Blueprint cost you nothing.
+> ## The Blueprint fee comes off the build entirely.
+> If we go on to build together, the Blueprint cost you nothing.
 >
-> **If you decide not to build with us, the document is still yours.** You can take it to your own team or to another firm. We sell it that way because a client who feels trapped isn't a good client — not for them, not for us.
+> **If you decide not to build with us, the document is still yours.** You can take it to your own team or to another firm. *(neschimbat)*
 >
-> **[Start with a Blueprint]**
+> **[Start with a Blueprint → /contact]**
 
-### Livrabilul-mostră
+Cifra uriașă și „within 60 days" au fost scoase — clauza de 60 de zile trăiește în contract.
 
-> ## This is what you receive.
-> Figura 01: `BlueprintDoc` — p. 7 / 24 din specificația funcțională. Legendă: `Deliverable · sample`. Singura figură de pe site.
+### 05 Livrabilul-mostră (BlueprintDoc) · 06 Pentru cine e / nu e — neschimbate.
 
-### Pentru cine e / nu e
+### 07 Întrebările — toate cele 7; singura schimbare: finalul ultimei („best €450 you can spend" → „the cheapest way to find out").
 
-`fitYes` / `fitNo` — neschimbate din copy-ul existent.
-
-### Întrebări — toate cele 7
-
-Cele 3 existente în EN + cele 4 portate din RO:
-
-4. **"It's too expensive."** — Then we cut scope, not price. A Blueprint for a single feature costs less than one for the whole system. What we won't do is deliver the same thing cheaper — that would mean the original price was invented.
-5. **"Can you start next week?"** — Usually not. We run one project at a time, so we don't do to you what firms juggling five at once do to their clients. You get the real date we can start — and if it doesn't work for you, you hear it in the first call.
-6. **"Can you quote by email, without a call?"** — No. A price given without understanding what we are building is an invented number, and we would both find that out three months in. Thirty minutes is enough to give you a range we can stand behind.
-7. **"What does a Blueprint NOT do?"** — It doesn't write production code and it doesn't ship your system. It is the document the system comes from. And it doesn't guarantee the project is worth building — if the analysis says it isn't, we tell you. That is the best €450 you can spend.
-
-### CTA final
-
-> ## Thirty minutes, and you leave with a number.
-> **[Start with a Blueprint]**
+### CTA final — neschimbat.
 
 ---
 
-## 4. `/lab`
+## 5. `/projects` — expoziția *(fost `/lab`, restructurat 2026-08-25)*
 
-Copy-ul EN existent supraviețuiește aproape intact — era cea mai bine scrisă pagină. Modificări: fără `noindex`, legată din navigație, lede-ul strâns cu o propoziție.
+> `THE EXHIBITION`
+> # Two projects, shown as they are.
+> We run our own ideas through the process we sell: model first, phases, honest stage labels.
 
-Structura per proiect: nume + etichetă de stadiu (adevărată, obligatoriu) → teza → Problema / Teza / Unde e / Ce urmează → nota de date (Declutter: GDPR art. 9) sau nota juridică (GigTim: forma legală a muncii scurte).
+**Un exponat pe ecran** (`.exhibit`, `min-height: 100svh`, centrat): index `01/02` + „EXHIBIT" (SectionHead) → numele mare + eticheta de stadiu (adevărată, obligatoriu) → **figura mare** cu ecranul live → paragraful-teză → nota (Declutter: date de sănătate; GigTim: forma juridică) → **acțiunile**.
 
-**Cererile, în ordinea asta, exclusiv aici:**
-1. Principal, cu buton: **Looking for 3–5 psychotherapists** — to get their hands on the Declutter prototype and tell me where I am wrong. No money, not much time — one hour, once. **[Write to me]**
-2. Secundar, text: colaboratori plătiți (design de produs, mobile).
-3. Terțiar, o propoziție, fără buton: For investment conversations: [email].
+| Exponat | Stadiu | Vizual de lansare |
+|---|---|---|
+| Declutter | `Prototype · updated August 2026` | `DeclutterApp.astro` — UI-ul prototipului: captură, grupuri, banda „returns before your session". `kind: demo` |
+| GigTim | `Being scoped · going through its own Blueprint` | `GigTimDoc.astro` — o pagină din propriul lui Blueprint (gramatica BlueprintDoc, cutia „Open questions"). `kind: demo` |
 
----
+Capturile reale (`public/img/…`) intră în același slot de figură când există.
 
-## 5. `/contact`
+**Acțiunile (`ExhibitActions.astro`):** Contact (`.btn` roșu → `/contact`, mereu) · Like (`♥ NN`, doar cu `PUBLIC_LIKES_ENDPOINT`) · Comment (deschide firul Cusdis, doar cu `PUBLIC_CUSDIS_APP_ID`). Fără variabile → doar Contact, zero JS de terți. Sub fir: „Comments appear after review."
 
-Stânga — formular: Name · Company · Email · What you want to build („Two or three sentences are enough.") · Rough budget (opțional) · **[Send]**.
-Formularul postează la `PUBLIC_FORM_ENDPOINT`; fără variabilă setată la build, în locul lui apare adresa de email. Niciodată `action="#"`.
-
-Dreapta — **How working with us goes** (moștenit din fosta /cum-lucram, o linie fiecare):
-
-> - **Communication** — one channel, and a written update every Friday. If we slip, you hear it the day it happens.
-> - **Code and accounts** — the repository is on your account from day one. Servers and domains in your name, not ours.
-> - **Payment** — in phases, never all at the end and never all up front.
-> - **If we are late** — a deadline moves once, in writing, with the reason. A second slip means the extra cost is ours.
-
-Apoi, ca secțiune proprie, răspunsul la **"How many of you are there?"** — textul canonic din `docs/voice.md`, neatins.
-
-> We reply the same working day.
+**Cererile, în ordinea asta, exclusiv aici (neschimbate):** psihoterapeuți (buton) → colaboratori plătiți → investiție (o propoziție, fără buton).
 
 ---
 
-## 6. `/privacy`
+## 6. `/contact`
 
-Scrisă, nu copiată. Adevărul simplu: site-ul nu setează cookie-uri și nu rulează analytics; singurele date personale sunt cele trimise prin formular (nume, firmă, email, mesaj), folosite doar ca să răspundem; nu există banner de cookie-uri pentru că nu există cookie-uri. Operator: EUDAIMONIA AI TECH S.R.L. Angajamentele Declutter (art. 9) rămân pe `/lab`, unde sunt argument, nu boilerplate.
+Neschimbat: formular (postează la `PUBLIC_FORM_ENDPOINT`; fără variabilă — adresa de email; niciodată `action="#"`) + „How working with us goes" + răspunsul la „How many of you are there?".
+
+---
+
+## 7. `/privacy`
+
+Adevărul simplu: zero cookie-uri, zero analytics; datele din formular folosite doar ca să răspundem. **Nou (2026-08-25):** o secțiune despre like-uri și comentarii pe `/projects` — like-ul stochează un număr și un semn în browserul vizitatorului, nimic identificabil; comentariile sunt găzduite de Cusdis, se încarcă doar la deschidere, apar după aprobare; dacă nu se văd, nu rulează. Referința „the Lab" → „the projects page".
 
 **De revizuit de utilizator înainte de publicare.**
 
 ---
 
-## 7. Subsolul
+## 8. Subsolul
 
-- Denumirea juridică · CUI · nr. ONRC · sediu — **obligatoriu legal, de completat de utilizator**
-- „Maquette is the trading name of EUDAIMONIA AI TECH S.R.L."
-- Privacy · ANPC · ODR
-- Fără: „© Toate drepturile rezervate. Made with ❤️".
+Neschimbat ca reguli (fără „©/Made with ❤️"); cuprinsul include acum Services și Projects.
 
 ---
 
-## 8. Ce trebuie să existe înainte de lansare
+## 9. Ce trebuie să existe înainte de lansare
 
 - [ ] Datele SRL-ului pentru subsol (ONRC, sediu)
 - [ ] `PUBLIC_FORM_ENDPOINT` setat (Formspree/Resend) — altfel se afișează emailul
+- [ ] `PUBLIC_CUSDIS_APP_ID` setat (cont cusdis.com) — altfel nu există Comment; moderarea e a utilizatorului
+- [ ] `PUBLIC_LIKES_ENDPOINT` setat (worker-ul din `workers/likes/` deployat pe Cloudflare) — altfel nu există Like
 - [ ] `/privacy` revizuită de utilizator
 - [ ] Email pe domeniu
-- [ ] Etichetele de stadiu din `/lab` verificate încă o dată față de realitate
+- [ ] Etichetele de stadiu din `/projects` verificate încă o dată față de realitate

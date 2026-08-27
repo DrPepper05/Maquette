@@ -1,0 +1,21 @@
+---
+/** Ecran real, nu captură: UI-ul prototipului Declutter (kind: demo).
+ *  Gândurile sunt conținut ilustrativ, diegetic — ca specificația fictivă
+ *  din BlueprintDoc. Se înlocuiește cu o captură reală în același slot
+ *  de figură când există una. */
+import { copy } from '../../copy';
+const d = copy.screens.declutter;
+---
+<div class="scr dcl">
+  <div class="scr-bar"><span>{d.bar}</span><b>{d.page}</b></div>
+  <div class="scr-body">
+    <div class="cap">{d.cap}</div>
+    {d.groups.map(([g, items]) => (
+      <div class="grp">
+        <p class="g">{g}</p>
+        <ul>{items.map((li) => <li>{li}</li>)}</ul>
+      </div>
+    ))}
+    <div class="strip">{d.strip}</div>
+  </div>
+</div>

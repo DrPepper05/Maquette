@@ -1,10 +1,12 @@
 /* Toată sursa de adevăr pentru text. Se editează aici, nu în pagini.
-   Limba site-ului: engleză (decizie 2026-08-24). Vezi docs/site-map.md. */
+   Limba site-ului: engleză (decizie 2026-08-24). Vezi docs/site-map.md.
+   Revizie 2026-08-25: zero prețuri și zero termene autoimpuse pe site. */
 
 export const routes = {
   home: '/',
+  services: '/services',
   blueprint: '/blueprint',
-  lab: '/lab',
+  projects: '/projects',
   contact: '/contact',
   privacy: '/privacy',
 } as const;
@@ -21,15 +23,16 @@ export type Kind = keyof typeof kinds;
 
 export const copy = {
   nav: [
+    ['services', 'Services'],
     ['blueprint', 'Blueprint'],
-    ['lab', 'Lab'],
+    ['projects', 'Projects'],
     ['contact', 'Contact'],
   ] as [RouteKey, string][],
   cta: 'Start with a Blueprint',
 
   home: {
     title: 'Maquette — software studio',
-    desc: 'We build web apps and automations for companies that have outgrown spreadsheets. We start with the model: a fixed-price Blueprint before anything big.',
+    desc: 'We build web apps, automations and AR product viewers for companies that have outgrown spreadsheets. We start with the model: a Blueprint before anything big.',
     kicker: 'First the model. Then the system.',
     /* Titlul se randează în trei bucăți: cuvântul din mijloc e îmbinarea mono —
        un singur cuvânt, maxim, pe titlu (docs/brand.md § Mișcările). */
@@ -37,32 +40,32 @@ export const copy = {
     h1mono: 'spreadsheets',
     h1b: '.',
     h1: 'We build web apps and automations for companies that have outgrown spreadsheets.',
-    lede: 'We start with the model, not the code — a fixed-price Blueprint before anything big.',
-    heroLink: 'Talk to us',
+    lede: 'We start with the model, not the code — a Blueprint before anything big.',
+    heroLink: 'How every build starts',
 
-    /* 01 — rate card: meniu de scenarii cu prețuri (feedback 2026-08-24).
-       Sub-intervalele împart Treapta 1 din positioning.md — capetele
-       1.200–2.000 / 800–1.500 nu se depășesc fără decizie de business. */
+    /* 01 — ce construim: aceleași rânduri cu puncte de ghidaj, dar coloana
+       din dreapta e etichetă mono de categorie, NU preț (decizie 2026-08-25:
+       zero cifre pe site). Al treilea slot al tuplei rămâne pentru sub-etichetă
+       — gol acum; canvas-ul (paintSec01) pictează aceleași tuple. */
     build: {
       label: 'What we build',
-      h: 'What we build, and what it typically costs.',
+      h: 'Automation, web systems, and apps.',
       rows: [
-        ['Presentation website, CMS included', '€1,200 – 1,500', ''],
-        ['Catalogue or client portal, with admin panel', '€1,500 – 2,000', ''],
-        ['Two systems connected — ERP, website, email', '€800 – 1,100', '+ €80/month upkeep'],
-        ['Quotes, invoices and reports that run themselves', '€1,100 – 1,500', '+ €80/month upkeep'],
+        ['Quotes, invoices and reports that run themselves', 'Automation', ''],
+        ['Two systems connected — ERP, website, email', 'Automation', ''],
+        ['Presentation websites, catalogues, client portals', 'Web build', ''],
+        ['Mobile apps and AR product viewers — your product at true scale', 'App · AR/3D', ''],
       ] as [string, string, string][],
-      /* Rândul catch-all acoperă și demo-ul AR trimis pe email. */
-      customWhat: 'Something specific — a configurator, 3D and AR, an unusual automation',
-      customCta: 'Talk to us',
-      note: 'Every figure is a typical scenario. The firm number comes after a 30-minute call — and it stays firm.',
+      customWhat: 'Something specific — a configurator, an integration, an unusual system',
+      customCta: 'See the services',
+      note: 'No menu prices — every build is scoped and quoted for the client it is for. The firm number comes after a 30-minute call, and it stays firm.',
     },
 
     /* 02 — Blueprint-ul, comprimat la o propoziție. Mecanismul complet
-       stă pe /blueprint. Fără cifră: ancorarea rămâne regulă. */
+       stă pe /blueprint. Fără cifră și fără zile. */
     mech: {
       label: 'The Blueprint',
-      h: 'Every build starts with a Blueprint: five days, a fixed price, and a document that stays yours even if you build elsewhere.',
+      h: 'Every build starts with a Blueprint: a spec, an architecture, a clickable prototype, and a document that stays yours even if you build elsewhere.',
       link: "See what's in it",
     },
 
@@ -82,8 +85,8 @@ export const copy = {
           p: 'Short shifts for students. It goes through its own Blueprint first: spec, architecture and numbers before the first line of code.',
         },
       ],
-      exhibit: 'The third exhibit is this site — static, hand-written, about 250 bytes of JavaScript.',
-      link: 'See the Lab',
+      exhibit: 'The third exhibit is this site — static, hand-written, and it works with JavaScript turned off.',
+      link: 'See the exhibition',
       /* Ștampila onestității — o singură instanță pe site. Se actualizează
          când realitatea se schimbă; nu se șterge cât timp e adevărată. */
       stamp: ['Delivered projects', '00', 'updated Aug 2026'],
@@ -102,18 +105,74 @@ export const copy = {
     },
   },
 
+  /* Pagina de servicii — cele trei tipuri de propuneri (2026-08-25).
+     Doar text, fără figuri: niciun ecran AR fals fără o captură reală. */
+  services: {
+    title: 'Services — Maquette',
+    desc: 'Automations, websites and web apps, and applications including AR product viewers. Scoped and quoted per client.',
+    eyebrow: 'Services',
+    h1: 'Automation, web systems, and apps — each built from a model first.',
+    lede: 'Three kinds of work, one process: we define the system with you, then build it in phases. No menu prices — every build is quoted for the client it is for.',
+    ctaRow: 'Talk to us',
+    items: [
+      {
+        label: 'Automations',
+        h: 'The work your team does by hand, done by the system.',
+        p: 'We connect the tools you already have and automate the routine between them. Sold in hours saved, not in features — and the numbers come from you, in the first call.',
+        points: [
+          'Quotes, invoices and reports that generate themselves',
+          'Two systems connected — ERP, website, email, spreadsheets',
+          'Stock, orders and notifications kept in sync',
+          'Monitoring and upkeep, with a monthly report on what ran',
+        ],
+      },
+      {
+        label: 'Websites & web apps',
+        h: 'From a presentation site to a client portal with an admin panel.',
+        p: 'Built to be edited by your own team and measured by results: a catalogue that is searchable, a quote that goes out in minutes, a page that loads fast on a phone.',
+        points: [
+          'Presentation websites with a CMS you edit yourselves',
+          'Catalogues and client portals, with admin panels',
+          'Web applications built around your process',
+          'Technical SEO and real, verified performance',
+        ],
+      },
+      {
+        label: 'Apps & AR viewers',
+        h: 'Mobile and desktop apps — including AR product viewers.',
+        p: 'Your product in the customer’s room, at true scale: a couch seen from the product page, on the phone, before it is bought. We build the viewer and the pipeline that feeds it your catalogue.',
+        points: [
+          'AR product viewers — furniture, fixtures, equipment',
+          '3D configurators tied to your real product options',
+          'Mobile and desktop apps that talk to the systems above',
+        ],
+      },
+    ],
+    pricing: {
+      label: 'How pricing works',
+      h: 'No two builds cost the same, so this site shows no menu.',
+      p: 'A 30-minute call gives you a range we can stand behind. When you want the exact number before committing, that is what the Blueprint is for: spec, architecture, prototype — and a price quoted up front, fixed once agreed.',
+      link: 'See the Blueprint',
+    },
+    end: {
+      h: 'Thirty minutes, and you leave with a number.',
+      p: 'You tell us what hurts, we tell you what it would cost and how long it would take — even if we never work together.',
+    },
+  },
+
   blueprint: {
     title: 'Blueprint — Maquette',
-    desc: 'Five days, fixed price. Spec, architecture, clickable prototype and a real number. It comes off the build entirely.',
-    eyebrow: 'Fixed price · 5 working days',
-    h1: 'Pay a little to find out exactly what it will cost.',
+    desc: 'How every build starts: spec, architecture, clickable prototype and a real number — before you commit to anything large. The fee comes off the build entirely.',
+    eyebrow: 'How every build starts',
+    h1: 'Find out exactly what it will cost before you commit to it.',
     lede: 'The Blueprint is the model of your project: a spec, an architecture, a clickable prototype and a real number. You do it before committing to anything large.',
 
+    /* Fișa spune MECANISMUL prețului, nu cifra (2026-08-25). */
     facts: [
-      ['Commitment', '5 working days'],
-      ['Price', '€450'],
+      ['Scope', 'One system, defined together'],
       ['Who works on it', 'One person, start to finish'],
-      ['Result', 'Spec, architecture, prototype, figure'],
+      ['Result', 'Spec, architecture, prototype, estimate'],
+      ['The price', 'Quoted up front, fixed once agreed'],
     ] as [string, string][],
 
     pain: {
@@ -133,21 +192,23 @@ export const copy = {
       ] as [string, string][],
     },
 
-    days: {
-      label: 'The five days',
+    /* Pași, nu zile — termenele autoimpuse nu se publică (2026-08-25). */
+    process: {
+      label: 'The process',
       rows: [
-        ['Day 1', 'A long conversation. We ask the uncomfortable questions now, not in three months.'],
-        ['Day 2–3', 'We write the spec and the architecture. You get a draft and you correct it.'],
-        ['Day 4', 'The prototype.'],
-        ['Day 5', 'The estimate, the plan, the risks. We walk through them together, point by point.'],
+        ['01', 'A long conversation. We ask the uncomfortable questions now, not in three months.'],
+        ['02', 'We write the spec and the architecture. You get a draft and you correct it.'],
+        ['03', 'The prototype.'],
+        ['04', 'The estimate, the plan, the risks. We walk through them together, point by point.'],
       ] as [string, string][],
     },
 
-    /* Prețul + reversarea riscului stau lipite — tiparul Stark. */
-    price: {
-      label: 'The price',
-      dim: '€450',
-      p: 'It comes off the build entirely, if the build starts within 60 days. If we go on together, the Blueprint cost you nothing.',
+    /* Garanția + reversarea riscului stau lipite de buton — tiparul Stark.
+       Fără cifră; clauza „în 60 de zile" trăiește în contract, nu pe site. */
+    guarantee: {
+      label: 'The guarantee',
+      h: 'The Blueprint fee comes off the build entirely.',
+      p: 'If we go on to build together, the Blueprint cost you nothing.',
       keepH: 'If you decide not to build with us, the document is still yours.',
       keepP: "You can take it to your own team or to another firm. We sell it that way because a client who feels trapped isn't a good client — not for them, not for us.",
     },
@@ -181,49 +242,54 @@ export const copy = {
         ["It's too expensive.", "Then we cut scope, not price. A Blueprint for a single feature costs less than one for the whole system. What we won't do is deliver the same thing cheaper — that would mean the original price was invented."],
         ['Can you start next week?', "Usually not. We run one project at a time, so we don't do to you what firms juggling five at once do to their clients. You get the real date we can start — and if it doesn't work for you, you hear it in the first call."],
         ['Can you quote by email, without a call?', 'No. A price given without understanding what we are building is an invented number, and we would both find that out three months in. Thirty minutes is enough to give you a range we can stand behind.'],
-        ['What does a Blueprint NOT do?', "It doesn't write production code and it doesn't ship your system. It is the document the system comes from. And it doesn't guarantee the project is worth building — if the analysis says it isn't, we tell you. That is the best €450 you can spend."],
+        ['What does a Blueprint NOT do?', "It doesn't write production code and it doesn't ship your system. It is the document the system comes from. And it doesn't guarantee the project is worth building — if the analysis says it isn't, we tell you. That is the cheapest way to find out."],
       ] as [string, string][],
     },
 
     end: { h: 'Thirty minutes, and you leave with a number.' },
   },
 
-  lab: {
-    title: 'Lab — Maquette',
-    desc: 'Our own products, in progress: Declutter and GigTim.',
-    eyebrow: 'Our own products',
-    h1: 'We build for ourselves too.',
-    lede: "The Lab is how we test on ourselves what we ask clients to do: start with the model, ship in phases, measure.",
-    projLabel: 'In progress now',
+  /* Expoziția (fost Lab, 2026-08-25): un exponat pe ecran, cu figură mare
+     și acțiuni. Etichetele de stadiu trebuie să rămână adevărate. */
+  projects: {
+    title: 'Projects — Maquette',
+    desc: 'Two of our own products, shown as they are: Declutter and GigTim.',
+    eyebrow: 'The exhibition',
+    h1: 'Two projects, shown as they are.',
+    lede: 'We run our own ideas through the process we sell: model first, phases, honest stage labels.',
 
-    projects: [
+    exhibits: [
       {
+        slug: 'declutter',
+      cover: '',   /* cale sub /img — gol până există fotografia; coperta interimară e ecranul live */
         name: 'Declutter',
         stage: 'Prototype · updated August 2026',
         h: 'The things you meant to say in therapy, and forget by the time you get there.',
-        blocks: [
-          ['The problem', 'Two weeks pass between sessions. In that time exactly the things you wanted to talk about go through your head — usually on the bus, at three in the morning, or in the middle of an argument. By the time you are in the room, none of them are left. You end up with "I don’t know, it was an okay week".'],
-          ['The thesis', 'A thought should not be archived, it should come back when it matters. You write it down in three seconds and it returns before the session, grouped — not as a list of forty notes.'],
-          ['Where it is now', 'A working prototype for capture and grouping. The pre-session return is being built.'],
-          ['What is next', 'Testing with real psychotherapists, on real patients, before any new feature.'],
-        ] as [string, string][],
+        p: 'Two weeks pass between sessions, and the thoughts you meant to bring vanish by the time you are in the room. You write one down in three seconds; it comes back before the session, grouped — not as a list of forty notes. Capture and grouping work today. The pre-session return is being built.',
         noteH: 'What you write there is health data.',
         noteP: 'We treat it as such: encrypted, stored in the European Union, no advertising trackers, and no model is trained on your content. A therapist does not ask what features you have — they ask where their patients’ data lives.',
+        fig: { title: 'Declutter — capture and return', tech: 'Prototype UI · 2026' },
       },
       {
+        slug: 'gigtim',
+      cover: '',   /* cale sub /img — gol până există fotografia; coperta interimară e ecranul live */
         name: 'GigTim',
         stage: 'Being scoped · going through its own Blueprint',
         h: 'Short shifts for students. The business posts it, the student takes it.',
-        blocks: [
-          ['The problem', 'A restaurant needs two people on Saturday night. A warehouse needs four on Thursday for a stock count. They look on Facebook groups and through friends, and some of them do not turn up. On the other side, a student with three free hours on Tuesday has nowhere to sell them.'],
-          ['The thesis', 'Both the demand and the supply exist and keep missing each other for lack of a channel. A three-line posting, up in two minutes, taken by someone in five.'],
-          ['Where it is now', 'Being scoped. It goes through exactly the process we sell: spec, architecture and numbers before the first line of code.'],
-          ['The hard part', 'Not the app — the first city. A marketplace without local density does not work: a student opens it, sees three postings and never comes back. So one campus and one neighbourhood first, not a national launch.'],
-        ] as [string, string][],
+        p: 'A restaurant needs two people on Saturday night; a student has three free hours on Tuesday. Demand and supply keep missing each other for lack of a channel. GigTim is being scoped right now, through exactly the process we sell — spec, architecture and numbers before the first line of code. The hard part is not the app but the first city: one campus and one neighbourhood, not a national launch.',
         noteH: 'Short-term work has a legal shape in Romania.',
         noteP: 'Day-labourer status, self-employment or a fixed-term contract — each carries different obligations for the business hiring. A platform that brokers work cannot sidestep that. Which is why the legal shape gets decided in the Blueprint, not after launch.',
+        fig: { title: 'GigTim — its own Blueprint', tech: 'Document, draft · 2026' },
       },
     ],
+
+    /* Acțiunile exponatului. Like/Comment se randează doar cu env setat. */
+    actions: {
+      contact: 'Build something like this',
+      like: 'Like',
+      comment: 'Comment',
+      commentNote: 'Comments appear after review.',
+    },
 
     /* Cererile stau exclusiv aici, în ordinea asta. Investiția fără buton. */
     askLabel: 'How you can help',
@@ -268,17 +334,19 @@ export const copy = {
     sections: [
       ['What this site collects', 'This site sets no cookies and runs no analytics. There is no tracking of any kind, which is also why there is no cookie banner: there is nothing to consent to.'],
       ['The contact form', 'If you write to us through the contact form, we receive what you typed: your name, company, email address and message. We use it to reply, and for nothing else. We do not add you to any mailing list and we do not share it with anyone.'],
+      ['Likes and comments on the projects page', 'A like stores a single number on our counter and a small flag in your browser so you cannot like twice — nothing that identifies you. Comments are hosted by Cusdis, load only after you open them, and are published after review. If neither is visible on the page, neither is running.'],
       ['How long we keep it', 'Correspondence is kept as long as the conversation is relevant, then deleted. You can ask us at any time to delete what we hold about you, and we will.'],
       ['Who we are', 'The data controller is EUDAIMONIA AI TECH S.R.L., trading as Maquette, registered in Romania. For anything related to your data, write to the address in the footer.'],
-      ['Our products', 'Declutter and GigTim, the products described in the Lab, have their own commitments — described there, where they matter.'],
+      ['Our products', 'Declutter and GigTim, the products described on the projects page, have their own commitments — described there, where they matter.'],
     ] as [string, string][],
   },
 
   footer: {
     contentsLabel: 'Contents',
     contents: [
+      ['services', 'Services'],
       ['blueprint', 'Blueprint'],
-      ['lab', 'Lab'],
+      ['projects', 'Projects'],
       ['contact', 'Contact'],
       ['privacy', 'Privacy'],
     ] as [RouteKey, string][],
@@ -302,6 +370,9 @@ export const copy = {
         ['The client sends the request', 'through the form or by email.', 'client'],
         ['The system checks stock', 'for every line and flags what is missing.', 'automatic'],
         ['Sales fills in', 'the delivery date for the missing lines.', 'sales'],
+        /* „valid for 14 days" e conținut diegetic — regula de business a
+           sistemului fictiv din specificație, NU un termen Maquette.
+           Nu se șterge la epurările de prețuri/termene. */
         ['The quote goes out', 'as a PDF, valid for 14 days.', 'automatic'],
         ['On acceptance', 'the order is created in the ERP and stock is reserved.', 'automatic'],
       ] as [string, string, string][],
@@ -310,6 +381,46 @@ export const copy = {
         'It does not compute volume discounts — those are entered by hand',
         'It does not issue the invoice; it only prepares the data for it',
         'It has no mobile app',
+      ],
+    },
+
+    /* Ecranul Declutter — UI-ul prototipului, randat live (kind: demo).
+       Gândurile sunt conținut ilustrativ, diegetic — ca specificația fictivă. */
+    declutter: {
+      bar: 'Declutter',
+      page: 'session · Thu, in 2 days',
+      cap: 'Write it down. Three seconds.',
+      groups: [
+        ['Work — boundaries', [
+          'I keep saying yes to things I resent later.',
+          'The promotion talk went nowhere again.',
+        ]],
+        ['Sleep', [
+          'Third night this week awake at three.',
+        ]],
+      ] as [string, string[]][],
+      strip: 'Comes back before your session — grouped, not as forty notes.',
+    },
+
+    /* Ecranul GigTim — o pagină din PROPRIUL lui Blueprint (kind: demo).
+       Vizualul onest pentru „being scoped": documentul, nu o aplicație
+       care nu există. Întrebările deschise sunt cele reale din scoping. */
+    gigtim: {
+      bar: 'GigTim · Blueprint — draft in progress',
+      page: 'p. 3 / 18',
+      sec: '2.1 — The shift flow',
+      h: 'From posting to filled shift',
+      steps: [
+        ['The business posts a shift', 'three lines, up in two minutes.', 'business'],
+        ['Students nearby see it', 'filtered by campus and free hours.', 'automatic'],
+        ['A student takes it', 'one tap. The business confirms.', 'student'],
+        ['The shift is logged', 'hours and rating, for both sides.', 'automatic'],
+      ] as [string, string, string][],
+      outT: 'Open questions — being scoped',
+      out: [
+        'The legal form of each shift — day labour, self-employed or fixed-term',
+        'Which single campus and neighbourhood go first',
+        'Whether payment runs through the platform in version 1',
       ],
     },
   },

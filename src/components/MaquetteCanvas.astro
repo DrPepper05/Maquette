@@ -1,0 +1,31 @@
+---
+/**
+ * MaquetteCanvas.astro — ambient backdrop mount + capability gate.
+ * ────────────────────────────────────────────────────────────────
+ * Five dark prospectus pages float BLURRED behind the paper — backdrop
+ * only, the homepage echo of AmbientCards. The content never leaves the
+ * document; scrolling is fully native. (The old dive/park system was
+ * removed 2026-08-26 — docs/brand.md §6.)
+ *
+ * Rendered from index.astro only. The heavy Three.js chunk is loaded
+ * via dynamic import behind the gate below, so phones, coarse pointers
+ * and reduced-motion never download it at all.
+ */
+---
+
+<div id="mq-wrap" class="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
+  <canvas id="mq-c" class="w-full h-full block"></canvas>
+  <!-- Static paper vignette — keeps the backdrop faint toward the edges. -->
+  <div id="mq-vig" class="absolute inset-0 pointer-events-none"
+       style="background: radial-gradient(ellipse 90% 80% at 55% 40%, transparent 0%, rgba(244,242,237,0.25) 40%, rgba(244,242,237,0.82) 100%);"></div>
+</div>
+
+<script>
+  function start() {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!matchMedia('(min-width: 768px) and (pointer: fine)').matches) return;
+    import('../scripts/maquette-ambient').then((m) => m.boot());
+  }
+  start();
+  document.addEventListener('astro:page-load', start);
+</script>

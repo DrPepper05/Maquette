@@ -65,10 +65,12 @@ EN — *„They model it first, then build it."*
 
 ## 3. Ofertele
 
-Trei servicii vizibile. AR-ul, configuratoarele 3D și lucrurile specializate **nu apar ca ofertă pe site** — sunt capabilități pe care le scoți la cerere, într-o discuție.
+> **Revizie 2026-08-25 (decizie utilizator):** pe site nu se publică **nicio cifră și niciun termen autoimpus** — nici la Blueprint. Site-ul vinde mecanismul: *discuție de 30 de minute → interval; Blueprint → cifră fermă, care ține*. Tot ce e preț în documentul ăsta e **intern** (pentru oferte și discuții), nu pentru site. Tot atunci: **AR/3D devine ofertă numită pe `/services`** (secțiunea Apps), nu doar capabilitate de acoperire — demo-ul rămâne link privat.
+
+Trei servicii vizibile pe `/services`: Automations · Websites & web apps · Apps, inclusiv vizualizatoare AR/3D de produs.
 
 ### 🔹 Blueprint — *conturarea ideii*
-**Preț fix, afișat pe site · 3–5 zile lucrătoare**
+**Preț fix per client, comunicat în discuție (nepublicat pe site) · termen scurt, fără promisiune publică de zile**
 
 Livrabile:
 - Specificație funcțională (ce face sistemul, pentru cine, în ce ordine)
@@ -77,14 +79,14 @@ Livrabile:
 - Estimare pe faze, cu interval, nu cu un singur număr
 - Plan de execuție + listă de riscuri, scris pe limba clientului
 
-**Mecanismul care îl vinde:** taxa se scade **100%** din primul proiect de build, dacă acesta începe în 60 de zile. Pentru clientul care oricum construiește, Blueprint-ul e gratis. Pentru cel care nu construiește, tot pleacă cu un document pe care îl poate duce oriunde — inclusiv la altă firmă. Asta se spune explicit pe site; e exact ce elimină frica de a plăti pentru „niște hârtii".
+**Mecanismul care îl vinde:** taxa se scade **100%** din primul proiect de build. Pentru clientul care oricum construiește, Blueprint-ul e gratis. Pentru cel care nu construiește, tot pleacă cu un document pe care îl poate duce oriunde — inclusiv la altă firmă. Asta se spune explicit pe site; e exact ce elimină frica de a plăti pentru „niște hârtii". Clauza „în 60 de zile" stă în contract, nu pe site (2026-08-25 — termenele autoimpuse nu se publică).
 
 **De ce există:** îți plătește timpul de vânzare, filtrează clienții neserioși, și transformă „cât costă?" dintr-o ghicitoare într-un produs cu preț.
 
 ---
 
 ### 🔹 Aplicații și site-uri
-**Interval pe scenariu tipic, afișat · cifra fermă după o discuție de 30 de minute**
+**Fără cifre pe site (2026-08-25) · cifra fermă după o discuție de 30 de minute**
 
 Site de prezentare sau catalog, aplicații web, zone de client, panouri de administrare. Bilingv, CMS ca să poată edita singuri, SEO tehnic, performanță reală (Lighthouse ≥ 95), analytics, formulare care ajung unde trebuie.
 
@@ -93,7 +95,7 @@ Site de prezentare sau catalog, aplicații web, zone de client, panouri de admin
 ---
 
 ### 🔹 Automatizări
-**Interval pe scenariu tipic, afișat · setup + abonament lunar de mentenanță**
+**Fără cifre pe site (2026-08-25) · setup + abonament lunar de mentenanță, comunicate în ofertă**
 
 Legăm sistemele care azi nu vorbesc între ele: ERP ↔ site ↔ email ↔ Sheets ↔ WhatsApp. Generare automată de oferte și facturi, notificări, sincronizare de stocuri, raportare care se face singură.
 
@@ -106,11 +108,9 @@ Numerele se iau **de la client**, în discovery. Nu se inventează niciodată.
 
 ---
 
-### Linia de acoperire (o singură propoziție, în pagina de servicii)
+### ~~Linia de acoperire~~ — înlocuită (2026-08-25)
 
-> „Lucrăm și pe zone mai specializate — configuratoare de produs, vizualizare 3D și AR, integrări cu echipamente. Dacă ai ceva neobișnuit, întreabă."
-
-Atât. Fără pagină, fără poze, fără navigație. Rolul ei e strict să susțină demo-ul AR atunci când îl trimiți: patronul care primește emailul intră pe site, vede propoziția, și povestea stă în picioare. Fără ea, demo-ul pare împrumutat.
+Vechea regulă („o singură propoziție de acoperire, fără pagină, fără poze") a fost înlocuită: AR/3D e acum secțiune numită pe `/services`. Ce rămâne valabil: **fără poze și fără ecrane AR false** — secțiunea e text până există o captură reală; demo-ul funcțional rămâne link privat pentru outreach.
 
 ---
 
@@ -118,26 +118,18 @@ Atât. Fără pagină, fără poze, fără navigație. Rolul ei e strict să sus
 
 **Situația reală:** proiectele livrate până acum au fost mult sub nivelul de piață țintit. Nu se sare direct. Se urcă pe trepte, iar treapta se schimbă când există dovadă, nu când vrem noi.
 
-### Regula de publicare
-> **Pe site apare un singur preț: cel de la Blueprint.** Pentru restul — zero cifre, doar „estimare fermă după o discuție de 30 de minute".
+### Regula de publicare — revizuită 2026-08-25
+> **Pe site nu apare nicio cifră.** Nici la Blueprint. Toate treptele de mai jos sunt **prețuri de lucru interne**, pentru oferte și discuții. Pe site rămâne doar mecanismul: „estimare fermă după o discuție de 30 de minute; cifra exactă, din Blueprint — quoted up front, fixed once agreed".
 
-**Unde se afișează prețul Blueprint — decizie revizuită (august 2026).**
+Un avantaj lateral al deciziei: prețurile interne pot urca pe trepte fără ca site-ul să pară inconsecvent — nu există cifră publicată care să te blocheze.
 
-Nu pe homepage. Doar pe `/blueprint`.
-
-Datele susțin afișarea pentru servicii productizate sub ~10.000 $: cine compară pleacă la concurentul care afișează, iar un serviciu productizat își pierde exact avantajul care îl vinde dacă tot trebuie să suni ca să afli cât costă. Dar prima cifră pe care o vede un vizitator **ancorează tot studioul**. Cu `450 €` pe homepage, o construcție de 12.000 € sună a salt.
-
-Deci: homepage-ul duce mecanismul — *cinci zile, preț fix, se scade integral din proiect, documentul rămâne al tău oricum*. Cifra stă pe pagina unde omul deja s-a decis să evalueze, și acolo stă mare.
-
-De ce: orice „de la X €" publicat acum te blochează șase luni. Dacă pui un preț mic, nu mai poți urca fără să pari inconsecvent. Dacă pui unul mare pe care nu-l poți susține încă, ori nu te sună nimeni, ori te sună, accepți mai puțin, și prețul de pe site devine o minciună. Blueprint-ul e singurul care merită afișat, pentru că e produs fix, angajament mic și filtrează exact cine trebuie.
-
-> **Notă rate-card (2026-08-24):** pe homepage prețurile se afișează ca meniu de scenarii („site de prezentare cu CMS: X–Y € · catalog cu panou de administrare: Y–Z €…"), la cererea utilizatorului. Sub-intervalele sunt **împărțiri ale intervalelor Treapta 1** de mai jos — capetele (1.200–2.000 / 800–1.500) nu se depășesc fără decizie de business. Rândul final e mereu catch-all: „ceva specific → discuție de 30 de minute".
+> **Istoric.** Regula veche (august 2026): un singur preț publicat — Blueprint 450 €, doar pe `/blueprint`; pe homepage, rate card cu intervale pe scenariu tipic (nota rate-card din 2026-08-24). Ambele anulate de decizia utilizatorului din 2026-08-25: „prețul diferă de la client la client". Argumentele pro-afișare (TrustRadius/NN-g/G2) rămân consemnate în CLAUDE.md, marcate ca înlocuite.
 
 ### Treapta 1 — acum → primele 2 case study-uri (≈3 luni)
 
 | | Preț de lucru (nepublicat) |
 |---|---|
-| Blueprint | **450 €** *(singurul afișat — și doar pe `/blueprint`, nu pe homepage)* |
+| Blueprint | **450 €** *(intern — pe site nu se afișează, decizie 2026-08-25)* |
 | Aplicații și site-uri | 1.200 – 2.000 € |
 | Automatizări | 800 – 1.500 € + 80 €/lună |
 

@@ -1,0 +1,9 @@
+# Worker-ul contorului de like-uri. Deploy manual, nu în build-ul site-ului.
+name = "maquette-likes"
+main = "worker.js"
+compatibility_date = "2026-08-01"
+
+# id-ul se completează după `wrangler kv namespace create LIKES` (vezi README.md)
+[[kv_namespaces]]
+binding = "LIKES"
+id = ""

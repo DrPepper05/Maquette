@@ -1,0 +1,152 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import AmbientCards from '../components/AmbientCards.astro';
+import Figure from '../components/Figure.astro';
+import ExhibitActions from '../components/ExhibitActions.astro';
+import DeclutterApp from '../components/screens/DeclutterApp.astro';
+import GigTimDoc from '../components/screens/GigTimDoc.astro';
+import { copy } from '../copy';
+const t = copy.projects;
+const email = 'contact@maquette.ro';
+---
+<Base route="projects" title={t.title} desc={t.desc}>
+
+  <section class="wrap" style="padding-top: clamp(64px, 8vw, 110px)">
+    <p class="lbl">{t.eyebrow}</p>
+    <h1 class="t-display mt-6 max-w-[16ch]" style="font-size: clamp(38px, 5.6vw, 76px)">{t.h1}</h1>
+    <p class="lede prose-w mt-7">{t.lede}</p>
+  </section>
+
+  <!-- ── Exponatele — unul pe ecran, cu figură mare și acțiuni.
+       Id-urile sunt ex-*, niciodată s01…cta (alea trezesc canvas-ul).
+       Eticheta de stadiu trebuie să rămână adevărată. ── -->
+  {t.exhibits.map((p, i) => (
+    <section class="wrap sec rise exhibit" id={`ex-${p.slug}`}>
+      <SectionHead index={String(i + 1).padStart(2, '0')} title="Exhibit" />
+      <AmbientCards n={i} />
+
+      <!-- cardul-album: coperta sus (foto când există, ecranul live până
+           atunci), numele pe scrim, banda de info dedesubt — TOT exponatul
+           e un singur card întunecat, plutind. -->
+      <article class="card-page album float-card" data-tilt="1.5">
+        <div class="album-cover">
+          {p.cover ? (
+            <img class="cover-img" src={p.cover} alt={`${p.name} — cover`} loading="lazy" />
+          ) : (
+            <div class="cover-live" inert>
+              {p.slug === 'declutter' ? <DeclutterApp /> : <GigTimDoc />}
+            </div>
+          )}
+          <div class="album-scrim" aria-hidden="true"></div>
+          <div class="album-title">
+            <div class="flex flex-wrap items-baseline gap-x-5 gap-y-2">
+              <h2 class="t-display" style="font-size: clamp(38px, 5vw, 68px)">{p.name}</h2>
+              <span class="lbl">{p.stage}</span>
+            </div>
+            <span class="lbl">FIG. {String(i + 1).padStart(2, '0')} · {p.fig.title} — {p.fig.tech}</span>
+          </div>
+        </div>
+
+        <div class="album-body">
+          <div class="grid gap-x-14 gap-y-10 lg:grid-cols-[1.15fr_1fr] items-start">
+            <div>
+              <p class="t-h3 max-w-[38ch]" style="color: var(--mid); font-weight: 500">{p.h}</p>
+              <p class="mt-5 text-[16px]">{p.p}</p>
+              <div class="mt-6 pl-5 border-l-2 max-w-[64ch]" style="border-color: var(--hairline)">
+                <h3 class="t-h3 !text-[16px]">{p.noteH}</h3>
+                <p class="mt-2 text-[15.5px]" style="color: var(--mid)">{p.noteP}</p>
+              </div>
+              <ExhibitActions slug={p.slug} />
+            </div>
+            {p.cover && (
+              <div class="album-inset">
+                <Figure index={String(i + 1).padStart(2, '0')} title={p.fig.title} kind="demo" tech={p.fig.tech}>
+                  {p.slug === 'declutter' ? <DeclutterApp /> : <GigTimDoc />}
+                </Figure>
+              </div>
+            )}
+          </div>
+        </div>
+      </article>
+    </section>
+  ))}
+
+  <!-- ── Cererile — exclusiv aici, în ordinea asta ── -->
+  <section class="wrap sec rise">
+    <SectionHead index="03" title={t.askLabel} />
+    <AmbientCards n={2} />
+    <article class="card-page float-card" data-tilt="1.5">
+      <div class="max-w-[64ch]">
+        <h3 class="t-h2 !text-[clamp(24px,3vw,34px)]">{t.ask1H}</h3>
+        <p class="mt-4" style="color: var(--mid)">{t.ask1P}</p>
+        <a href={`mailto:${email}`} class="btn mt-8">{t.ask1Cta}</a>
+
+        <p class="row-line mt-12 text-[16px]" style="color: var(--mid)">{t.ask2}</p>
+        <p class="text-[16px] pt-4" style="color: var(--mid)">{t.ask3} <a href={`mailto:${email}`} class="lnk !text-[14px]">{email}</a></p>
+      </div>
+    </article>
+  </section>
+
+  <script>
+    /* Like + Comment — rulează doar dacă butoanele există în DOM
+       (adică doar cu env-urile setate). Cusdis se încarcă la primul clic. */
+    const store = {
+      get(k: string) { try { return localStorage.getItem(k); } catch { return null; } },
+      set(k: string) { try { localStorage.setItem(k, '1'); } catch { /* private mode */ } },
+    };
+    const pad = (n: number) => String(Math.max(0, n)).padStart(2, '0');
+
+    document.querySelectorAll<HTMLButtonElement>('[data-like]').forEach((btn) => {
+      const slug = btn.closest<HTMLElement>('[data-exhibit]')?.dataset.exhibit ?? '';
+      const ep = btn.dataset.endpoint ?? '';
+      const out = btn.querySelector('[data-count]');
+      if (!slug || !ep || !out) return;
+      let count = 0;
+      if (store.get('liked:' + slug)) btn.classList.add('on');
+      fetch(`${ep}?id=${slug}`)
+        .then((r) => r.json())
+        .then((d) => { count = d.count | 0; out.textContent = pad(count); })
+        .catch(() => {});
+      btn.addEventListener('click', () => {
+        if (store.get('liked:' + slug)) return;
+        store.set('liked:' + slug);
+        btn.classList.add('on');
+        out.textContent = pad(++count);
+        fetch(ep, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ id: slug }),
+        }).catch(() => {});
+      });
+    });
+
+    let cusdisSdk: Promise<void> | null = null;
+    const loadCusdis = () => (cusdisSdk ??= new Promise((res) => {
+      const s = document.createElement('script');
+      s.src = 'https://cusdis.com/js/cusdis.es.js';
+      s.async = true;
+      s.onload = () => res();
+      document.body.appendChild(s);
+    }));
+
+    document.querySelectorAll<HTMLButtonElement>('[data-comment]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const wrap = btn.closest('section')?.querySelector<HTMLElement>('[data-thread]');
+        if (!wrap) return;
+        const open = wrap.hidden;
+        wrap.hidden = !open;
+        btn.setAttribute('aria-expanded', String(open));
+        if (open && !wrap.dataset.loaded) {
+          wrap.dataset.loaded = '1';
+          await loadCusdis();
+          const C = (window as any).CUSDIS;
+          const el = wrap.querySelector('.cusdis-thread');
+          if (C?.renderTo && el) C.renderTo(el);
+          else C?.initial?.();
+        }
+      });
+    });
+  </script>
+
+</Base>

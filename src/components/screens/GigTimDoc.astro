@@ -1,0 +1,23 @@
+---
+/** Ecran real, nu captură: o pagină din PROPRIUL Blueprint al lui GigTim
+ *  (kind: demo). Vizualul onest pentru „being scoped" — documentul,
+ *  nu o aplicație care nu există. Refolosește stilurile `.doc`. */
+import { copy } from '../../copy';
+const d = copy.screens.gigtim;
+---
+<div class="scr doc">
+  <div class="scr-bar"><span>{d.bar}</span><b>{d.page}</b></div>
+  <div class="scr-body">
+    <p class="sub">{d.sec}</p>
+    <h4>{d.h}</h4>
+    <ol>
+      {d.steps.map(([lead, rest, tag]) => (
+        <li><b>{lead}</b> {rest} <em>{tag}</em></li>
+      ))}
+    </ol>
+    <div class="out">
+      <p class="t">{d.outT}</p>
+      <ul>{d.out.map((li) => <li>{li}</li>)}</ul>
+    </div>
+  </div>
+</div>

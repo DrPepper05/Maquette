@@ -39,7 +39,7 @@ Revizuit 2026-08-24, după cercetarea „max quality": site-urile memorabile din
 - **Semne de registru (crop marks)** la colțurile figurilor.
 - **Ștampila onestității** — o singură instanță pe site, rotită, chenar roșu: `DELIVERED PROJECTS · 00`. Zero-ul e cel mai onest lucru de pe pagină; ștampila îl face memorabil. Se actualizează când realitatea se schimbă.
 - **Numeralul-filigran**: indexul secțiunii, uriaș (Figtree 300, cerneală la ~6%), în spatele conținutului.
-- **Un singur bloc roșu pe pagină**: CTA-ul de pe homepage și secțiunea de preț de pe `/blueprint` sunt full-bleed `#B34530` cu text de hârtie. Restul paginii ține disciplina — de-aia detonează blocul. Niciodată două pe aceeași pagină.
+- **Un singur bloc roșu pe pagină** — registrul (2026-08-25): `/` CTA-ul final · `/blueprint` garanția („taxa se scade integral") · `/services` CTA-ul final · `/projects` fără bloc — roșul stă în butoanele Contact ale exponatelor. Full-bleed `#B34530` cu text de hârtie. Restul paginii ține disciplina — de-aia detonează blocul. Niciodată două pe aceeași pagină.
 - **Îmbinarea mono în titlu**: un singur cuvânt pe titlu, maxim, setat în JetBrains Mono în interiorul display-ului Figtree.
 
 **1. Secțiuni numerotate ca un document de specificație.**
@@ -59,7 +59,7 @@ FIG. 01 · BLUEPRINT — FUNCTIONAL SPECIFICATION
 Deliverable · sample — Document, 24 pp. · 2026
 ```
 
-Ecranele **sunt cod care rulează, nu capturi** — pentru un studio de software, adevărat într-un fel în care o poză nu e. **Diagramele au fost scoase de pe site** (decizie utilizator, 2026-08-24) — singurul ecran rămas e documentul BlueprintDoc.
+Ecranele **sunt cod care rulează, nu capturi** — pentru un studio de software, adevărat într-un fel în care o poză nu e. **Diagramele au fost scoase de pe site** (decizie utilizator, 2026-08-24). Ecranele existente (2026-08-25): `BlueprintDoc` (pe `/blueprint`), `DeclutterApp` (UI-ul prototipului, pe `/projects`) și `GigTimDoc` (o pagină din propriul Blueprint al lui GigTim — vizualul onest pentru „being scoped", pe `/projects`). Figurile exponatelor acceptă în același slot o captură reală (`<img src="/img/…">`) când există una — legenda rămâne adevărată.
 
 > ⚠️ **Capcană Astro (rămâne valabilă dacă revin ecrane SVG):** un bloc `<style>` în `<defs>` într-o componentă `.astro` e extras și scopat — selectorii nu mai ajung la SVG. Stilurile SVG stau ca **atribute de prezentare**, răspândite din obiecte JS.
 
@@ -72,7 +72,7 @@ Ecranele **sunt cod care rulează, nu capturi** — pentru un studio de software
 | `Delivered project` | Muncă livrată, cu acord scris. **Încă nefolosită.** |
 
 **3. Roșul ca punctuație — plus o singură detonare pe pagină.**
-Unde are voie roșul — listă închisă: indexul de secțiune · **un singur buton primar pe ecran** · sublinierea linkurilor la hover · punctul din wordmark · accentele din interiorul ecranelor întunecate · rigla de progres · chenarul ștampilei · `::selection` (fundal roșu, text de hârtie) · **și exact un bloc full-bleed roșu pe pagină** (CTA-ul de pe homepage; prețul pe `/blueprint`).
+Unde are voie roșul — listă închisă: indexul de secțiune · **un singur buton primar pe ecran** · sublinierea linkurilor la hover · punctul din wordmark · accentele din interiorul ecranelor întunecate · rigla de progres · chenarul ștampilei · starea „liked" a butonului Like de pe `/projects` · `::selection` (fundal roșu, text de hârtie) · **și cel mult un bloc full-bleed roșu pe pagină** (registrul din §2, mobilierul).
 **Nu are voie:** titluri, text curent, al doilea bloc pe aceeași pagină.
 
 ---
@@ -144,7 +144,23 @@ Sistemul din v5 se păstrează integral (era deja corect):
 | Secvența de deschidere | Cinci elemente din hero, decalaj 70ms, sub o secundă, doar pe homepage. `[data-seq]` / `[data-seq-i]`. | **0 KB** |
 | `animation-timeline: view()` | Aparițiile `.rise`. Rulează în compozitor, nu atinge INP. | **0 KB** |
 
-Un `IntersectionObserver` de ~250 de octeți în `Base.astro` preia `.rise` unde `animation-timeline` lipsește. **Deriva plăcilor a murit odată cu plăcile.** Excepția de asamblare pentru diagrama Before/After a fost anulată odată cu diagrama (2026-08-24) — regula „nimic care se construiește pe ecran" rămâne fără excepții.
+Un `IntersectionObserver` de ~250 de octeți în `Base.astro` preia `.rise` unde `animation-timeline` lipsește. Excepția de asamblare pentru diagrama Before/After a fost anulată odată cu diagrama (2026-08-24).
+
+**Excepție, datată 2026-08-24 (REDUSĂ LA AMBIENT 2026-08-26) — `MaquetteCanvas.astro`.** Recenzia externă din 2026-08-26 a numit homepage-ul „haotic — animația pierde conținutul și textul". Diagnosticul măsurat: textul era clar doar pe ~32% din scrollul fiecărei secțiuni (restul — rampe de blur sau hârtie goală), camera pompa zoom de patru ori, finalul avea strob, iar pe telefon nu exista niciun gate. Cercetarea NN/g pe scrolljacking confirmă mecanismul (scroll deturnat + text obligatoriu de citit = cele mai grave probleme de utilizabilitate; alternativa „lock pe secțiuni" a fost evaluată și respinsă pe aceeași bază). Versiunea cu dive-uri — pagini care zburau înăuntru și parcau peste secțiuni, cu geamăn DOM și crossfade blur→clar — e păstrată în git; pe site nu mai există. **Contractul nou:**
+- **Textul nu părăsește niciodată documentul.** §01–§04 sunt HTML obișnuit, mereu vizibil — fără reparentare, fără geamăn DOM, fără parcare, fără pin, fără snap. Doar hero-ul rămâne slide de `100svh`; secțiunile revin la ritmul normal `.sec`.
+- Cele **cinci pagini întunecate ale prospectului** plutesc împrăștiate ÎN SPATELE hârtiei, permanent ESTOMPATE — pictate din `copy.ts` cu fonturile site-ului (repictate pe `fonts.ready`), deci petele sunt forme reale de text: niciodată lizibile, nici menite să fie. Ecoul de homepage al `AmbientCards` de pe sub-pagini.
+- **Paginile-companion, ancorate pe secțiuni (2026-08-27; înlocuiește „poarta" din aceeași zi, respinsă de utilizator ca „prea basic, doar un mini fundal").** Fiecare pagină 3D plutește ÎN SPATELE propriei secțiuni, pe partea OPUSĂ cardului ei (§01 are cardul pe stânga → pagina lui blurată plutește pe dreapta; §02 invers; pagina-cuprins portret e companion-ul hero-ului, în dreapta lui). Poziția se calculează pe planul lookAt din baza camerei fixe: `docY`-ul secțiunii (măsurat la boot/resize/`fonts.ready`) minus scrollul, convertit în unități-lume — paginile defilează 1:1 cu documentul, ca și cum ar fi prinse de secțiunile lor (lerp-ul pe `sy` le dă un mic trailing organic). Funcție pură de `scrollY`, scroll nativ neatins; fără parallax pe root (ancorarea îl înlocuiește). Registrul rămâne fantoma; `endFade` înainte de CTA rămâne. Camera stă pe loc (r≈44, lookAt(0,2,0)); parallax de mouse redus; legănare lentă per pagină (~8–10s).
+- **Deschiderea — „coborârea" (2026-08-27, revizuită în aceeași zi: prima versiune pornea cardurile ÎN SPATELE camerei și nu se vedea nimic — feedback: „când intru pe site nu văd nicio animație").** One-shot, ~3,2s, crane cinematic (ease-in-out): paginile atârnă într-o COLOANĂ înaltă deasupra scenei (offset lateral alternat, adâncimi variate), camera pornește SUS, printre ele, și coboară odată cu ele (paginile cad și ele, mai încet — camera le depășește, deci în cadru urcă și trec pe lângă privitor); când camera trece de stratul unei pagini, aceasta se desprinde și alunecă în jos spre ancora ei din document. În zbor paginile sunt aproape solide (~2,7× fantoma, bloom de 0,3s la start ca să nu pocnească) și se relaxează la registrul-fantomă când aterizează. lookAt-ul coboară împreună cu camera (ușor sub stratul ei — pitch discret în jos), aterizând EXACT pe poza de repaus. Textul hero NU așteaptă intro-ul. Nu se re-declanșează niciodată.
+- **Gate de capabilitate:** canvasul rulează doar la `(min-width: 768px) and (pointer: fine)` fără reduced-motion, DOAR pe homepage (montat din `index.astro`, nu din Base), încărcat prin dynamic import — telefoanele și celelalte pagini nu descarcă chunk-ul Three.js deloc.
+- **GSAP a ieșit din proiect** (singurul consumator era scrub-ul vechi). Grila, crucile de referință, liniile roșii, particulele, strobul, HUD-ul și lumina roșie punctuală: șterse. Igiena de performanță rămâne: dpr max 1,5 · `alpha: true` fără `Scene.background` · texturi pictate la 1× (blur-ul oricum topește rezoluția).
+
+Logica trăiește în `src/scripts/maquette-ambient.ts`; componenta `.astro` e doar montura + gate-ul de ~10 linii.
+
+**Limbajul de card, pe TOATE paginile:** `.float-card` (legănare lentă + tilt spre cursor, JS-ul mic din Base; tăcut la reduced-motion, tilt doar la pointer fin) pe ramele figurilor (`/projects`, `/blueprint`) și, cu skin-ul `.card-lite` (paper-2 + hairline + radius), pe blocurile de ofertă din `/services` și formularul din `/contact`. Niciodată pe un element cu `.rise` (ambele scriu `transform` — de-aia `.rise` stă pe secțiune și `.float-card` pe cardul-copil) și niciodată pe blocurile roșii. **Secțiunile homepage-ului sunt carduri (2026-08-27, decizia utilizatorului: „designed the same as in the project tab").** §01–§04 folosesc `.card-page float-card home-card` (întunecat, ca pe `/projects`), ALTERNATE stânga-dreapta (`home-card` ~780px; `.right` = `margin-left: auto`; sub 900px cad la lățime plină), cu `SectionHead` + filigranul numeric pe hârtie, în afara cardului (pe secțiunile cu card pe dreapta filigranul trece pe stânga — clasa `.mark-left` pe secțiune), `AmbientCards` în jur, iar în fundal, pe partea GOALĂ, pagina 3D blurată a secțiunii (companion-ul de mai sus). Hero-ul rămâne tipografic pe hârtie; CTA rămâne blocul roșu full-bleed. Punctele de ghidaj din `.rate-row` au varianta lor pe întuneric (`.card-page .rate-row .dots`). **Cardul-pagină pe taburi (2026-08-26):** pe sub-pagini, TOT blocul de conținut al unei secțiuni e un card plutitor, cu mini-carduri GOALE, blurate, plutind în hârtia din jur (`AmbientCards`, pur CSS) — ecoul paginilor de pe homepage. Două suprafețe, împărțite deliberat până alege utilizatorul: `.card-page` (întunecat) pe `/projects` + `/contact`, `.card-page-lite` (hârtie ridicată) pe `/services` + `/blueprint` — schimbarea e un nume de clasă. Pe `/projects` cardul e un ALBUM: coperta sus (câmpul `cover` din copy.ts când există fotografia; până atunci ecranul live, tăiat full-bleed și atenuat), numele pe scrim, banda de info + acțiunile dedesubt; când apare fotografia, ecranul live coboară ca insert mic în bandă — dovada „cod care rulează" rămâne. **Reflexia „holo" (2026-08-26):** la hover, cardurile au un luciu care urmărește cursorul + un strat de puncte (halftone) dezvăluit doar în jurul lui — foarte subtil, gen folie de carte de joc; `screen` pe cardurile întunecate (overlay e invizibil pe #0F1013), blend normal + puncte de cerneală pe cele deschise; condus de --glare/--mx/--my din JS-ul din Base, cu micro-scale la hover. Legănarea implicită a cardurilor: 6-8px.
+
+Regula „nimic care se construiește pe ecran" rămâne valabilă pentru orice altceva de pe site — fundalul ambient nu construiește nimic: e decor static care respiră, sub conținut, în spatele lui.
+
+**A doua excepție de JS, datată 2026-08-25 — acțiunile exponatelor de pe `/projects`.** Like (fetch către `PUBLIC_LIKES_ENDPOINT`, contor mono, guard în `localStorage`) și Comment (SDK-ul Cusdis, ~5 KB, încărcat **doar la primul clic** pe buton — zero JS de terți la load). Ambele gate-uite pe env: fără variabile setate, se randează doar butonul Contact. Contoarele pornesc de la `00` — zeroul onest; nu se seedează. Microcopy obligatoriu sub fir: „Comments appear after review."
 
 Reveal-urile se retunează subtil: opacitate + 10px, nu 16px.
 
@@ -152,7 +168,7 @@ Reveal-urile se retunează subtil: opacitate + 10px, nu 16px.
 
 **Semne de amator, de evitat explicit:** `ease-in` pe ceva care intră · `transition: all` · `scale(0) → scale(1)` · animarea lui `height`/`top` în loc de `transform` · reveal care se repetă la fiecare reintrare.
 
-**Lista neagră:** Lenis · GSAP și ScrollTrigger (50,7 KB gzip; licență Webflow revocabilă) · split-text pe caractere · preloader cu procent · scroll orizontal · cursor custom · butoane magnetice · Three.js · Rive · Lottie · Theatre.js · Spline. Și nimic care se construiește pe ecran.
+**Lista neagră:** Lenis · split-text pe caractere · preloader cu procent · scroll orizontal · cursor custom · butoane magnetice · Rive · Lottie · Theatre.js · Spline · GSAP (scos din proiect 2026-08-26, odată cu dive-urile) · orice formă de scrolljacking (snap, lock, scrub pe conținut — NN/g, respinsă explicit 2026-08-26). Three.js rămâne doar pentru fundalul ambient din `MaquetteCanvas`; nu se folosește în altă parte a site-ului.
 
 **`prefers-reduced-motion`** oprește tot și lasă conținutul vizibil. Gate-ul `html.js-anim` face ca, fără JS, nimic să nu pornească ascuns.
 
@@ -171,6 +187,8 @@ Reveal-urile se retunează subtil: opacitate + 10px, nu 16px.
 **Figura (`Figure.astro`)** — rama întunecată + legenda. Props: `index`, `title`, `kind` (din `copy.kinds`), `tech`.
 
 **Câmp de formular (`.fld`)** — fundal `--paper-2`, chenar `--hairline`, `border-radius` 6px, focus `--red`. **O singură definiție, în global.css.**
+
+**Exponatul (`/projects`, 2026-08-25)** — secțiune `.exhibit` de `min-height: 100svh`, conținut centrat: `SectionHead` cu index + „EXHIBIT", numele proiectului la scară display, eticheta de stadiu, `Figure` mare cu ecranul live, paragraful-teză, nota, apoi `ExhibitActions.astro` (Contact `.btn` roșu · Like `.act` · Comment `.act`). `.act` e buton mono pe hairline; starea „liked" trece pe `--red`.
 
 ---
 

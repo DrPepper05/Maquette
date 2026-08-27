@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import AmbientCards from '../components/AmbientCards.astro';
+import { copy, routes } from '../copy';
+const t = copy.services;
+---
+<Base route="services" title={t.title} desc={t.desc}>
+
+  <!-- ── Hero — cele trei propuneri, fără cifre ── -->
+  <section class="wrap" style="padding-top: clamp(64px, 8vw, 110px)">
+    <p class="lbl">{t.eyebrow}</p>
+    <h1 class="t-display mt-6 max-w-[20ch]" style="font-size: clamp(38px, 5.6vw, 76px)">{t.h1}</h1>
+    <p class="lede prose-w mt-7">{t.lede}</p>
+  </section>
+
+  <!-- ── 01–03 · Serviciile — doar text, fără figuri (niciun ecran fals) ── -->
+  {t.items.map((s, i) => (
+    <section class="wrap sec rise">
+      <SectionHead index={String(i + 1).padStart(2, '0')} title={s.label} />
+      <AmbientCards n={i} />
+      <!-- cardul-pagină (varianta deschisă): tot conținutul ofertei -->
+      <div class="float-card card-page-lite" data-tilt="2">
+        <h2 class="t-h2 max-w-[24ch]">{s.h}</h2>
+        <p class="mt-6 prose-w" style="color: var(--mid)">{s.p}</p>
+        <ul class="m-0 mt-8 p-0 list-none grid max-w-[74ch]">
+          {s.points.map((li) => (
+            <li class="row-line text-[16px] pl-7 relative">
+              <span class="absolute left-0 top-[19px] lbl" aria-hidden="true">—</span>{li}
+            </li>
+          ))}
+        </ul>
+        <a href={routes.contact} class="lnk mt-8">{t.ctaRow}</a>
+      </div>
+    </section>
+  ))}
+
+  <!-- ── 04 · Cum funcționează prețul — înlocuitorul rate card-ului ── -->
+  <section class="wrap sec rise">
+    <SectionHead index="04" title={t.pricing.label} />
+    <AmbientCards n={0} />
+    <div class="float-card card-page-lite" data-tilt="2">
+      <h2 class="t-h2 max-w-[24ch]">{t.pricing.h}</h2>
+      <p class="mt-6 prose-w" style="color: var(--mid)">{t.pricing.p}</p>
+      <a href={routes.blueprint} class="lnk mt-8">{t.pricing.link}</a>
+    </div>
+  </section>
+
+  <!-- ── CTA final — singurul bloc roșu de pe pagină ── -->
+  <section class="block-red sec rise">
+    <div class="wrap">
+      <h2 class="t-h2 max-w-[20ch]">{t.end.h}</h2>
+      <p class="mt-5 prose-w" style="color: var(--mid)">{t.end.p}</p>
+      <a href={routes.contact} class="btn btn-paper mt-9">{copy.cta}</a>
+    </div>
+  </section>
+
+</Base>

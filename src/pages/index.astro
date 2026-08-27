@@ -1,88 +1,121 @@
 ---
 import Base from '../layouts/Base.astro';
 import SectionHead from '../components/SectionHead.astro';
+import AmbientCards from '../components/AmbientCards.astro';
+import MaquetteCanvas from '../components/MaquetteCanvas.astro';
 import { copy, routes } from '../copy';
 const t = copy.home;
 ---
 <Base route="home" title={t.title} desc={t.desc}>
 
+  <!-- fundalul ambient — paginile blurate ale prospectului: intro-ul
+       „împărțirea paginilor" + companionii ancorați pe secțiuni;
+       gate-uit pe lățime/pointer/reduced-motion în componentă -->
+  <MaquetteCanvas />
+
   <!-- ── Hero — ce facem și pentru cine, în 10 secunde ── -->
-  <section class="wrap" data-seq style="padding-top: clamp(72px, 10vw, 140px)">
-    <p class="lbl" data-seq-i>{t.kicker}</p>
-    <h1 class="t-display prose-w mt-6 max-w-[24ch]" data-seq-i>{t.h1a}<span class="h1-mono">{t.h1mono}</span>{t.h1b}</h1>
-    <p class="lede prose-w mt-7 max-w-[52ch]" data-seq-i>{t.lede}</p>
-    <div class="flex flex-wrap items-center gap-7 mt-10" data-seq-i>
-      <a href={routes.blueprint} class="btn">{copy.cta}</a>
-      <a href={routes.contact} class="lnk">{t.heroLink}</a>
-    </div>
-  </section>
-
-  <!-- ── 01 · Rate card — meniul de scenarii cu prețuri ── -->
-  <section class="wrap sec rise">
-    <SectionHead index="01" title={t.build.label} />
-    <h3 class="t-h2 max-w-[24ch]">{t.build.h}</h3>
-    <div class="rate mt-12">
-      {t.build.rows.map(([what, price, sub]) => (
-        <div class="rate-row">
-          <span class="what">{what}</span>
-          <i class="dots" aria-hidden="true"></i>
-          <span class="price tabular">{price}{sub && <em>{sub}</em>}</span>
-        </div>
-      ))}
-      <a href={routes.contact} class="rate-row rate-custom">
-        <span class="what">{t.build.customWhat}</span>
-        <i class="dots" aria-hidden="true"></i>
-        <span class="price">{t.build.customCta} →</span>
-      </a>
-    </div>
-    <p class="mt-8 text-[15.5px] max-w-[60ch]" style="color: var(--mid)">{t.build.note}</p>
-  </section>
-
-  <!-- ── 02 · Blueprint-ul — o propoziție; mecanismul stă pe /blueprint ── -->
-  <section class="wrap sec rise">
-    <SectionHead index="02" title={t.mech.label} />
-    <h3 class="t-h2 max-w-[26ch]">{t.mech.h}</h3>
-    <a href={routes.blueprint} class="lnk mt-8">{t.mech.link}</a>
-  </section>
-
-  <!-- ── 03 · Dovada — etichetele de stadiu trebuie să rămână adevărate ── -->
-  <section class="wrap sec rise">
-    <SectionHead index="03" title={t.proof.label} />
-    <div class="flex flex-wrap items-start justify-between gap-8">
-      <h3 class="t-h2 max-w-[24ch]">{t.proof.h}</h3>
-      <!-- ștampila onestității — singura instanță de pe site -->
-      <div class="stamp mt-2" role="note">
-        <span>{t.proof.stamp[0]}</span>
-        <b>{t.proof.stamp[1]}</b>
-        <span>{t.proof.stamp[2]}</span>
+  <section id="hero" class="wrap slide relative" data-seq>
+    <div class="slide-inner">
+      <p class="lbl" data-seq-i>{t.kicker}</p>
+      <h1 class="t-display prose-w mt-6 max-w-[24ch]" data-seq-i>{t.h1a}<span class="h1-mono">{t.h1mono}</span>{t.h1b}</h1>
+      <p class="lede prose-w mt-7 max-w-[52ch]" data-seq-i>{t.lede}</p>
+      <div class="flex flex-wrap items-center gap-7 mt-10" data-seq-i>
+        <a href={routes.contact} class="btn">{copy.cta}</a>
+        <a href={routes.blueprint} class="lnk">{t.heroLink}</a>
       </div>
     </div>
-    <div class="grid gap-x-14 gap-y-10 md:grid-cols-2 mt-10">
-      {t.proof.cards.map((c) => (
-        <article class="row-line">
-          <div class="flex items-baseline gap-4">
-            <h4 class="t-h3">{c.name}</h4>
-            <span class="lbl">{c.stage}</span>
-          </div>
-          <p class="mt-3 text-[16px]" style="color: var(--mid)">{c.p}</p>
-        </article>
-      ))}
-    </div>
-    <div class="flex flex-wrap items-baseline justify-between gap-6 mt-10">
-      <p class="text-[15.5px] max-w-[48ch]" style="color: var(--mid)">{t.proof.exhibit}</p>
-      <a href={routes.lab} class="lnk">{t.proof.link}</a>
+    <!-- indiciu de scroll — doar pe hero; pleacă natural odată cu el -->
+    <div class="scroll-cue" aria-hidden="true">
+      <span class="lbl">Scroll</span>
+      <svg class="arr" width="14" height="20" viewBox="0 0 14 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7 1v16M2 12l5 5 5-5" />
+      </svg>
     </div>
   </section>
 
-  <!-- ── 04 · O singură obiecție, fix înainte de CTA ── -->
-  <section class="wrap sec rise">
+  <!-- ── Secțiunile ca CARDURI (2026-08-27): limbajul /projects, alternate
+       stânga-dreapta; SectionHead + filigranul stau pe hârtie, cardul
+       plutește, pagina 3D blurată a secțiunii stă în fundal pe partea
+       goală (maquette-ambient o ancorează pe id-ul secțiunii). ── -->
+
+  <!-- ── 01 · Ce construim — card pe STÂNGA, pagina 3D pe dreapta ── -->
+  <section id="s01" class="wrap sec rise">
+    <SectionHead index="01" title={t.build.label} />
+    <AmbientCards n={0} />
+    <article class="card-page float-card home-card" data-tilt="1.5">
+      <h3 class="t-h2 max-w-[24ch]">{t.build.h}</h3>
+      <div class="rate mt-12">
+        {t.build.rows.map(([what, tag, sub]) => (
+          <div class="rate-row">
+            <span class="what">{what}</span>
+            <i class="dots" aria-hidden="true"></i>
+            <span class="price">{tag}{sub && <em>{sub}</em>}</span>
+          </div>
+        ))}
+        <a href={routes.services} class="rate-row rate-custom">
+          <span class="what">{t.build.customWhat}</span>
+          <i class="dots" aria-hidden="true"></i>
+          <span class="price">{t.build.customCta} →</span>
+        </a>
+      </div>
+      <p class="mt-8 text-[15.5px] max-w-[60ch]" style="color: var(--mid)">{t.build.note}</p>
+    </article>
+  </section>
+
+  <!-- ── 02 · Blueprint-ul — card pe DREAPTA, pagina 3D pe stânga ── -->
+  <section id="s02" class="wrap sec rise mark-left">
+    <SectionHead index="02" title={t.mech.label} />
+    <AmbientCards n={1} />
+    <article class="card-page float-card home-card right" data-tilt="1.5">
+      <h3 class="t-h2 max-w-[26ch]">{t.mech.h}</h3>
+      <a href={routes.blueprint} class="lnk mt-8">{t.mech.link}</a>
+    </article>
+  </section>
+
+  <!-- ── 03 · Dovada — card pe STÂNGA; etichetele de stadiu rămân adevărate ── -->
+  <section id="s03" class="wrap sec rise">
+    <SectionHead index="03" title={t.proof.label} />
+    <AmbientCards n={2} />
+    <article class="card-page float-card home-card" data-tilt="1.5">
+      <div class="flex flex-wrap items-start justify-between gap-8">
+        <h3 class="t-h2 max-w-[24ch]">{t.proof.h}</h3>
+        <!-- ștampila onestității — singura instanță de pe site -->
+        <div class="stamp mt-2" role="note">
+          <span>{t.proof.stamp[0]}</span>
+          <b>{t.proof.stamp[1]}</b>
+          <span>{t.proof.stamp[2]}</span>
+        </div>
+      </div>
+      <div class="grid gap-x-14 gap-y-10 md:grid-cols-2 mt-10">
+        {t.proof.cards.map((c) => (
+          <article class="row-line">
+            <div class="flex items-baseline gap-4">
+              <h4 class="t-h3">{c.name}</h4>
+              <span class="lbl">{c.stage}</span>
+            </div>
+            <p class="mt-3 text-[16px]" style="color: var(--mid)">{c.p}</p>
+          </article>
+        ))}
+      </div>
+      <div class="flex flex-wrap items-baseline justify-between gap-6 mt-10">
+        <p class="text-[15.5px] max-w-[48ch]" style="color: var(--mid)">{t.proof.exhibit}</p>
+        <a href={routes.projects} class="lnk">{t.proof.link}</a>
+      </div>
+    </article>
+  </section>
+
+  <!-- ── 04 · O singură obiecție — card pe DREAPTA, fix înainte de CTA ── -->
+  <section id="s04" class="wrap sec rise mark-left">
     <SectionHead index="04" title={t.objection.label} />
-    <h3 class="t-h2">{t.objection.h}</h3>
-    <p class="mt-6 prose-w" style="color: var(--mid)">{t.objection.p}</p>
+    <AmbientCards n={0} />
+    <article class="card-page float-card home-card right" data-tilt="1.5">
+      <h3 class="t-h2">{t.objection.h}</h3>
+      <p class="mt-6 prose-w" style="color: var(--mid)">{t.objection.p}</p>
+    </article>
   </section>
 
   <!-- ── CTA final — singurul bloc roșu de pe pagină ── -->
-  <section class="block-red sec rise">
+  <section id="cta" class="block-red sec rise">
     <div class="wrap">
       <h2 class="t-h2 max-w-[20ch]">{t.end.h}</h2>
       <p class="mt-5 prose-w" style="color: var(--mid)">{t.end.p}</p>
