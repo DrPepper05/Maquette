@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-label="Illustration: a tangle of overlapping thoughts resolving into three ordered groups">
+  <!-- Maquette house illustration — NOT a product screenshot.
+       Cognitive overload: a working-memory tangle passes a narrow gate
+       and returns as three grouped stacks. Composed for the SQUARE album
+       face: lower ~30% stays calm (scrim + title live there). -->
+  <rect width="1000" height="1000" fill="#0F1013"/>
+
+  <!-- datum crosses -->
+  <g stroke="#8B8F94" stroke-width="2" opacity=".16">
+    <path d="M108 640v24M96 652h24"/>
+    <path d="M652 132v24M640 144h24"/>
+    <path d="M920 560v24M908 572h24"/>
+  </g>
+
+  <!-- the tangle -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M180 400 C220 310 350 290 380 370 C405 435 300 470 260 420 C225 375 310 335 360 365 C420 400 380 490 300 490 C220 490 170 450 190 390" stroke="#8B8F94" stroke-width="2.5" opacity=".5"/>
+    <path d="M140 430 C210 350 440 330 470 420 C490 485 350 525 260 500 C180 480 160 430 230 400 C300 370 440 385 450 440" stroke="#C7CACF" stroke-width="2" opacity=".35"/>
+    <path d="M320 430 C340 390 420 395 415 435 C410 475 335 475 330 435 C327 410 385 400 400 430" stroke="#8B8F94" stroke-width="3" opacity=".6"/>
+    <path d="M200 360 C280 300 400 305 440 360 C480 415 400 480 330 465" stroke="#8B8F94" stroke-width="2" opacity=".25"/>
+    <path d="M160 480 C230 530 380 535 440 480" stroke="#8B8F94" stroke-width="2" opacity=".22"/>
+  </g>
+
+  <!-- stray thoughts around the tangle -->
+  <g stroke="#8B8F94" stroke-width="3" stroke-linecap="round" opacity=".55">
+    <path d="M96 320l34 -10"/>
+    <path d="M120 520l30 14"/>
+    <path d="M236 250l26 12"/>
+    <path d="M420 250l30 -6"/>
+    <path d="M500 330l28 10"/>
+    <path d="M480 510l32 -8"/>
+    <path d="M70 420l28 2"/>
+    <path d="M350 218l24 14"/>
+  </g>
+  <g stroke="#D9573A" stroke-width="3" stroke-linecap="round" opacity=".85">
+    <path d="M180 262l30 8"/>
+    <path d="M512 450l28 -4"/>
+  </g>
+  <g fill="#C7CACF" opacity=".5">
+    <circle cx="106" cy="352" r="3"/>
+    <circle cx="460" cy="280" r="3"/>
+    <circle cx="516" cy="490" r="2.5"/>
+    <circle cx="150" cy="552" r="2.5"/>
+  </g>
+
+  <!-- the gate, and the flow through it -->
+  <g fill="none" stroke-width="2">
+    <path d="M490 360 C560 365 590 395 630 400 C680 406 700 300 738 268" stroke="#262B33"/>
+    <path d="M500 415 C570 418 600 412 630 414 C685 418 706 420 740 428" stroke="#3A4048"/>
+    <path d="M485 470 C560 470 600 425 630 422 C682 418 704 545 740 585" stroke="#262B33"/>
+  </g>
+  <g stroke="#8B8F94" stroke-width="2" opacity=".7">
+    <path d="M636 386v-24"/>
+    <path d="M636 438v24"/>
+  </g>
+
+  <!-- three grouped stacks, stacked on the right -->
+  <g>
+    <g>
+      <circle cx="756" cy="240" r="3.5" fill="#D9573A"/>
+      <path d="M770 240h150" stroke="#262B33" stroke-width="2"/>
+      <rect x="750" y="262" width="170" height="13" rx="6.5" fill="#C7CACF" opacity=".85"/>
+      <rect x="750" y="288" width="132" height="13" rx="6.5" fill="#8B8F94" opacity=".55"/>
+      <rect x="750" y="314" width="150" height="13" rx="6.5" fill="#8B8F94" opacity=".4"/>
+    </g>
+    <g>
+      <circle cx="756" cy="410" r="3.5" fill="#8B8F94"/>
+      <path d="M770 410h150" stroke="#262B33" stroke-width="2"/>
+      <rect x="750" y="432" width="156" height="13" rx="6.5" fill="#C7CACF" opacity=".8"/>
+      <rect x="750" y="458" width="112" height="13" rx="6.5" fill="#D9573A" opacity=".9"/>
+      <rect x="750" y="484" width="140" height="13" rx="6.5" fill="#8B8F94" opacity=".45"/>
+    </g>
+    <g>
+      <circle cx="756" cy="580" r="3.5" fill="#8B8F94"/>
+      <path d="M770 580h150" stroke="#262B33" stroke-width="2"/>
+      <rect x="750" y="602" width="140" height="13" rx="6.5" fill="#C7CACF" opacity=".8"/>
+      <rect x="750" y="628" width="102" height="13" rx="6.5" fill="#8B8F94" opacity=".45"/>
+    </g>
+  </g>
+
+  <!-- plate caption -->
+  <g font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="14" letter-spacing="3">
+    <text x="750" y="120" fill="#D9573A">A</text>
+    <text x="772" y="120" fill="#8B8F94">FORTY THOUGHTS,</text>
+    <text x="772" y="146" fill="#8B8F94">THREE GROUPS</text>
+  </g>
+</svg>

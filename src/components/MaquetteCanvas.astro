@@ -2,14 +2,18 @@
 /**
  * MaquetteCanvas.astro — "Pages of the prospectus"
  * ────────────────────────────────────────────────────────────────────────
- * 4 dark pages float scattered in 3D, BLURRED — abstract smudges of text.
- * Each diving page carries its section's REAL copy (canvas texture, drawn
- * from copy.ts). Per section, its page flies in and PARKS at text size
- * (computed park pose — never full-screen), the blur resolves to crisp
- * text, then blurs back and the page leaves WITH the text. The HTML inners
- * are hidden while the canvas runs (visible for no-JS/reduced-motion) —
- * the page texture is the only visible text for §01–§03. The 4th page is
- * a table of contents; the finale connects everything before the CTA.
+ * 4 dark pages float scattered in 3D. Far away — and parked-aside, and in
+ * the finale — each page shows a designed ALBUM COVER (ghost numeral,
+ * plate caption, a small house-illustration motif, in the /projects cover
+ * language) instead of a blind blur smudge (2026-08-28: covers-only read
+ * as "simple cards"). Only DURING approach does the cover melt into a
+ * blur — an abstract smudge of the real text — which then resolves to
+ * crisp text as the page PARKS at text size (computed park pose — never
+ * full-screen); on leave it blurs back, the cover returns, and the page
+ * leaves WITH the text. The HTML inners are hidden while the canvas runs
+ * (visible for no-JS/reduced-motion) — the page texture is the only
+ * visible text for §01–§03. The 4th page is a table of contents; the
+ * finale connects everything before the CTA.
  */
 ---
 
@@ -54,6 +58,11 @@ function boot() {
   const cv = document.getElementById('mq-c') as HTMLCanvasElement | null;
   if (!cv || (cv as any).__mq) return;
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  // Sub 1024px, formula de parcare (texW·1.12, plafon .94·vw) ar scala
+  // textul parcat la ~6-9px — ilizibil. Telefoanele și tabletele primesc
+  // HTML-ul static: boot() iese înainte de reparentare, aceeași cale ca
+  // no-JS/reduced-motion (audit 2026-08-31).
+  if (innerWidth < 1024) return;
   // Cronologia e cuplată la secțiunile homepage-ului (s01…cta). Pe orice
   // altă pagină (Base injectează componenta peste tot) nu pornim nimic —
   // altfel o pagină-geamăn goală parchează peste conținut.
@@ -91,6 +100,11 @@ function boot() {
   //  small with the site's own faces. Zooming in reads as "the small
   //  text on the card came close and became the section". The 4th card
   //  is a table-of-contents page — the whole scene is the prospectus.
+  //  Every diving card ALSO gets an ALBUM COVER face (paintCover01…04,
+  //  below) — the face it shows while far, parked-aside, or in the
+  //  finale, so the floating scene reads as an album of covers, not
+  //  blind blur smudges. Covers share the /projects cover language:
+  //  ghost numeral, plate caption, sparse house-illustration motif.
   // ═══════════════════════════════════════════════════════════════
 
   const SCR = { bg: '#0F1013', hi: '#F2F0EC', body: '#C7CACF', mid: '#8B8F94', ln: '#262B33', red: '#D9573A' };
@@ -110,6 +124,14 @@ function boot() {
   type Ctx = CanvasRenderingContext2D;
   function bar(c: Ctx, x: number, y: number, w: number, h: number, r: number, fill: string) {
     c.beginPath(); c.roundRect(x, y, w, h, r); c.fillStyle = fill; c.fill();
+  }
+  // Datum cross — small plus-mark, the /projects cover-illustration language.
+  function datumCross(c: Ctx, x: number, y: number, r: number, alpha: number) {
+    c.strokeStyle = `rgba(139,143,148,${alpha})`; c.lineWidth = 2;
+    c.beginPath();
+    c.moveTo(x - r, y); c.lineTo(x + r, y);
+    c.moveTo(x, y - r); c.lineTo(x, y + r);
+    c.stroke();
   }
   function wrapText(c: Ctx, text: string, maxW: number): string[] {
     const out: string[] = []; let cur = '';
@@ -224,49 +246,73 @@ function boot() {
 
   // ── §03 page — proof, landscape: heading left, stamp right, the two
   // product columns beneath (full real paragraphs, no truncation) ──
+  // The honesty stamp is painted from the DOM twin's MEASURED geometry
+  // (captured in layoutPages) — the painter's old hard-coded stamp
+  // (12/32px, −2.3°, fixed 250×92 box) differed from the twin's .stamp
+  // (10/28px, −5°, flex-placed auto box), so the park crossfade showed
+  // two stamps sliding into each other.
+  interface StampLine { size: number; wt: number; ls: number; base: number; }
+  let stampM: { cx: number; cy: number; w: number; h: number; bw: number; r: number; rot: number; lines: StampLine[] } | null = null;
+  // Product columns + bottom row of §03, measured the same way (the first
+  // article anchors both grid columns; y-values logical, relative to page).
+  let proofM: { rowTop: number; nameDy: number; pDy: number; pLh: number; exBase: number; exLh: number; exW: number; linkBase: number } | null = null;
+  let stampSig = '';
   function paintSec03(c: Ctx, W: number, H: number) {
     const t = copy.home.proof, MR = Math.round(W * .15);
     const { ML, hBase } = pageTop(c, W, MR, '03', t.label, 48);
     const hBottom = heading(c, ML, hBase, t.h, 48, W - ML - MR - 282);
-    // the honesty stamp, miniature, top-right of the heading row
-    c.save();
-    c.translate(W - MR - 130, hBase + 22); c.rotate(-.04);
-    c.strokeStyle = SCR.red; c.lineWidth = 2.5;
-    c.beginPath(); c.roundRect(-125, -46, 250, 92, 10); c.stroke();
-    (c as any).letterSpacing = '1.5px';
-    c.font = `600 12px ${F_MONO}`; c.fillStyle = SCR.red; c.textAlign = 'center';
-    c.fillText(t.stamp[0].toUpperCase(), 0, -18);
-    c.font = `700 32px ${F_MONO}`; c.fillText(t.stamp[1], 0, 16);
-    c.font = `600 10px ${F_MONO}`; c.fillText(t.stamp[2].toUpperCase(), 0, 36);
-    c.textAlign = 'left'; (c as any).letterSpacing = '0px';
-    c.restore();
-    // product columns (.row-line: border-top + 22px padding; p mt-3 16px/26)
+    // the honesty stamp, miniature, top-right of the heading row — drawn
+    // only once its twin geometry is measured (layoutPages runs, and
+    // repaints this page, before the first frame ever renders).
+    if (stampM) {
+      c.save();
+      c.translate(stampM.cx, stampM.cy); c.rotate(stampM.rot);
+      c.strokeStyle = SCR.red; c.lineWidth = stampM.bw;
+      // CSS draws the border INSIDE the box; stroke on the centerline box
+      const bw = stampM.w - stampM.bw, bh = stampM.h - stampM.bw;
+      c.beginPath(); c.roundRect(-bw / 2, -bh / 2, bw, bh, Math.max(stampM.r - stampM.bw / 2, 0)); c.stroke();
+      c.textAlign = 'center'; c.fillStyle = SCR.red;
+      for (let i = 0; i < stampM.lines.length; i++) {
+        const ln = stampM.lines[i];
+        (c as any).letterSpacing = `${ln.ls}px`;
+        c.font = `${ln.wt} ${ln.size}px ${F_MONO}`;
+        c.fillText((t.stamp[i] ?? '').toUpperCase(), 0, ln.base - stampM.cy);
+      }
+      c.textAlign = 'left'; (c as any).letterSpacing = '0px';
+      c.restore();
+    }
+    // product columns — anchored on the twin's MEASURED first article when
+    // available (border-top, name/paragraph baselines, real line-height);
+    // the old approximations (+22+46, 26px lines) sat everything ~10-20px
+    // below the twin and the park crossfade showed the drift.
     const gap = 56, colW = (W - ML - MR - gap) / 2;
-    const colsTop = hBottom + 40;
+    const colsTop = proofM ? proofM.rowTop : hBottom + 40;
+    const pLh = proofM ? proofM.pLh : 26;
     let gridBottom = colsTop;
     t.cards.forEach((card, i) => {
       const x = ML + i * (colW + gap);
       c.strokeStyle = SCR.ln; c.lineWidth = 2;
       c.beginPath(); c.moveTo(x, colsTop); c.lineTo(x + colW, colsTop); c.stroke();
       c.font = `700 28px ${F_HEAD}`; c.fillStyle = SCR.hi;
-      const nBase = colsTop + 22 + 46;
+      const nBase = colsTop + (proofM ? proofM.nameDy : 68);
       c.fillText(card.name, x, nBase);
       const nw = c.measureText(card.name).width;
       (c as any).letterSpacing = '1.5px';
       c.font = `600 11px ${F_MONO}`; c.fillStyle = SCR.mid;
-      c.fillText(card.stage.toUpperCase(), x + nw + 18, nBase - 2);
+      c.fillText(card.stage.toUpperCase(), x + nw + 18, nBase);
       (c as any).letterSpacing = '0px';
       c.font = `400 16px ${F_HEAD}`; c.fillStyle = SCR.mid;
-      let py = colsTop + 22 + 52 + 12 + 20;
-      for (const line of wrapText(c, card.p, colW)) { c.fillText(line, x, py); py += 26; }
-      gridBottom = Math.max(gridBottom, py - 26 + 8 + 22);
+      let py = colsTop + (proofM ? proofM.pDy : 106);
+      for (const line of wrapText(c, card.p, colW)) { c.fillText(line, x, py); py += pLh; }
+      gridBottom = Math.max(gridBottom, py - pLh + 8 + 22);
     });
     // bottom row: exhibit note left, link right (justify-between, mt-10)
-    const bBase = gridBottom + 62 + 19;
+    const bBase = proofM?.exBase || gridBottom + 62 + 19;
     c.font = `400 15.5px ${F_HEAD}`; c.fillStyle = SCR.mid;
     let ey = bBase;
-    for (const line of wrapText(c, t.exhibit, 470)) { c.fillText(line, ML, ey); ey += 26; }
-    drawLink(c, 0, bBase, t.link, W - MR);
+    const exLh = proofM ? proofM.exLh : 26;
+    for (const line of wrapText(c, t.exhibit, proofM ? proofM.exW : 470)) { c.fillText(line, ML, ey); ey += exLh; }
+    drawLink(c, 0, proofM?.linkBase || bBase, t.link, W - MR);
   }
 
   // ── §04 page — the objection, before the CTA ──
@@ -283,6 +329,17 @@ function boot() {
   // ── TOC page — the prospectus contents ──
   function paintToc(c: Ctx, W: number, H: number) {
     const ML = Math.round(W * .16), MR = ML;
+    // The TOC page already reads as the album's front cover — 2026-08-28
+    // gives it the same ghost-watermark + datum-cross furniture as the
+    // other covers, at low cost (no twin, nothing to calibrate against).
+    c.font = `300 ${Math.round(H * .5)}px ${F_HEAD}`;
+    (c as any).letterSpacing = `${(H * .5 * -.05).toFixed(1)}px`;
+    c.fillStyle = 'rgba(242,240,236,.07)';
+    c.textAlign = 'right';
+    c.fillText('M.', W - MR, H - 46);
+    c.textAlign = 'left'; (c as any).letterSpacing = '0px';
+    datumCross(c, ML + 8, H * .40, 10, .16);
+    datumCross(c, W - MR - 8, 226, 10, .16);
     bar(c, ML, 74, 22, 22, 7, SCR.red);
     c.font = `700 26px ${F_HEAD}`; c.fillStyle = SCR.hi;
     c.fillText('Maquette.', ML + 36, 95);
@@ -311,6 +368,131 @@ function boot() {
     c.font = `500 15px ${F_HEAD}`; c.fillStyle = SCR.red;
     c.fillText(copy.cta + '  →', ML, H - 84);
   }
+
+  // ── ALBUM COVERS (2026-08-28) — the face each diving page shows while
+  // far, parked-aside, or in the finale, so the floating scene reads as
+  // an album of covers rather than blind blur smudges. Shared chrome +
+  // one motif per section, in the /projects cover language (declutter-
+  // cover.svg / gigtim-cover.svg): dark ground, sparse line-art in
+  // ln/mid/body inks, ONE red accent (the plate index only). ──
+  function paintCover(c: Ctx, W: number, H: number, idx: string, label: string, motif: (c: Ctx, W: number, H: number) => void) {
+    const ML = Math.round(W * .15), MR = Math.round(W * .15), PT = Math.round(W * .04);
+    // Ghost numeral watermark — first, under everything (echoes .sec-mark).
+    const nSize = Math.round(H * .70);
+    c.font = `300 ${nSize}px ${F_HEAD}`;
+    (c as any).letterSpacing = `${(nSize * -.05).toFixed(1)}px`;
+    c.fillStyle = 'rgba(242,240,236,.08)';
+    c.textAlign = 'right';
+    c.fillText(idx, W - MR, Math.round(H * .90));
+    c.textAlign = 'left'; (c as any).letterSpacing = '0px';
+    // Plate caption — same kicker() furniture, at the EXACT spot the real
+    // section page draws its own (pageTop's PT+19), so this row never
+    // shifts as the cover melts into the resolved page underneath it.
+    kicker(c, ML, PT + 19, idx, label, W, MR);
+    // Datum crosses — sparse, off the motif.
+    datumCross(c, ML - 6, H * .80, 11, .16);
+    datumCross(c, W - MR + 6, H * .26, 11, .16);
+    motif(c, W, H);
+  }
+
+  // 01 — menu rows with dot leaders + category bars (echoes paintSec01).
+  function motif01(c: Ctx, W: number, H: number) {
+    const x0 = W * .15, xEnd = W * .62, rowH = (H * .46) / 4, y0 = H * .32;
+    for (let i = 0; i < 4; i++) {
+      const y = y0 + i * rowH + rowH * .5;
+      const isLast = i === 3;
+      const barW = W * (isLast ? .16 : .13 + (i % 2) * .04);
+      bar(c, x0, y - 5, barW, 10, 5, isLast ? 'rgba(217,87,58,.85)' : `rgba(199,202,207,${(.45 + i * .1).toFixed(2)})`);
+      c.strokeStyle = SCR.ln; c.lineWidth = 2.5; c.lineCap = 'round';
+      c.setLineDash([0.1, 12]);
+      c.beginPath(); c.moveTo(x0 + barW + 16, y); c.lineTo(xEnd, y); c.stroke();
+      c.setLineDash([]); c.lineCap = 'butt';
+      bar(c, xEnd + 14, y - 4, 22, 8, 4, 'rgba(139,143,148,.45)');
+      if (i > 0) {
+        c.strokeStyle = SCR.ln; c.lineWidth = 1;
+        c.beginPath(); c.moveTo(x0, y0 + i * rowH); c.lineTo(xEnd + 36, y0 + i * rowH); c.stroke();
+      }
+    }
+  }
+
+  // 02 — blueprint title-block: framed plate, corner ticks, a nested
+  // title cell, one dimension line above the frame.
+  function motif02(c: Ctx, W: number, H: number) {
+    const x0 = W * .15, y0 = H * .34, fw = W * .48, fh = H * .40;
+    c.strokeStyle = SCR.ln; c.lineWidth = 2;
+    c.strokeRect(x0, y0, fw, fh);
+    const tk = 9;
+    c.beginPath();
+    for (const [cx, cy] of [[x0, y0], [x0 + fw, y0], [x0, y0 + fh], [x0 + fw, y0 + fh]] as [number, number][]) {
+      c.moveTo(cx - tk, cy); c.lineTo(cx + tk, cy);
+      c.moveTo(cx, cy - tk); c.lineTo(cx, cy + tk);
+    }
+    c.stroke();
+    const dy = y0 - 22;
+    c.strokeStyle = 'rgba(139,143,148,.55)'; c.lineWidth = 1.5;
+    c.beginPath();
+    c.moveTo(x0, dy); c.lineTo(x0 + fw, dy);
+    c.moveTo(x0, dy - 6); c.lineTo(x0, dy + 6);
+    c.moveTo(x0 + fw, dy - 6); c.lineTo(x0 + fw, dy + 6);
+    c.stroke();
+    const cw = fw * .42, ch = fh * .34, cx0 = x0 + fw - cw, cy0 = y0 + fh - ch;
+    c.strokeStyle = SCR.ln; c.lineWidth = 1.5;
+    c.strokeRect(cx0, cy0, cw, ch);
+    c.beginPath(); c.moveTo(cx0, cy0 + ch * .5); c.lineTo(cx0 + cw, cy0 + ch * .5); c.stroke();
+    bar(c, cx0 + 10, cy0 + 10, cw * .5, 7, 3.5, 'rgba(199,202,207,.6)');
+    bar(c, cx0 + 10, cy0 + ch * .5 + 10, cw * .34, 6, 3, 'rgba(139,143,148,.5)');
+  }
+
+  // 03 — two mini plates echoing the /projects covers (tangle squiggles,
+  // dot grid) + the honesty-stamp OUTLINE, dashed and NOT red — the red
+  // stamp stays a single instance, drawn on the real §03 page only.
+  function motif03(c: Ctx, W: number, H: number) {
+    const s = Math.min(W, H) * .24, y0 = H * .32, gap = 26, x1 = W * .15, x2 = x1 + s + gap;
+    c.strokeStyle = SCR.ln; c.lineWidth = 2;
+    c.strokeRect(x1, y0, s, s);
+    c.strokeStyle = 'rgba(139,143,148,.5)'; c.lineWidth = 2; c.lineCap = 'round';
+    for (let i = 0; i < 3; i++) {
+      const yy = y0 + s * (.28 + i * .22);
+      c.beginPath();
+      c.moveTo(x1 + s * .16, yy);
+      c.quadraticCurveTo(x1 + s * .5, yy - s * .12, x1 + s * .84, yy);
+      c.stroke();
+    }
+    c.lineCap = 'butt';
+    c.strokeStyle = SCR.ln; c.lineWidth = 2;
+    c.strokeRect(x2, y0, s, s);
+    c.fillStyle = 'rgba(139,143,148,.55)';
+    const gN = 4, pad = s * .18;
+    for (let r = 0; r < gN; r++) for (let cc = 0; cc < gN; cc++) {
+      const px = x2 + pad + (s - 2 * pad) * (cc / (gN - 1));
+      const py = y0 + pad + (s - 2 * pad) * (r / (gN - 1));
+      c.beginPath(); c.arc(px, py, 2.4, 0, Math.PI * 2); c.fill();
+    }
+    const stW = s * 1.7, stH = s * .5, stx = x1 + stW / 2, sty = y0 + s + stH / 2 + 26;
+    c.save();
+    c.translate(stx, sty); c.rotate(-.06);
+    c.strokeStyle = SCR.ln; c.lineWidth = 2; c.setLineDash([5, 6]);
+    c.beginPath(); c.roundRect(-stW / 2, -stH / 2, stW, stH, 8); c.stroke();
+    c.setLineDash([]);
+    c.restore();
+  }
+
+  // 04 — an empty, dashed exhibit frame: the case study that isn't there yet.
+  function motif04(c: Ctx, W: number, H: number) {
+    const x0 = W * .15, y0 = H * .32, fw = W * .46, fh = H * .40;
+    c.strokeStyle = SCR.ln; c.lineWidth = 2;
+    c.setLineDash([10, 10]);
+    c.beginPath(); c.roundRect(x0, y0, fw, fh, 14); c.stroke();
+    c.setLineDash([]);
+    bar(c, x0 + fw * .12, y0 + fh * .36, fw * .5, 8, 4, 'rgba(139,143,148,.35)');
+    bar(c, x0 + fw * .12, y0 + fh * .54, fw * .32, 8, 4, 'rgba(139,143,148,.28)');
+    datumCross(c, x0 + fw * .80, y0 + fh * .76, 10, .3);
+  }
+
+  function paintCover01(c: Ctx, W: number, H: number) { paintCover(c, W, H, '01', copy.home.build.label, motif01); }
+  function paintCover02(c: Ctx, W: number, H: number) { paintCover(c, W, H, '02', copy.home.mech.label, motif02); }
+  function paintCover03(c: Ctx, W: number, H: number) { paintCover(c, W, H, '03', copy.home.proof.label, motif03); }
+  function paintCover04(c: Ctx, W: number, H: number) { paintCover(c, W, H, '04', copy.home.objection.label, motif04); }
 
   // Rounded-corner shape/box — replaces BoxGeometry for every panel
   // silhouette, so the screens read as rounded cards, not slabs.
@@ -343,8 +525,9 @@ function boot() {
     group: THREE.Group;
     bMat: THREE.MeshPhysicalMaterial;
     eMat: THREE.LineBasicMaterial;
-    fMatB: THREE.MeshBasicMaterial;   // blurred page face (the abstract state)
-    fMatS: THREE.MeshBasicMaterial;   // sharp page face (the parked state)
+    fMatB: THREE.MeshBasicMaterial;         // blurred page face (the approach state)
+    fMatS: THREE.MeshBasicMaterial;         // sharp page face (the parked state)
+    fMatC: THREE.MeshBasicMaterial | null;  // cover face (the far/aside/finale state)
     w: number; h: number; texW: number;
     seed: number;
   }
@@ -361,10 +544,14 @@ function boot() {
     tex.anisotropy = Math.min(8, R.capabilities.getMaxAnisotropy());
     return tex;
   }
+  // bcnv/blur are optional: cover faces (screenTex(..., {blur:false}))
+  // never park at 1:1 and never need a blurred variant, so they skip the
+  // blur canvas entirely and paint at their own `res` (default RES).
   interface TexJob {
-    cnv: HTMLCanvasElement; bcnv: HTMLCanvasElement;
+    cnv: HTMLCanvasElement; bcnv?: HTMLCanvasElement;
     paint: (c: Ctx, W: number, H: number) => void;
-    sharp: THREE.CanvasTexture; blur: THREE.CanvasTexture; blurPx: number;
+    sharp: THREE.CanvasTexture; blur?: THREE.CanvasTexture; blurPx: number;
+    res: number;
   }
   // Textures are painted at 2× the logical resolution (painters keep
   // logical coordinates via setTransform), so the parked page stays crisp
@@ -373,25 +560,32 @@ function boot() {
   const texJobs: TexJob[] = [];
   function paintJob(j: TexJob) {
     const c = j.cnv.getContext('2d')!;
-    c.setTransform(RES, 0, 0, RES, 0, 0);
-    const W = j.cnv.width / RES, H = j.cnv.height / RES;
+    c.setTransform(j.res, 0, 0, j.res, 0, 0);
+    const W = j.cnv.width / j.res, H = j.cnv.height / j.res;
     c.fillStyle = SCR.bg; c.fillRect(0, 0, W, H);
     j.paint(c, W, H);
+    j.sharp.needsUpdate = true;
+    if (!j.bcnv || !j.blur) return;
     const bc = j.bcnv.getContext('2d')!;
     bc.setTransform(1, 0, 0, 1, 0, 0);
     bc.filter = 'none';
     bc.fillStyle = SCR.bg; bc.fillRect(0, 0, j.bcnv.width, j.bcnv.height);
-    bc.filter = `blur(${j.blurPx * RES}px)`;
+    bc.filter = `blur(${j.blurPx * j.res}px)`;
     bc.drawImage(j.cnv, 0, 0);
     bc.filter = 'none';
-    j.sharp.needsUpdate = true; j.blur.needsUpdate = true;
+    j.blur.needsUpdate = true;
   }
-  function screenTex(w: number, h: number, ppu: number, paint: (c: Ctx, W: number, H: number) => void) {
+  function screenTex(w: number, h: number, ppu: number, paint: (c: Ctx, W: number, H: number) => void, opts?: { res?: number; blur?: boolean }) {
+    const res = opts?.res ?? RES;
     const cnv = document.createElement('canvas');
-    cnv.width = Math.round(w * ppu * RES); cnv.height = Math.round(h * ppu * RES);
-    const bcnv = document.createElement('canvas');
-    bcnv.width = cnv.width; bcnv.height = cnv.height;
-    const job: TexJob = { cnv, bcnv, paint, sharp: mkTex(cnv), blur: mkTex(bcnv), blurPx: Math.round(ppu / 11) };
+    cnv.width = Math.round(w * ppu * res); cnv.height = Math.round(h * ppu * res);
+    const wantBlur = opts?.blur !== false;
+    const bcnv = wantBlur ? document.createElement('canvas') : undefined;
+    if (bcnv) { bcnv.width = cnv.width; bcnv.height = cnv.height; }
+    const job: TexJob = {
+      cnv, bcnv, paint, sharp: mkTex(cnv), blur: bcnv ? mkTex(bcnv) : undefined,
+      blurPx: Math.round(ppu / 11), res,
+    };
     paintJob(job);
     texJobs.push(job);
     return job;
@@ -407,7 +601,7 @@ function boot() {
     return g;
   }
 
-  function mkPanel(w: number, h: number, d: number, ppu: number, paint: (c: Ctx, W: number, H: number) => void): Panel {
+  function mkPanel(w: number, h: number, d: number, ppu: number, paint: (c: Ctx, W: number, H: number) => void, coverPaint?: (c: Ctx, W: number, H: number) => void): Panel {
     const g = new THREE.Group();
     const bMat = new THREE.MeshPhysicalMaterial({
       color: P.scr, roughness: .18, metalness: .7, clearcoat: .05,
@@ -420,8 +614,9 @@ function boot() {
     const box = roundedBox(w, h, d, rad);
     g.add(new THREE.Mesh(box, bMat));
     g.add(new THREE.LineSegments(new THREE.EdgesGeometry(box), eMat));
-    // Two page faces, blurred under sharp — un-tonemapped so the palette
-    // is exact. Their opacities crossfade as the page parks (resolve).
+    // Three page faces, cover under blur under sharp — un-tonemapped so
+    // the palette is exact. Their opacities crossfade with scroll: cover
+    // (far/aside/finale) → blur (approach) → sharp (parked).
     const job = screenTex(w, h, ppu, paint);
     const fGeo = faceGeo(w, h, rad);
     const fMatB = new THREE.MeshBasicMaterial({ map: job.blur, toneMapped: false, transparent: true, opacity: 0 });
@@ -431,9 +626,20 @@ function boot() {
     const faceS = new THREE.Mesh(fGeo, fMatS);
     faceS.position.z = d / 2 + .012;
     g.add(faceB); g.add(faceS);
+    // Cover face — no blur variant (never parks at 1:1, so half-res is
+    // plenty), painted BELOW the blur face in the z-stack (it's the face
+    // shown before the blur ever takes over).
+    let fMatC: THREE.MeshBasicMaterial | null = null;
+    if (coverPaint) {
+      const cjob = screenTex(w, h, ppu, coverPaint, { res: 1, blur: false });
+      fMatC = new THREE.MeshBasicMaterial({ map: cjob.sharp, toneMapped: false, transparent: true, opacity: 0 });
+      const faceC = new THREE.Mesh(fGeo, fMatC);
+      faceC.position.z = d / 2 + .004;
+      g.add(faceC);
+    }
     root.add(g);
     // texW is LOGICAL texture width (park sizing maps it ≈1:1 to screen px)
-    return { group: g, bMat, eMat, fMatB, fMatS, w, h, texW: Math.round(w * ppu), seed: Math.random() * 100 };
+    return { group: g, bMat, eMat, fMatB, fMatS, fMatC, w, h, texW: Math.round(w * ppu), seed: Math.random() * 100 };
   }
 
   // ═══════════════════════════════════════════════════════════════
@@ -444,13 +650,19 @@ function boot() {
   // painted top padding dropped from 7% to 4% of W, and the geometry
   // sheds the same 3%·w so the parked card fits under the sticky header
   // at unchanged text scale.
-  const pMain = mkPanel(10, 5.7, .12, 128, paintSec01);
-  const pAdm  = mkPanel(7, 4.3, .10, 160, paintSec02);
+  // Each diving panel also gets a coverPaint — its album-cover face,
+  // shown while far/aside/finale (see paintCover above). pSide (TOC)
+  // doesn't get one — it already reads as the album's front cover.
+  // §02 and §04 are cut to their CONTENT height (2026-08-31: at 4.3/4.37
+  // they parked with the whole lower half empty — an unfinished slide).
+  // The painted layout is unchanged; only the box shrank onto it.
+  const pMain = mkPanel(10, 5.7, .12, 128, paintSec01, paintCover01);
+  const pAdm  = mkPanel(7, 3.4, .10, 160, paintSec02, paintCover02);
   const pSide = mkPanel(2.8, 6, .10, 192, paintToc);
   // §03's page is landscape (was a portrait "phone") — it parks over a
   // landscape section, and every floating object is a page now anyway.
-  const pMobi = mkPanel(7.5, 4.37, .08, 160, paintSec03);
-  const pObj  = mkPanel(7.5, 4.37, .08, 160, paintSec04);
+  const pMobi = mkPanel(7.5, 4.37, .08, 160, paintSec03, paintCover03);
+  const pObj  = mkPanel(7.5, 2.5, .08, 160, paintSec04, paintCover04);
   const panels = [pMain, pAdm, pSide, pMobi, pObj];
 
   // ═══════════════════════════════════════════════════════════════
@@ -461,10 +673,11 @@ function boot() {
   //  Scroll fractions hard-coded at one window size drift on every other
   //  one — both document height and each section's position depend on the
   //  viewport. So all timelines are generated from the real DOM (at boot
-  //  and on every ScrollTrigger refresh): each slide's center is a snap
-  //  point, and each dive's phases sit at fixed viewport-height fractions
-  //  around that center. Snap, peak and text reveal coincide on any screen
-  //  by construction. Scroll → animation is RIGID (scrub: true, no lerp).
+  //  and on every ScrollTrigger refresh): each slide's center is both the
+  //  dive's peak AND the idle-settle magnet's rest point (they share the
+  //  measured centers), and each dive's phases sit at fixed viewport-height
+  //  fractions around that center — aligned on any screen by construction.
+  //  Scroll → animation runs through a short scrub catch-up (0.25s).
   // ═══════════════════════════════════════════════════════════════
 
   type KF = number[];
@@ -518,7 +731,13 @@ function boot() {
     [7.8, -.4, 2.8, 0, -.22, 0, .6],
     [-8.6, 2.2, 2.4, 0, .24, 0, .55],
   ];
-  const OP = { hidden: [0, .65, .22], solid: [.92, .50, 1], dim: [.75, .28, .35] };
+  // ui (3rd value) raised sharply for hidden/dim (2026-08-28, second
+  // pass): the renderer composites with alpha:true over the pale paper —
+  // at the original .50/.45 the whole dark cover washed toward flat gray
+  // against that paper (measured: at .50 the design is barely legible;
+  // .85+ reads as a real dark object with visible bars/numeral/accent —
+  // see the opacity sweep this was tuned against). solid/parked untouched.
+  const OP = { hidden: [0, .60, .86], solid: [.92, .50, 1], dim: [.75, .30, .68] };
   const row = (t: number, pose: number[], op: number[]): KF =>
     [t, pose[0], pose[1], pose[2], pose[3], pose[4], pose[5], op[0], op[1], op[2], pose[6]];
 
@@ -526,6 +745,15 @@ function boot() {
   let pcCta = .95, finStart = .84;           // CTA center / finale begins
   let holds: [number, number, number, number][] = [];
   let hudCuts: number[] = [.1, .3, .5, .7];
+  // Idle-settle magnet state — refreshed by buildTimeline(), read by the
+  // trigger's snapTo closure, so refresh/resize re-syncs the magnet free.
+  let snapPts: number[] = [];                // rest points: top + plateau centers
+  let snapPK = .04;                          // plateau half-width = dead zone
+  // While the guided first pass drives the scroll, the idle-settle must
+  // stand down — two magnets writing scroll fight each other (verified:
+  // the tour's slow start goes scroll-event-silent for a beat, the snap
+  // wakes, pulls back to the nearest rest point, and wins every frame).
+  let tourOn = false;
 
   // interpKF needs strictly ascending scrollT — measured bounds could
   // collide on extreme viewports.
@@ -540,6 +768,11 @@ function boot() {
   // card height to it (small breathing margin included).
   const headEl = document.querySelector('.site-head') as HTMLElement | null;
   let headH = 0;
+  // Canvasul se estompează la zero pe măsură ce footerul intră în viewport
+  // (2026-08-31): clusterul final plutea PESTE textul juridic din subsol.
+  // footStart = progresul la care topul footerului atinge fundul viewportului.
+  const footEl = document.querySelector('footer');
+  let footStart = 1;
   const maxCardH = () => Math.max(innerHeight - headH - 24, 200);
 
   // Size each DOM page twin with the SAME formula as parkPose, in CSS px:
@@ -561,16 +794,121 @@ function boot() {
       const sc = pg.querySelector('.mq-page-scale') as HTMLElement;
       sc.style.width = `${pnl.texW}px`;
       // logical-px padding (CSS % would resolve against the parent's
-      // scaled width). Top = painter PT (4%) − 3% — the twin's own line
-      // boxes above the kicker make up the difference; measured, not
-      // derived. Sides 10%, bottom 3%.
-      sc.style.padding = `${Math.round(pnl.texW * .01)}px ${Math.round(pnl.texW * .10)}px ${Math.round(pnl.texW * .03)}px`;
+      // scaled width). Sides 15% = the painters' ML/MR exactly — the
+      // twin's content box must equal the painted content box (70% of
+      // texW) or the park crossfade rewraps the heading and shifts rows.
+      sc.style.padding = `${Math.round(pnl.texW * .01)}px ${Math.round(pnl.texW * .15)}px ${Math.round(pnl.texW * .03)}px`;
+      // Vertical self-calibration — the old fixed top padding assumed the
+      // twin's line boxes above the kicker fill 3%·W; they don't, and the
+      // parked text sat ~38 logical px high (user: "moves a little bit
+      // up"). The painters put the first heading baseline at
+      // PT + 25 + 42 + ASC(hSize); measure the twin's REAL baseline (an
+      // inline-block probe's bottom = the text baseline) and absorb the
+      // difference into padding-top. Runs per refresh, never per frame;
+      // fonts.ready triggers a refresh, so late fonts recalibrate too.
+      const hEl = sc.querySelector('.t-h2');
+      if (hEl) {
+        const hSize = parseFloat(pg.style.getPropertyValue('--pg-h')) || 48;
+        const target = Math.round(pnl.texW * .04) + 25 + 42 + Math.round(hSize * .91);
+        const probe = document.createElement('span');
+        probe.style.cssText = 'display:inline-block;width:0;height:0;padding:0;margin:0;border:0;';
+        hEl.insertBefore(probe, hEl.firstChild);
+        const measured = (probe.getBoundingClientRect().bottom - sc.getBoundingClientRect().top) / (wPx / pnl.texW);
+        probe.remove();
+        sc.style.paddingTop = `${Math.round(pnl.texW * .01 + target - measured)}px`;
+      }
+      // §03 only: measure the twin's honesty stamp — box center/size,
+      // rotation, border, and each line's font + baseline — in LOGICAL px
+      // (rects divided by the twin scale), and hand it to paintSec03. Must
+      // run AFTER the padding-top calibration above, which shifts the
+      // stamp's flow position. The rotation is suspended for the reads
+      // (rotate is paint-only, so clearing it causes no reflow); the
+      // inline-block probe trick is the same as the heading's. If the
+      // geometry changed, the §03 texture repaints from the new values —
+      // one stamp, drawn twice identically, instead of two stamps.
+      if (k === 2) {
+        const s = wPx / pnl.texW;
+        const scRect = sc.getBoundingClientRect();
+        const probeBase = (el: Element) => {
+          const pr = document.createElement('span');
+          pr.style.cssText = 'display:inline-block;width:0;height:0;padding:0;margin:0;border:0;';
+          el.insertBefore(pr, el.firstChild);
+          const b = (pr.getBoundingClientRect().bottom - scRect.top) / s;
+          pr.remove();
+          return b;
+        };
+        const lhOf = (el: Element) => {
+          const cs = getComputedStyle(el);
+          const lh = parseFloat(cs.lineHeight);
+          return isNaN(lh) ? (parseFloat(cs.fontSize) || 16) * 1.5 : lh;
+        };
+        const st = sc.querySelector('.stamp') as HTMLElement | null;
+        if (st) {
+          const cs = getComputedStyle(st);
+          const rm = /^(-?[\d.]+)(deg|rad|grad|turn)/.exec(cs.rotate);
+          const rot = !rm ? 0 : parseFloat(rm[1]) *
+            ({ deg: Math.PI / 180, rad: 1, grad: Math.PI / 200, turn: Math.PI * 2 })[rm[2] as 'deg' | 'rad' | 'grad' | 'turn'];
+          const prevRot = st.style.rotate;
+          st.style.rotate = '0deg';
+          const r = st.getBoundingClientRect();
+          const lines = Array.from(st.children).map((ch) => {
+            const lcs = getComputedStyle(ch);
+            return {
+              size: parseFloat(lcs.fontSize) || 10,
+              wt: parseInt(lcs.fontWeight) || 600,
+              ls: parseFloat(lcs.letterSpacing) || 0,
+              base: probeBase(ch),
+            };
+          });
+          st.style.rotate = prevRot;
+          stampM = {
+            cx: (r.left + r.width / 2 - scRect.left) / s,
+            cy: (r.top + r.height / 2 - scRect.top) / s,
+            w: r.width / s, h: r.height / s,
+            bw: parseFloat(cs.borderTopWidth) || 0,
+            r: parseFloat(cs.borderTopLeftRadius) || 0,
+            rot, lines,
+          };
+        }
+        // Product columns + bottom row: same treatment. The first article
+        // anchors both grid columns (they're top-aligned twins); the
+        // baselines and line-heights come from the real boxes, not from
+        // the painter's old +22+46/26px approximations (those sat the
+        // names ~10px and the bottom row ~20px below the twin).
+        const art = sc.querySelector('article');
+        const p1 = art?.querySelector('p');
+        if (art && p1) {
+          const rowTop = (art.getBoundingClientRect().top - scRect.top) / s;
+          const h4 = art.querySelector('.t-h3');
+          const lnk = sc.querySelector('a.lnk');
+          const exP = lnk?.parentElement?.querySelector('p');
+          proofM = {
+            rowTop,
+            nameDy: (h4 ? probeBase(h4) : rowTop + 68) - rowTop,
+            pDy: probeBase(p1) - rowTop,
+            pLh: lhOf(p1),
+            exBase: exP ? probeBase(exP) : 0,
+            exLh: exP ? lhOf(exP) : 26,
+            exW: exP ? exP.getBoundingClientRect().width / s : 470,
+            linkBase: lnk ? probeBase(lnk) : 0,
+          };
+        }
+        const sig = JSON.stringify([stampM, proofM]);
+        if (sig !== stampSig) {
+          stampSig = sig;
+          const j = texJobs.find((j) => j.paint === paintSec03);
+          if (j) paintJob(j);
+        }
+      }
     }
   }
 
   function buildTimeline() {
     layoutPages();
     const max = Math.max(document.documentElement.scrollHeight - innerHeight, 1);
+    footStart = footEl
+      ? Math.min(Math.max(((footEl as HTMLElement).offsetTop - innerHeight) / max, .5), .999)
+      : 1;
     const centers = secEls.map((el, i) => el
       ? Math.min(Math.max((el.offsetTop + el.offsetHeight / 2 - innerHeight / 2) / max, 0), 1)
       : .2 + i * .19);
@@ -578,14 +916,18 @@ function boot() {
     pcCta = centers[4];
     const F = innerHeight / max;             // one viewport-height, in progress units
     // The page parks at TEXT size (never full screen). Park blend runs
-    // [pc-C → pc-PK], holds parked across [pc-PK → pc+PK] — kept short:
-    // the blur-resolve fills the approach/leave, so something is always
-    // changing while scrolling.
-    const A = .55 * F;                       // approach begins / aside reached
+    // [pc-C → pc-PK], holds parked across [pc-PK → pc+PK]. The plateau is
+    // WIDE (±0.22F — the brand.md figure; ~44% of the line between centers
+    // is settled) so free scroll grazes it easily, and the phases tile the
+    // half-window exactly: PK + (C−PK) + (A−C) = A = half the slide spacing,
+    // so adjacent dive windows abut with no overlap.
+    const A = .50 * F;                       // approach begins / aside reached
     const C = .36 * F;                       // close-up reached / park blend starts
-    const PK = .16 * F;                      // parked at text size
+    const PK = .22 * F;                      // parked at text size
 
     holds   = pcs.map((pc) => [pc - C, pc - PK, pc + PK, pc + C] as [number, number, number, number]);
+    snapPK  = PK;
+    snapPts = [0, ...pcs, pcCta, 1];         // 0 = hero top, 1 = footer bottom
     finStart = pcs[3] + A;                   // the finale begins after §04's page departs
     hudCuts = [pcs[0] - A, (pcs[0] + pcs[1]) / 2, (pcs[1] + pcs[2]) / 2, (pcs[2] + pcs[3]) / 2, (pcs[3] + pcCta) / 2];
 
@@ -628,8 +970,11 @@ function boot() {
     DIVES.forEach((d, k) => {
       const pc = pcs[k];
       camKF.push([pc - PK, 7, 2.5, d.angle], [pc + PK, 7, 2.5, d.angle]);
+      // Mid-point pull-back kept soft (r=11, was 16): the brief pause before
+      // the idle-settle glide should read as a composed wide shot, not an
+      // abandoned orbit.
       if (k < DIVES.length - 1)
-        camKF.push([(pc + pcs[k + 1]) / 2, 16, 6, (d.angle + DIVES[k + 1].angle) / 2]);
+        camKF.push([(pc + pcs[k + 1]) / 2, 11, 4, (d.angle + DIVES[k + 1].angle) / 2]);
     });
     camKF.push([pcs[3] + A, 30, 14, DIVES[3].angle + .08]);
     camKF.push([pcCta, 36, 15, 1.95], [1, 34, 14, 2.0]);
@@ -700,8 +1045,10 @@ function boot() {
 
   // ═══════════════════════════════════════════════════════════════
   //  INPUT — ScrollTrigger scrubs a proxy tween; sp is the eased progress.
-  //  No snap (removed 2026-08-25 — the "click" felt bad) and no DOM portal:
-  //  the card itself is the background at each dive's peak.
+  //  Snap reinstated 2026-08-27 as an IDLE-SETTLE (the 2026-08-25 removal
+  //  cited a "click" — see the contract at the trigger config below for how
+  //  this version avoids it). Still no DOM portal: the card itself is the
+  //  background at each dive's peak.
   // ═══════════════════════════════════════════════════════════════
 
   let sp = 0, tmx = 0, tmy = 0, smx = 0, smy = 0;
@@ -718,12 +1065,33 @@ function boot() {
   function onR() { cam.aspect = innerWidth/innerHeight; cam.updateProjectionMatrix(); R.setSize(innerWidth,innerHeight); needsFrame = true; }
   addEventListener('resize', onR);
 
-  // No snap — the user scrolls freely; the wide flat window in the timeline
-  // is what makes each section's covered state easy to rest in. Scrub is a
-  // short catch-up (0.35s), so discrete wheel steps read as one continuous
-  // motion instead of stepped jumps. A numeric scrub only smooths a linked
-  // animation (a standalone trigger reports raw progress), so the trigger
-  // scrubs a proxy tween and the render loop reads the eased value.
+  // Free scroll stays untouched DURING every gesture; the wide plateau
+  // (±0.22F, restored 2026-08-27) handles grazing, and the idle-settle
+  // magnet below handles stops mid-transit. Scrub is a short catch-up
+  // (0.25s — tightened 2026-08-28 from 0.35, "the animation part doesn't
+  // feel responsive"), so discrete wheel steps read as one continuous motion instead
+  // of stepped jumps. A numeric scrub only smooths a linked animation (a
+  // standalone trigger reports raw progress), so the trigger scrubs a proxy
+  // tween and the render loop reads the eased value.
+  //
+  // IDLE-SETTLE contract (reinstated 2026-08-27 — none of the 2026-08-25
+  // failure modes): reacts almost instantly (0.05s after the LAST scroll
+  // event — trackpad/touch inertia keeps resetting the clock, so no
+  // gesture is ever caught mid-flight) but glides GENTLY (0.5–0.85s
+  // power3.out: full speed at once, long soft landing — user feedback:
+  // "fast reaction → small animation", the old inOut's slow start read as
+  // staying put and its middle read as a lurch) · ScrollTrigger kills the
+  // snap tween on any new input — the user always wins · dead zone on the
+  // plateau: anyone already parked (twin on) is never nudged · the HERO
+  // TOP and the FOOTER BOTTOM are rest points with NO dead zone — every
+  // stop resolves somewhere composed; there is no free zone left, because
+  // both leftovers looked broken (half-clipped hero; red block half
+  // off-screen over the footer) · non-directional nearest-center: small
+  // nudges relax back like a magnet. Targets are the measured centers,
+  // read via closure, so every refresh re-syncs them. Plan B if built-in
+  // cancellation ever feels fighty: hand-rolled 'scroll' debounce →
+  // gsap.to(window,{scrollTo, autoKill:true}) with explicit input-kill
+  // listeners (ScrollToPlugin is vendored, unimported).
   const prox = { p: 0 };
   const tw = gsap.to(prox, {
     p: 1,
@@ -731,13 +1099,281 @@ function boot() {
     scrollTrigger: {
       start: 0,
       end: () => ScrollTrigger.maxScroll(window),
-      scrub: 0.35,
+      scrub: 0.25,
       onRefresh: () => { buildTimeline(); needsFrame = true; },
+      snap: {
+        snapTo: (value: number) => {
+          if (tourOn || !snapPts.length) return value;   // guided pass owns the scroll
+          let nearest = snapPts[0];
+          for (const p of snapPts)
+            if (Math.abs(p - value) < Math.abs(nearest - value)) nearest = p;
+          // Plateau dead zone for the section/CTA centers only. The two
+          // endpoints (hero top, footer bottom) have none: they must rest
+          // at their exact edge — anything in between (half-clipped hero,
+          // red block half off-screen above the footer) looks broken.
+          if (nearest > 0 && nearest < 1 && Math.abs(nearest - value) <= snapPK) return value;
+          return nearest;
+        },
+        delay: 0.05,
+        duration: { min: 0.5, max: 0.85 },
+        ease: 'power3.out',
+        directional: false,
+        inertia: false,  // judge from where the user STOPPED, not a velocity
+                         // projection — with inertia on, a fast flick hands
+                         // snapTo a far-projected value and the settle
+                         // overshoots whole sections
+      },
     },
   });
   // Layout settles late (fonts) — remeasure everything once they're in,
   // and repaint the card pages with the real faces.
   (document as any).fonts?.ready?.then(() => { repaintTextures(); ScrollTrigger.refresh(); needsFrame = true; });
+
+  // ═══════════════════════════════════════════════════════════════
+  //  GUIDED PASS — explicit user decision (2026-08-27), overriding the
+  //  scrolljacking guidance. It runs on EVERY page load (2026-08-28 —
+  //  the once-per-visitor localStorage flag was removed at the user's
+  //  request: "always when I open the website, have the animation"; a
+  //  reload or a new tab replays the tour). Scroll input is a slide deck:
+  //  ONE gesture (wheel notch, swipe, arrow/PgDn/Space) = ONE full section
+  //  transition on a fast-attack/flat-cruise blend (tourEase below), with
+  //  the frozen plateau spans EXCISED from the tween (see step()) so every
+  //  animated frame shows motion — extra input during the transition is
+  //  ignored, no matter how hard they scroll. Backward gestures play the previous section at the
+  //  same pace. Two escapes are kept from the a11y guidance: nav LINKS
+  //  stay clickable (only scroll input is intercepted) and the KEYBOARD
+  //  works as gestures. Reaching the CTA ends the tour FOR THIS PAGE VIEW
+  //  — from there, free scroll + idle-settle (the behavior above) until
+  //  the next load. Reduced motion never gets here (boot() returns long
+  //  before this). Scrollbar dragging bypasses the lock — known limit,
+  //  shared by every slide-deck implementation.
+  {
+    tourOn = true;                               // idle-settle stands down for the pass
+    const COOL = 250;                            // ms between gestures
+    // Fallback cruise ease (in-out) — used only if arc sampling degenerates.
+    const tourEase = (t: number) => {
+      const u = 1 - t;
+      return .10 * (1 - u * u) + .90 * (.5 - .5 * Math.cos(Math.PI * t));
+    };
+    // ARC-LENGTH PACING (2026-08-28, sixth round: "the card that barely
+    // moves is slow, the card that comes a long way — §03 from its
+    // top-right scatter to center — is very fast and harsh"). No fixed
+    // ease can equalize APPARENT speed: each card travels a different
+    // on-screen distance per scroll unit, and it differs per section.
+    // So before each step we SAMPLE the real scene math — the same
+    // camera, timeline and park-blend formulas the render loop uses —
+    // at 48 points across the live span, accumulate opacity-weighted
+    // screen-px motion of all five cards, and invert that curve: the
+    // tween spends time proportional to VISIBLE motion. A sine in-out on
+    // the arc gives soft take-off and landing, so perceived speed is one
+    // smooth bell no matter what the choreography does. Sampling mutates
+    // the live `cam` between frames — harmless, render() re-poses it from
+    // scroll on every rAF. (~250 pose evaluations per gesture, <1ms.)
+    const _aV = new THREE.Vector3();
+    const _pb = [0, 0, 0, 0, 0];
+    const arcEase = (a: number, b: number): ((t: number) => number) | null => {
+      const N = 48;
+      const cum = new Float64Array(N + 1);
+      const lx = new Float64Array(panels.length), ly = new Float64Array(panels.length);
+      const lw = new Float64Array(panels.length);
+      for (let k = 0; k <= N; k++) {
+        const s = a + (b - a) * (k / N);
+        let dh = 0;
+        _pb[0] = _pb[1] = _pb[2] = _pb[3] = _pb[4] = 0;
+        for (let d = 0; d < holds.length; d++) {
+          const h = trap(s, holds[d][0], holds[d][1], holds[d][2], holds[d][3]);
+          if (h > dh) dh = h;
+          _pb[DIVES[d].panel] = h;
+        }
+        const [cR, cH, cA] = interpCam(camKF, s);
+        cam.position.set(Math.cos(cA) * cR, cH, Math.sin(cA) * cR);
+        cam.lookAt(0, 2 - dh * 1.5, 0);
+        cam.updateMatrixWorld();
+        // Per-panel screen deltas, split into OBJECT motion (relative to
+        // the weighted-mean displacement) and global camera PAN. A pan
+        // moves every projected point at once — the lookAt target drops
+        // 1.5 units during every park blend — but perceptually a
+        // full-frame pan reads far calmer than an object crossing the
+        // frame, so it counts at 35%. Without the split, the pan made the
+        // blend zones swallow ~70% of the arc and the tween crawled there.
+        const dxs = [0, 0, 0, 0, 0], dys = [0, 0, 0, 0, 0], ws = [0, 0, 0, 0, 0];
+        let gx = 0, gy = 0, wSum = 0;
+        for (let i = 0; i < panels.length; i++) {
+          const v = interpKF(allKF[i], s);
+          let x = v[0], y = v[1], z = v[2];
+          const cT = _pb[i];
+          // Perceptual weight: opacity softened (.25 floor) — a
+          // semi-transparent card sweeping the frame is still very
+          // visible (§03's fastest approach happens at ui≈.22, and pure
+          // opacity weighting starved it of time); the render damp
+          // (cards fading while another parks) still zeroes it out.
+          const w = (.25 + .75 * Math.max(v[6], v[8])) * (cT > 0 ? 1 : 1 - dh);
+          if (cT > 0) {
+            parkPose(panels[i]);
+            const e = eio(cT);
+            x += (_covPos.x - x) * e; y += (_covPos.y - y) * e; z += (_covPos.z - z) * e;
+          }
+          _aV.set(x, y, z).project(cam);
+          const sx = _aV.x * innerWidth * .5, sy = _aV.y * innerHeight * .5;
+          if (k > 0) {
+            const wgt = Math.min(w, lw[i]);
+            dxs[i] = sx - lx[i]; dys[i] = sy - ly[i]; ws[i] = wgt;
+            gx += wgt * dxs[i]; gy += wgt * dys[i]; wSum += wgt;
+          }
+          lx[i] = sx; ly[i] = sy; lw[i] = w;
+        }
+        let stepPx = 0;
+        if (k > 0 && wSum > 0) {
+          gx /= wSum; gy /= wSum;
+          // Fit the common similarity motion — translation g (camera pan)
+          // + radial zoom λ about the weighted centroid (camera dolly) —
+          // and count it at 30%: optic-flow pan/zoom moves every point a
+          // lot but reads calm. The RESIDUAL is true object-vs-frame
+          // motion (a card sweeping the scene) and counts in full.
+          let cx = 0, cy = 0;   // centroid of the PREVIOUS sample's positions
+          for (let i = 0; i < panels.length; i++) { cx += ws[i] * (lx[i] - dxs[i]); cy += ws[i] * (ly[i] - dys[i]); }
+          cx /= wSum; cy /= wSum;
+          let num = 0, den = 0;
+          for (let i = 0; i < panels.length; i++) {
+            const rx = lx[i] - dxs[i] - cx, ry = ly[i] - dys[i] - cy;   // position at k-1, centered
+            num += ws[i] * (rx * (dxs[i] - gx) + ry * (dys[i] - gy));
+            den += ws[i] * (rx * rx + ry * ry);
+          }
+          const lam = den > 1e-6 ? num / den : 0;
+          let avgR = 0;
+          for (let i = 0; i < panels.length; i++) {
+            const rx = lx[i] - dxs[i] - cx, ry = ly[i] - dys[i] - cy;
+            avgR += ws[i] * Math.hypot(rx, ry);
+            const ex = dxs[i] - gx - lam * rx, ey = dys[i] - gy - lam * ry;
+            stepPx += ws[i] * Math.min(Math.hypot(ex, ey), 300);
+          }
+          avgR /= wSum;
+          stepPx += .3 * Math.min(Math.hypot(gx, gy) + Math.abs(lam) * avgR, 300) * wSum;
+        }
+        // small floor per step: the warp never creates zero-speed holes
+        cum[k] = k ? cum[k - 1] + stepPx + .75 : 0;
+      }
+      const total = cum[N];
+      (window as any).__arc = { a, b, cum: Array.from(cum) };  // DEBUG — remove
+      if (!(total > 1)) return null;
+      return (t: number) => {
+        const target = (.5 - .5 * Math.cos(Math.PI * t)) * total;
+        let lo = 0;
+        while (lo < N && cum[lo + 1] < target) lo++;
+        const seg = cum[lo + 1] - cum[lo] || 1e-9;
+        return Math.min(1, (lo + (target - cum[lo]) / seg) / N);
+      };
+    };
+    const gTargets = () => snapPts.slice(0, -1); // [0, pcs…, pcCta] — the tour ends at the CTA
+    const gp = { y: 0 };
+    let tourTw: ReturnType<typeof gsap.to> | null = null;
+    let coolUntil = 0;
+    let done = false;
+    const unhook = () => {
+      tourOn = false;                        // re-arm the idle-settle magnet
+      removeEventListener('wheel', onTourWheel, { capture: true });
+      removeEventListener('touchstart', onTourTS, { capture: true });
+      removeEventListener('touchmove', onTourTM, { capture: true });
+      removeEventListener('keydown', onTourKey, { capture: true });
+    };
+    const finish = () => {
+      if (done) return;
+      done = true;      // free scroll + idle-settle from here until the next load
+      unhook();
+    };
+    const step = (dir: 1 | -1) => {
+      const now = performance.now();
+      if (tourTw?.isActive() || now < coolUntil) return;
+      const max = Math.max(ScrollTrigger.maxScroll(window), 1);
+      const pts = gTargets();
+      if (!pts.length) return;
+      const p = scrollY / max;
+      let i = 0;
+      for (let k = 1; k < pts.length; k++)
+        if (Math.abs(pts[k] - p) < Math.abs(pts[i] - p)) i = k;
+      const j = Math.min(Math.max(i + dir, 0), pts.length - 1);
+      if (j === i) return;
+      // PLATEAU EXCISION (2026-08-28, "remove those frames where the card
+      // just stays"): around every parked section, ±PK of scroll renders
+      // pixel-identical frames by construction (camera flat, card pinned
+      // by parkPose, all other tracks constant; only the HUD % differs).
+      // The tween therefore animates ONLY the live span between plateau
+      // edges. Departure keeps a fixed 0.15s micro-dash across its frozen
+      // span — exactly the DOM twin's fade-out window, so sharp text never
+      // ghosts over a moving card. Arrival is a plain teleport in
+      // onComplete: the ease's soft landing falls on the park-dock motion
+      // (h→1 completes at the plateau edge), never on frozen frames — the
+      // old fixed-duration tween spent ~1.1s of its tail crawling the
+      // arrival plateau. Duration scales with the live distance so the
+      // approved cruise pace (~0.31·F/s) holds for long and short steps
+      // alike. Hero top and CTA have no card plateau → no dash/teleport
+      // on that side.
+      const from = pts[i], to = pts[j];
+      const sgn = to > from ? 1 : -1;
+      const isSec = (k: number) => k > 0 && k < pts.length - 1;  // pc1…pc4
+      const start = isSec(i) ? from + sgn * snapPK : from;
+      const end = isSec(j) ? to - sgn * snapPK : to;
+      const F = innerHeight / max;
+      const live = Math.abs(end - start);
+      const dur = Math.min(2.8, Math.max(1.6, live / (.29 * F)));
+      const DASH = isSec(i) ? .15 : 0;
+      const T = DASH + dur, tp = T > 0 ? DASH / T : 0;
+      const dashFrac = Math.abs(start - from) / Math.max(Math.abs(end - from), 1e-9);
+      const cruise = arcEase(start, end) ?? tourEase;
+      const ez = DASH
+        ? (t: number) => (t < tp ? dashFrac * (t / tp)
+                                 : dashFrac + (1 - dashFrac) * cruise((t - tp) / (1 - tp)))
+        : cruise;
+      gp.y = scrollY;
+      tourTw = gsap.to(gp, {
+        y: end * max,
+        duration: T,
+        ease: ez,
+        onUpdate: () => scrollTo(0, gp.y),
+        onComplete: () => {
+          gp.y = to * max;
+          scrollTo(0, gp.y);                     // arrival teleport — identical frames
+          coolUntil = performance.now() + COOL;
+          if (j === pts.length - 1) finish();    // CTA reached — tour over
+        },
+      });
+    };
+    // A gentle trackpad swipe opens with deltas of 1–3 per event — a fixed
+    // per-event threshold swallowed the whole gesture ("I scroll a bit and
+    // it stays in place"). Accumulate instead: a few units of intent,
+    // in one direction, within a beat, are enough to commit a step.
+    let acc = 0, accT = 0;
+    const onTourWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const now = performance.now();
+      if (tourTw?.isActive() || now < coolUntil) { acc = 0; return; }
+      if (now - accT > 400 || (acc !== 0 && Math.sign(e.deltaY) !== Math.sign(acc))) acc = 0;
+      accT = now;
+      acc += e.deltaY;
+      if (Math.abs(acc) > 6) { const d = acc > 0 ? 1 : -1; acc = 0; step(d as 1 | -1); }
+    };
+    let tourTy = 0;
+    const onTourTS = (e: TouchEvent) => { tourTy = e.touches[0].clientY; };
+    const onTourTM = (e: TouchEvent) => {
+      e.preventDefault();
+      const dy = tourTy - e.touches[0].clientY;
+      if (Math.abs(dy) > 30) { tourTy = e.touches[0].clientY; step(dy > 0 ? 1 : -1); }
+    };
+    const onTourKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      const fwd = ['ArrowDown', 'PageDown', 'End'].includes(e.key) || (e.key === ' ' && !e.shiftKey);
+      const bwd = ['ArrowUp', 'PageUp', 'Home'].includes(e.key) || (e.key === ' ' && e.shiftKey);
+      if (!fwd && !bwd) return;
+      e.preventDefault();
+      step(fwd ? 1 : -1);
+    };
+    addEventListener('wheel', onTourWheel, { passive: false, capture: true });
+    addEventListener('touchstart', onTourTS, { passive: true, capture: true });
+    addEventListener('touchmove', onTourTM, { passive: false, capture: true });
+    addEventListener('keydown', onTourKey, { capture: true });
+    document.addEventListener('astro:before-swap', () => { tourTw?.kill(); unhook(); }, { once: true });
+  }
 
   cv.style.opacity = '1'; if (hb) hb.style.opacity = '.5';
 
@@ -788,7 +1424,9 @@ function boot() {
   //  RENDER LOOP
   // ═══════════════════════════════════════════════════════════════
 
-  const clock = new THREE.Clock();
+  // Ceas manual (THREE.Clock e deprecat în r165+; nu merită importul
+  // THREE.Timer pentru un delta și un elapsed).
+  let prevMs = performance.now();
   let fid: number;
   let lastHud = -1, lastPct = -1, lastSp = -1, idleTick = 0;
   const lastPg = [false, false, false, false];
@@ -826,12 +1464,18 @@ function boot() {
 
   function render() {
     fid = requestAnimationFrame(render);
-    const dt = clock.getDelta();
-    const t = clock.getElapsedTime();
+    const nowMs = performance.now();
+    const dt = Math.min((nowMs - prevMs) / 1000, .1);
+    prevMs = nowMs;
+    const t = nowMs / 1000;
 
     // Eased scroll progress from the scrubbed proxy tween — GSAP catches
-    // the playhead up to the scrollbar over ~0.35s, so wheel steps blend.
+    // the playhead up to the scrollbar over ~0.25s, so wheel steps blend.
     sp = prox.p;
+
+    // Footer fade: 1 cât timp footerul e sub viewport, 0 la fundul paginii
+    // — scena întreagă se retrage din spatele textului juridic.
+    const ff = 1 - eio(cl((sp - footStart) / Math.max(1 - footStart, .001)));
 
     // Only the mouse parallax keeps its own easing (it isn't scroll).
     smx += (tmx - smx) * 0.04;
@@ -890,10 +1534,20 @@ function boot() {
       // page parks, and blurs back as it leaves — the page carries its
       // text away instead of the text scrolling off.
       const resolve = eo(cl((cT - .55) / .35));
-      const faceVis = v[8] * damp;
-      pnl.bMat.opacity = fillT * damp;
-      pnl.eMat.opacity = v[7] * damp;
-      pnl.fMatB.opacity = faceVis * (1 - resolve);
+      // The "album opens" animation (2026-08-28): the cover melts into
+      // the blur face early in the approach (done at cT=.45, well before
+      // resolve starts at .55 — cover and sharp text never coexist).
+      // Both canvases share the same opaque SCR.bg ground, so the blend
+      // can't flash. cT=1 (parked): melt=1, resolve=1 → sharp alone,
+      // bit-identical to the pre-cover crossfade. No fMatC (pSide/TOC):
+      // melt is hard-coded 1, and the formulas below reduce exactly to
+      // the original two-face math.
+      const melt = pnl.fMatC ? eo(cl((cT - .12) / .33)) : 1;
+      const faceVis = v[8] * damp * ff;
+      pnl.bMat.opacity = fillT * damp * ff;
+      pnl.eMat.opacity = v[7] * damp * ff;
+      if (pnl.fMatC) pnl.fMatC.opacity = faceVis * (1 - melt);
+      pnl.fMatB.opacity = faceVis * melt * (1 - resolve);
       pnl.fMatS.opacity = faceVis * resolve;
 
       // Edge color shifts to subtler when filled
@@ -907,7 +1561,7 @@ function boot() {
     const connP = cl((sp - finStart) / Math.max(pcCta - finStart, .001));
     const connDraw = eo(connP);
     for (const cn of conns) {
-      cn.mat.opacity = connP * .65;
+      cn.mat.opacity = connP * .65 * ff;
       cn.line.geometry.setDrawRange(0, Math.floor(cn.nPts * connDraw));
     }
 
@@ -915,8 +1569,8 @@ function boot() {
     const ptclVis = cl((sp - (finStart + pcCta) / 2) / Math.max((1 - finStart) / 2, .001));
     for (const pt of ptcls) {
       const m = pt.mesh.material as THREE.MeshStandardMaterial;
-      m.opacity = eo(ptclVis) * .85;
-      m.emissiveIntensity = ptclVis * 3;
+      m.opacity = eo(ptclVis) * .85 * ff;
+      m.emissiveIntensity = ptclVis * 3 * ff;
       if (ptclVis > 0) {
         pt.ph = (pt.ph + dt * pt.spd) % 1;
         pt.mesh.position.copy(conns[pt.ci].curve.getPointAt(pt.ph));
@@ -925,18 +1579,19 @@ function boot() {
     }
 
     // ── Grid ──
-    gm1.opacity = .15 + sp * .15;
-    gm2.opacity = .08 + sp * .10;
+    gm1.opacity = (.15 + sp * .15) * ff;
+    gm2.opacity = (.08 + sp * .10) * ff;
 
     // ── Red point light (grows in Phase 4) ──
     rPt.intensity = connP * 5;
     rPt.distance = 25 + connP * 30;
     if (sp > .9) { rPt.intensity = 5 + (Math.sin((sp - .9) * 80) * .5 + .5) * 4; }
+    rPt.intensity *= ff;
 
     // ── Datum crosses — scroll-driven, so an idle page is truly static;
     // faded during dives (some sit closer to the camera than the card) ──
     crosses.rotation.y = -sp * 1.2;
-    cm.opacity = .15 * (1 - diveHold);
+    cm.opacity = .15 * (1 - diveHold) * ff;
 
     // ── HUD + paper vignette (fade while a card covers the screen) ──
     if (hb) {

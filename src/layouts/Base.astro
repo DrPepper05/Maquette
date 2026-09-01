@@ -1,12 +1,12 @@
 ---
 import '../styles/global.css';
 import { Font } from 'astro:assets';
-import { copy, routes, type RouteKey } from '../copy';
+import { copy, routes, base, type RouteKey } from '../copy';
 import MaquetteCanvas from '../components/MaquetteCanvas.astro';
 
 interface Props { route: RouteKey; title: string; desc: string; noindex?: boolean; }
 const { route, title, desc, noindex = false } = Astro.props;
-const site = 'https://maquette.ro';
+const site = Astro.site ?? new URL('https://maquette.ro');
 const t = copy;
 
 ---
@@ -17,8 +17,9 @@ const t = copy;
   <title>{title}</title>
   <meta name="description" content={desc} />
   <meta name="theme-color" content="#F4F2ED" />
+  <link rel="icon" href={base + '/favicon.svg'} type="image/svg+xml" />
   {noindex && <meta name="robots" content="noindex, nofollow" />}
-  <link rel="canonical" href={site + routes[route]} />
+  <link rel="canonical" href={new URL(routes[route], site)} />
   <script is:inline>
     // Înainte de primul paint. Elementele pornesc ascunse doar dacă avem
     // cu ce să le arătăm înapoi — fie scroll-driven nativ, fie JS.

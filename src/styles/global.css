@@ -207,9 +207,20 @@
   /* ── cardul-album de pe /projects: coperta sus (foto sau ecranul live,
      interimar), numele pe scrim, banda de info dedesubt ── */
   .album { padding: 0; overflow: hidden; }
+  /* cardul pătrat (2026-08-28): coperta umple TOATĂ fața — textul stă pe
+     spate. Pătratul se dimensionează după viewport, ca exponatul să încapă
+     într-o singură vedere, fără scroll. */
+  .exhibit .flip {
+    position: relative;
+    width: min(100%, calc(100svh - 170px));
+    aspect-ratio: 1 / 1;
+    margin-inline: auto;
+  }
+  /* absolut în pătrat: altfel min-height-ul de conținut al spatelui
+     învinge aspect-ratio și cardul crește înapoi la înălțimea textului */
+  .exhibit .flip-inner { position: absolute; inset: 0; }
   .album-cover {
-    position: relative; overflow: hidden;
-    height: clamp(300px, 42vw, 460px);
+    position: absolute; inset: 0; overflow: hidden;
     background: var(--scr-bg);
   }
   .album-cover .cover-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -226,10 +237,59 @@
   .album-title {
     position: absolute;
     left: clamp(24px, 4.5vw, 64px); right: clamp(24px, 4.5vw, 64px); bottom: clamp(20px, 3vw, 40px);
-    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 24px;
+    display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 14px 24px;
   }
+  /* marca de planșă — sus, peste ilustrație */
+  .album-fig {
+    position: absolute; z-index: 1;
+    top: clamp(18px, 2.5vw, 32px); left: clamp(24px, 4.5vw, 64px);
+    color: var(--scr-mid);
+  }
+  /* butonul „View more" — hârtie pe cardul întunecat, vizibil de departe;
+     roșul rămâne rezervat CTA-urilor Contact. */
+  .btn-view {
+    display: inline-flex; align-items: center; gap: 8px;
+    border-radius: var(--r); border: 1px solid transparent;
+    padding: 13px 24px; font-size: 15px; font-weight: 600;
+    font-family: inherit; cursor: pointer;
+    background: var(--paper); color: #141412;
+    box-shadow: 0 2px 10px rgb(0 0 0 / .35);
+    transition: opacity .18s ease, transform .18s ease;
+  }
+  .btn-view:hover { transform: translateY(-1px); }
   .album-body { padding: clamp(28px, 4.5vw, 64px); }
   .album-inset { max-width: 440px; border: 1px solid var(--hairline); border-radius: 12px; overflow: hidden; }
+
+  /* ── flip-ul „Read more" al exponatului: fața = albumul, spatele =
+     povestea lungă. Rotația scrie transform pe .flip-inner; legănarea
+     .float-card scrie pe wrapper — elemente diferite, fără conflict.
+     Fețele stau în aceeași celulă de grid, deci înălțimea = max(față,
+     spate) și nimic nu sare la întoarcere. ── */
+  .flip { perspective: 2400px; }
+  .flip-inner {
+    display: grid;
+    transform-style: preserve-3d;
+    transition: transform .7s cubic-bezier(.23, 1, .32, 1);
+  }
+  .flip-front, .flip-back {
+    grid-area: 1 / 1;
+    min-height: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .flip-back { transform: rotateY(180deg); }
+  .flip.open .flip-inner { transform: rotateY(180deg); }
+  /* spatele: coloană flex ca acțiunile să cadă la bază; scroll intern doar
+     ca plasă de siguranță pe ecrane mici. */
+  .album-back {
+    display: flex; flex-direction: column;
+    padding: clamp(24px, 3vw, 44px);
+    overflow-y: auto; overscroll-behavior: contain;
+  }
+  .album-back .ex-actions { margin-top: 0; }
+  @media (prefers-reduced-motion: reduce) {
+    .flip-inner { transition: none; }
+  }
 
   /* ── paginile-geamăn din DOM (MaquetteCanvas): textul REAL — clicabil,
      selectabil, nativ de clar — apare fix peste cardul parcat și dispare
@@ -357,6 +417,9 @@
   }
   .lnk:hover { border-color: var(--red); }
   .lnk::after { content: "\2192"; color: var(--red); }
+  /* varianta „înapoi": săgeata roșie trece în față și se întoarce */
+  .lnk-back::after { content: none; }
+  .lnk-back::before { content: "\2190"; color: var(--red); }
 
   /* ── formular — o singură definiție ── */
   .fld {
@@ -636,6 +699,19 @@ html.js-anim [data-seq] [data-seq-i]:nth-child(5) { animation-delay: .32s; }
     animation-range: entry 8% cover 26%;
   }
   html.js-anim .rise.in { transition: none; }
+
+  /* ── hero-ul se estompează la exit (2026-08-31): altfel butonul roșu
+     și linkul lui rămân vizibile peste cardul parcat al §01 cât timp
+     hero-ul iese din viewport. view() e bidirecțional — la întoarcere
+     sus, hero-ul revine. Copiii [data-seq-i] au deja animația de
+     deschidere, deci fade-ul stă pe părinte (.slide-inner). ── */
+  @keyframes hero-exit { to { opacity: 0; } }
+  html.js-anim [data-seq] .slide-inner,
+  html.js-anim [data-seq] .scroll-cue {
+    animation: hero-exit linear both;
+    animation-timeline: view();
+    animation-range: exit 5% exit 55%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -2,13 +2,17 @@
    Limba site-ului: engleză (decizie 2026-08-24). Vezi docs/site-map.md.
    Revizie 2026-08-25: zero prețuri și zero termene autoimpuse pe site. */
 
+/* Prefixul de bază al site-ului — '' pe domeniul propriu, '/Maquette' pe
+   GitHub Pages. Orice URL intern se construiește cu el. */
+export const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
 export const routes = {
-  home: '/',
-  services: '/services',
-  blueprint: '/blueprint',
-  projects: '/projects',
-  contact: '/contact',
-  privacy: '/privacy',
+  home: base + '/',
+  services: base + '/services',
+  blueprint: base + '/blueprint',
+  projects: base + '/projects',
+  contact: base + '/contact',
+  privacy: base + '/privacy',
 } as const;
 export type RouteKey = keyof typeof routes;
 
@@ -58,7 +62,7 @@ export const copy = {
       ] as [string, string, string][],
       customWhat: 'Something specific — a configurator, an integration, an unusual system',
       customCta: 'See the services',
-      note: 'No menu prices — every build is scoped and quoted for the client it is for. The firm number comes after a 30-minute call, and it stays firm.',
+      note: 'No menu prices — every build is scoped and quoted for the client it is for. A 30-minute call gives you a real range; the Blueprint turns it into a firm number.',
     },
 
     /* 02 — Blueprint-ul, comprimat la o propoziție. Mecanismul complet
@@ -85,7 +89,9 @@ export const copy = {
           p: 'Short shifts for students. It goes through its own Blueprint first: spec, architecture and numbers before the first line of code.',
         },
       ],
-      exhibit: 'The third exhibit is this site — static, hand-written, about 250 bytes of JavaScript.',
+      /* Fost „about 250 bytes of JavaScript" — fals de când homepage-ul
+         livrează Three.js + GSAP (~684 KB). Regula de aur (2026-08-31). */
+      exhibit: 'The third exhibit is this site — designed, written and built by hand.',
       link: 'See the exhibition',
       /* Ștampila onestității — o singură instanță pe site. Se actualizează
          când realitatea se schimbă; nu se șterge cât timp e adevărată. */
@@ -99,8 +105,10 @@ export const copy = {
       p: "There aren't any yet — none we could publish with written client consent, and we don't publish without it. Until then we show working deliverables instead: a real Blueprint sample, two products of our own, and this site. The first delivered project goes up the day a client signs off.",
     },
 
+    /* „real range", nu „a number" — apelul dă intervalul, Blueprint-ul
+       cifra fermă (aliniat 2026-08-31 cu /contact și mecanismul). */
     end: {
-      h: 'Thirty minutes, and you leave with a number.',
+      h: 'Thirty minutes, and you leave with a real range.',
       p: 'No strings and no sales deck. You tell us what hurts, we tell you what it would cost and how long it would take — even if we never work together.',
     },
   },
@@ -155,7 +163,7 @@ export const copy = {
       link: 'See the Blueprint',
     },
     end: {
-      h: 'Thirty minutes, and you leave with a number.',
+      h: 'Thirty minutes, and you leave with a real range.',
       p: 'You tell us what hurts, we tell you what it would cost and how long it would take — even if we never work together.',
     },
   },
@@ -246,7 +254,7 @@ export const copy = {
       ] as [string, string][],
     },
 
-    end: { h: 'Thirty minutes, and you leave with a number.' },
+    end: { h: 'Thirty minutes, and you leave with a real range.' },
   },
 
   /* Expoziția (fost Lab, 2026-08-25): un exponat pe ecran, cu figură mare
@@ -261,7 +269,9 @@ export const copy = {
     exhibits: [
       {
         slug: 'declutter',
-      cover: '',   /* cale sub /img — gol până există fotografia; coperta interimară e ecranul live */
+        /* Copertă: ilustrație SVG proprie (NU captură falsă) — supraîncărcarea
+           cognitivă rezolvată în grupuri; ecranul live coboară în insert. */
+        cover: base + '/img/declutter-cover.svg',
         name: 'Declutter',
         stage: 'Prototype · updated August 2026',
         h: 'The things you meant to say in therapy, and forget by the time you get there.',
@@ -269,10 +279,19 @@ export const copy = {
         noteH: 'What you write there is health data.',
         noteP: 'We treat it as such: encrypted, stored in the European Union, no advertising trackers, and no model is trained on your content. A therapist does not ask what features you have — they ask where their patients’ data lives.',
         fig: { title: 'Declutter — capture and return', tech: 'Prototype UI · 2026' },
+        /* Spatele cardului — „Read more". Secțiuni scurte, ton onest. */
+        more: [
+          ['The trigger is the session', 'Notes apps archive thoughts; Declutter returns them. Everything you capture comes back before your session, grouped by theme — work, sleep, the thing you keep postponing. You walk in with your agenda already in hand.'],
+          ['Capture in three seconds', 'A thought arrives on the bus, at 2 a.m., mid-meeting. You type one line and close the phone. No folders, no tags, no decisions — the sorting is our job, not yours.'],
+          ['Health data, treated as such', 'What you write for therapy is health data under article 9 of the GDPR. It is encrypted, stored in the European Union, and never used to train a model. No advertising trackers, no analytics on your content.'],
+          ['Where it stands', 'Capture and grouping work today. The pre-session return is being built. We are looking for three to five psychotherapists to test the prototype and tell us where we are wrong.'],
+        ],
       },
       {
         slug: 'gigtim',
-      cover: '',   /* cale sub /img — gol până există fotografia; coperta interimară e ecranul live */
+        /* Copertă: ilustrație SVG proprie — schimburi scurte pe harta unui
+           campus; documentul Blueprint live coboară în insert. */
+        cover: base + '/img/gigtim-cover.svg',
         name: 'GigTim',
         stage: 'Being scoped · going through its own Blueprint',
         h: 'Short shifts for students. The business posts it, the student takes it.',
@@ -280,6 +299,12 @@ export const copy = {
         noteH: 'Short-term work has a legal shape in Romania.',
         noteP: 'Day-labourer status, self-employment or a fixed-term contract — each carries different obligations for the business hiring. A platform that brokers work cannot sidestep that. Which is why the legal shape gets decided in the Blueprint, not after launch.',
         fig: { title: 'GigTim — its own Blueprint', tech: 'Document, draft · 2026' },
+        more: [
+          ['The gap, and the product', 'A restaurant needs two extra people on Saturday night; a student has three free hours on Tuesday. There is no channel between them. So: the business posts a shift with a time and a price, the student takes it in one tap. That is the whole product.'],
+          ['Density before features', 'A marketplace with no local density is an empty room. The plan starts with one campus and one neighbourhood — not a national launch.'],
+          ['The legal shape', 'Short-term work in Romania has legal forms: day labourer, self-employment, or a fixed-term contract. Each carries different obligations for the business. That choice is made in the Blueprint, not patched in after launch.'],
+          ['Where it stands', 'GigTim is in scoping — going through exactly the Blueprint we sell. Spec, architecture and unit numbers come before the first line of code.'],
+        ],
       },
     ],
 
@@ -289,6 +314,8 @@ export const copy = {
       like: 'Like',
       comment: 'Comment',
       commentNote: 'Comments appear after review.',
+      readMore: 'View more',
+      readLess: 'Back to the card',
     },
 
     /* Cererile stau exclusiv aici, în ordinea asta. Investiția fără buton. */
@@ -312,6 +339,7 @@ export const copy = {
     fSend: 'Send',
     after: 'We reply the same working day.',
     noFormLead: 'Write to us at',
+    phoneLead: 'Or call',
 
     howLabel: 'How working with us goes',
     how: [

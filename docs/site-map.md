@@ -53,7 +53,9 @@ Scheletul de slide-uri și id-urile (`hero`, `s01`–`s04`, `cta`, `s0N-inner`) 
 > | Mobile apps and AR product viewers — your product at true scale | APP · AR/3D |
 > | Something specific — a configurator, an integration, an unusual system | **See the services** |
 >
-> No menu prices — every build is scoped and quoted for the client it is for. The firm number comes after a 30-minute call, and it stays firm.
+> No menu prices — every build is scoped and quoted for the client it is for. A 30-minute call gives you a real range; the Blueprint turns it into a firm number.
+
+*(2026-08-31: nota veche promitea „the firm number comes after a 30-minute call" — contrazicea mecanismul „apel → interval; Blueprint → cifra fermă" și pagina de contact.)*
 
 ### 03 — THE BLUEPRINT *(o propoziție; mecanismul complet pe /blueprint)*
 
@@ -63,7 +65,7 @@ Scheletul de slide-uri și id-urile (`hero`, `s01`–`s04`, `cta`, `s0N-inner`) 
 
 ### 04 — PROOF
 
-Neschimbat în substanță: cele două carduri (Declutter `PROTOTYPE`, GigTim `BEING SCOPED`) + ștampila `DELIVERED PROJECTS · 00` + „the third exhibit is this site". Linkul: **[See the exhibition →](/projects)**.
+Neschimbat în substanță: cele două carduri (Declutter `PROTOTYPE`, GigTim `BEING SCOPED`) + ștampila `DELIVERED PROJECTS · 00` + „the third exhibit is this site". Linkul: **[See the exhibition →](/projects)**. *(2026-08-31: fraza exponatului e acum „designed, written and built by hand" — vechiul „about 250 bytes of JavaScript" era fals de când homepage-ul livrează Three.js/GSAP, ~684 KB.)*
 
 ### 05 — THE QUESTION EVERYONE ASKS
 
@@ -71,7 +73,7 @@ Neschimbat: „Where are the case studies?" + răspunsul onest.
 
 ### 06 — CTA (blocul roșu)
 
-> ## Thirty minutes, and you leave with a number.
+> ## Thirty minutes, and you leave with a real range.
 > No strings and no sales deck. You tell us what hurts, we tell you what it would cost and how long it would take — even if we never work together.
 >
 > **[Start with a Blueprint → /contact]**
@@ -94,7 +96,7 @@ Gramatica prospectului, **doar text — fără figuri** (niciun ecran AR fals; s
 
 **04 — How pricing works** — înlocuitorul rate card-ului: niciun build nu costă la fel, deci site-ul nu are meniu de prețuri; 30 de minute → un interval de care putem răspunde; cifra exactă → din Blueprint, „quoted up front, fixed once agreed". Link → `/blueprint`.
 
-**CTA roșu:** „Thirty minutes, and you leave with a number." → `/contact`.
+**CTA roșu:** „Thirty minutes, and you leave with a real range." → `/contact`.
 
 ---
 
@@ -168,6 +170,8 @@ Capturile reale (`public/img/…`) intră în același slot de figură când exi
 
 Neschimbat: formular (postează la `PUBLIC_FORM_ENDPOINT`; fără variabilă — adresa de email; niciodată `action="#"`) + „How working with us goes" + răspunsul la „How many of you are there?".
 
+**Telefon (2026-08-31):** sub formular/email, un rând „Or call `NUMĂR`" (`tel:`-link) — randat **doar** cu `PUBLIC_PHONE` setat, ca restul integrărilor. Motiv: B2B-ul românesc închide la telefon; email-only citește distant. Fără variabilă, nimic nu se afișează — nu se inventează un număr.
+
 ---
 
 ## 7. `/privacy`
@@ -188,6 +192,7 @@ Neschimbat ca reguli (fără „©/Made with ❤️"); cuprinsul include acum Se
 
 - [ ] Datele SRL-ului pentru subsol (ONRC, sediu)
 - [ ] `PUBLIC_FORM_ENDPOINT` setat (Formspree/Resend) — altfel se afișează emailul
+- [ ] `PUBLIC_PHONE` setat (număr real) — altfel `/contact` nu arată telefon
 - [ ] `PUBLIC_CUSDIS_APP_ID` setat (cont cusdis.com) — altfel nu există Comment; moderarea e a utilizatorului
 - [ ] `PUBLIC_LIKES_ENDPOINT` setat (worker-ul din `workers/likes/` deployat pe Cloudflare) — altfel nu există Like
 - [ ] `/privacy` revizuită de utilizator

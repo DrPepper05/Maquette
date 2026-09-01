@@ -7,6 +7,9 @@ const t = copy.contact;
    niciodată un formular mort cu action="#". */
 const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT as string | undefined;
 const email = 'contact@maquette.ro';
+/* Telefonul se randează doar cu env setat — nu se inventează un număr.
+   B2B-ul românesc închide la telefon (audit 2026-08-31). */
+const phone = import.meta.env.PUBLIC_PHONE as string | undefined;
 ---
 <Base route="contact" title={t.title} desc={t.desc}>
 
@@ -47,10 +50,16 @@ const email = 'contact@maquette.ro';
           <button class="btn" type="submit">{t.fSend}</button>
           <span class="text-[13.5px]" style="color: var(--mid)">{t.after}</span>
         </div>
+        {phone && (
+          <p class="text-[15px] mt-1" style="color: var(--mid)">{t.phoneLead} <a href={`tel:${phone.replace(/[^+\d]/g, '')}`} class="lnk">{phone}</a></p>
+        )}
       </form>
     ) : (
       <div class="row-line">
         <p class="t-h3">{t.noFormLead} <a href={`mailto:${email}`} class="lnk">{email}</a></p>
+        {phone && (
+          <p class="t-h3 mt-3">{t.phoneLead} <a href={`tel:${phone.replace(/[^+\d]/g, '')}`} class="lnk">{phone}</a></p>
+        )}
         <p class="mt-3 text-[14.5px]" style="color: var(--mid)">{t.after}</p>
       </div>
     )}

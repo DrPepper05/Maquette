@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import SectionHead from '../components/SectionHead.astro';
 import AmbientCards from '../components/AmbientCards.astro';
-import Figure from '../components/Figure.astro';
 import ExhibitActions from '../components/ExhibitActions.astro';
 import DeclutterApp from '../components/screens/DeclutterApp.astro';
 import GigTimDoc from '../components/screens/GigTimDoc.astro';
@@ -26,49 +25,55 @@ const email = 'contact@maquette.ro';
       <SectionHead index={String(i + 1).padStart(2, '0')} title="Exhibit" />
       <AmbientCards n={i} />
 
-      <!-- cardul-album: coperta sus (foto când există, ecranul live până
-           atunci), numele pe scrim, banda de info dedesubt — TOT exponatul
-           e un singur card întunecat, plutind. -->
-      <article class="card-page album float-card" data-tilt="1.5">
-        <div class="album-cover">
-          {p.cover ? (
-            <img class="cover-img" src={p.cover} alt={`${p.name} — cover`} loading="lazy" />
-          ) : (
-            <div class="cover-live" inert>
-              {p.slug === 'declutter' ? <DeclutterApp /> : <GigTimDoc />}
-            </div>
-          )}
-          <div class="album-scrim" aria-hidden="true"></div>
-          <div class="album-title">
-            <div class="flex flex-wrap items-baseline gap-x-5 gap-y-2">
-              <h2 class="t-display" style="font-size: clamp(38px, 5vw, 68px)">{p.name}</h2>
-              <span class="lbl">{p.stage}</span>
-            </div>
-            <span class="lbl">FIG. {String(i + 1).padStart(2, '0')} · {p.fig.title} — {p.fig.tech}</span>
-          </div>
-        </div>
-
-        <div class="album-body">
-          <div class="grid gap-x-14 gap-y-10 lg:grid-cols-[1.15fr_1fr] items-start">
-            <div>
-              <p class="t-h3 max-w-[38ch]" style="color: var(--mid); font-weight: 500">{p.h}</p>
-              <p class="mt-5 text-[16px]">{p.p}</p>
-              <div class="mt-6 pl-5 border-l-2 max-w-[64ch]" style="border-color: var(--hairline)">
-                <h3 class="t-h3 !text-[16px]">{p.noteH}</h3>
-                <p class="mt-2 text-[15.5px]" style="color: var(--mid)">{p.noteP}</p>
+      <!-- cardul-album PĂTRAT, o singură vedere (2026-08-28): fața e doar
+           coperta — ilustrația SVG, numele, eticheta de stadiu și butonul
+           „View more" (proeminent, hârtie pe întuneric). TOT textul stă pe
+           SPATELE cardului: teza, secțiunile lungi și acțiunile — „View
+           more" îl întoarce 180° pe Y. Rotația stă pe .flip-inner,
+           legănarea/tilt-ul pe wrapper — niciodată același element. -->
+      <div class="flip float-card" data-tilt="1.5" data-flip>
+        <div class="flip-inner">
+          <article class="card-page album flip-front">
+            <div class="album-cover">
+              {p.cover ? (
+                <img class="cover-img" src={p.cover} alt={`${p.name} — cover`} loading="lazy" />
+              ) : (
+                <div class="cover-live" inert>
+                  {p.slug === 'declutter' ? <DeclutterApp /> : <GigTimDoc />}
+                </div>
+              )}
+              <span class="lbl album-fig">FIG. {String(i + 1).padStart(2, '0')} · {p.fig.title} — {p.fig.tech}</span>
+              <div class="album-scrim" aria-hidden="true"></div>
+              <div class="album-title">
+                <div>
+                  <h2 class="t-display" style="font-size: clamp(34px, 4.6vw, 62px)">{p.name}</h2>
+                  <span class="lbl block mt-2">{p.stage}</span>
+                </div>
+                <button type="button" class="btn-view" data-flip-btn aria-expanded="false">{t.actions.readMore}</button>
               </div>
+            </div>
+          </article>
+
+          <article class="card-page album-back flip-back" inert>
+            <header class="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3">
+              <h3 class="t-h3">{p.name}</h3>
+              <button type="button" class="lnk lnk-back" data-flip-btn aria-expanded="true">{t.actions.readLess}</button>
+            </header>
+            <p class="t-h3 mt-5 max-w-[44ch]" style="color: var(--mid); font-weight: 500">{p.h}</p>
+            <div class="mt-7 grid gap-x-12 gap-y-6 sm:grid-cols-2">
+              {p.more.map(([mh, mp]) => (
+                <div>
+                  <h4 class="lbl">{mh}</h4>
+                  <p class="mt-2.5 text-[14.5px]" style="color: var(--mid)">{mp}</p>
+                </div>
+              ))}
+            </div>
+            <div class="mt-auto pt-6">
               <ExhibitActions slug={p.slug} />
             </div>
-            {p.cover && (
-              <div class="album-inset">
-                <Figure index={String(i + 1).padStart(2, '0')} title={p.fig.title} kind="demo" tech={p.fig.tech}>
-                  {p.slug === 'declutter' ? <DeclutterApp /> : <GigTimDoc />}
-                </Figure>
-              </div>
-            )}
-          </div>
+          </article>
         </div>
-      </article>
+      </div>
     </section>
   ))}
 
@@ -129,6 +134,23 @@ const email = 'contact@maquette.ro';
       s.onload = () => res();
       document.body.appendChild(s);
     }));
+
+    /* Flip „Read more" — fața devine inert cât e ascunsă (butoanele Like/
+       Comment nu pot primi focus pe dos), și invers. Fără JS, cardul stă
+       pe față și povestea lungă rămâne în DOM pentru SEO. */
+    document.querySelectorAll<HTMLElement>('[data-flip]').forEach((card) => {
+      const front = card.querySelector<HTMLElement>('.flip-front');
+      const back = card.querySelector<HTMLElement>('.flip-back');
+      if (!front || !back) return;
+      const btns = card.querySelectorAll<HTMLButtonElement>('[data-flip-btn]');
+      const set = (open: boolean) => {
+        card.classList.toggle('open', open);
+        front.inert = open;
+        back.inert = !open;
+        btns.forEach((b) => b.setAttribute('aria-expanded', String(open)));
+      };
+      btns.forEach((b) => b.addEventListener('click', () => set(!card.classList.contains('open'))));
+    });
 
     document.querySelectorAll<HTMLButtonElement>('[data-comment]').forEach((btn) => {
       btn.addEventListener('click', async () => {
