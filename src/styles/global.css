@@ -89,6 +89,13 @@
     display: flex; flex-direction: column; justify-content: center;
   }
   .slide.sec { margin-top: 0; } /* ritmul dintre secțiuni vine din înălțimea slide-ului */
+  /* ── pista călătoriei (2026-09-01): cât timp canvasul rulează, §01–§04
+     primesc 250svh de drum — camera are nevoie de scroll între stații; la
+     100svh un flick obișnuit teleporta o secțiune întreagă. Clasa e pusă
+     de boot()-ul canvasului DUPĂ toate gate-urile, deci mobilul, no-JS și
+     reduced-motion rămân la înălțimea naturală. Hero și CTA sunt conținut
+     real, nu pistă — rămân la 100svh. ── */
+  html.mq-journey :is(#s01, #s02, #s03, #s04) { min-height: 250svh; }
   /* .wrap are margin-inline auto — ca item de flex, marginile auto îi anulează
      stretch-ul și îl strâng pe conținut; forțăm lățimea plină înapoi. */
   .slide > .wrap, .slide > .slide-inner { width: 100%; }
