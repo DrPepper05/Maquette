@@ -71,10 +71,10 @@ const t = copy;
       <p class="text-[13.5px] max-w-[34ch]" style="color: var(--mid)">{t.footer.brandNote}</p>
     </div>
 
-    <div class="grid content-start">
+    <div class="grid content-start draw">
       <span class="lbl pb-2">{t.footer.contentsLabel}</span>
       {t.footer.contents.map(([key, label], i) => (
-        <a href={routes[key]} class="toc-row">
+        <a href={routes[key]} class="toc-row rise">
           <span class="no">{String(i + 1).padStart(2, '0')}</span>
           <span>{label}</span>
           <i class="dots" aria-hidden="true"></i>
@@ -97,28 +97,40 @@ const t = copy;
 </footer>
 
 <script>
-  /* Fallback pentru browserele fără scroll-driven animations (Firefox, azi). */
+  /* Fallback pentru browserele fără scroll-driven animations (Firefox, azi).
+     Două observatoare: .rise din main cu marginea de −12% (ca înainte);
+     .rise din subsol și elementele .draw (hairline/leadere care se
+     desenează) fără margine — stau în ultimii px ai paginii, unde −12% nu
+     s-ar atinge niciodată la scroll maxim. Nimic din #mq-pages (geamănul
+     fix al canvasului) nu e atins. */
   if (!CSS.supports('animation-timeline: view()')) {
-    const els = document.querySelectorAll('.rise');
-    if (els.length) {
+    const mk = (sel: string, rootMargin: string) => {
+      const els = [...document.querySelectorAll(sel)].filter((el) => !el.closest('#mq-pages'));
+      if (!els.length) return;
       const io = new IntersectionObserver((entries, obs) => {
         for (const e of entries) {
           if (!e.isIntersecting) continue;
           e.target.classList.add('in');
           obs.unobserve(e.target);
         }
-      }, { rootMargin: '0px 0px -12% 0px' });
+      }, { rootMargin });
       els.forEach((el) => io.observe(el));
-    }
+    };
+    mk('main .rise', '0px 0px -12% 0px');
+    mk('footer .rise, :is(main, footer) .draw', '0px');
   }
 
   /* Cardurile plutitoare (.float-card): legănare lentă + tilt spre cursor.
      Limbajul de card al homepage-ului, continuat static pe restul paginilor.
      Tăcut la reduced-motion; tilt doar cu hover+pointer fin; cardurile din
-     afara viewportului nu se animă. */
+     afara viewportului nu se animă — și bucla rAF se OPREȘTE când niciun
+     card nu e vizibil (2026-09-12). Legănarea e stratificată (7s + 11s,
+     plus o rotație de .3° la 13s) ca ochiul să nu prindă bucla; lerp-ul
+     e pe delta-time, deci identic la 60 și 120Hz. */
   const cards = [...document.querySelectorAll<HTMLElement>('.float-card')];
   if (cards.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const TAU = Math.PI * 2;
     const st = cards.map((el, i) => ({
       el, vis: false,
       ph: i * 1.7 + Math.random() * 2,
@@ -127,8 +139,16 @@ const t = copy;
       g: 0, tg: 0, mx: 50, my: 50,   // reflexia „holo": intensitate + poziția cursorului
       tilt: parseFloat(el.dataset.tilt || '4.5'),
     }));
+    let raf = 0, last = performance.now();
+    const arm = () => { if (!raf) { last = performance.now(); raf = requestAnimationFrame(loop); } };
     const io2 = new IntersectionObserver((es) => {
-      for (const e of es) { const c = st.find((x) => x.el === e.target); if (c) c.vis = e.isIntersecting; }
+      for (const e of es) {
+        const c = st.find((x) => x.el === e.target); if (!c) continue;
+        c.vis = e.isIntersecting;
+        c.el.classList.toggle('is-vis', c.vis);
+        c.el.style.willChange = c.vis ? 'transform' : '';
+        if (c.vis) arm();
+      }
     });
     st.forEach((c) => io2.observe(c.el));
     if (fine) st.forEach((c) => {
@@ -142,16 +162,22 @@ const t = copy;
       }, { passive: true });
       c.el.addEventListener('pointerleave', () => { c.tx = 0; c.ty = 0; c.tg = 0; });
     });
-    const loop = (now: number) => {
+    function loop(now: number) {
+      raf = 0;
+      const dt = Math.min((now - last) / 1000, .1); last = now;
       const t = now / 1000;
+      const k = 1 - Math.pow(.92, dt * 60), kg = 1 - Math.pow(.90, dt * 60);
+      let any = false;
       for (const c of st) {
         if (!c.vis) continue;
-        c.rx += (c.tx - c.rx) * .08;
-        c.ry += (c.ty - c.ry) * .08;
-        c.g += (c.tg - c.g) * .1;
-        const bob = Math.sin(t * .9 + c.ph) * c.amp;
+        any = true;
+        c.rx += (c.tx - c.rx) * k;
+        c.ry += (c.ty - c.ry) * k;
+        c.g += (c.tg - c.g) * kg;
+        const bob = c.amp * (.72 * Math.sin(t * TAU / 7 + c.ph) + .28 * Math.sin(t * TAU / 11 + 1.7 * c.ph));
+        const rz = .3 * Math.sin(t * TAU / 13 + c.ph);
         c.el.style.transform =
-          `perspective(900px) rotateX(${c.rx.toFixed(2)}deg) rotateY(${c.ry.toFixed(2)}deg) `
+          `perspective(900px) rotateX(${c.rx.toFixed(2)}deg) rotateY(${c.ry.toFixed(2)}deg) rotateZ(${rz.toFixed(3)}deg) `
           + `translateY(${bob.toFixed(1)}px) scale(${(1 + c.g * .006).toFixed(4)})`;
         if (c.g > .002) {
           c.el.style.setProperty('--glare', c.g.toFixed(3));
@@ -161,9 +187,9 @@ const t = copy;
           c.el.style.setProperty('--glare', '0');
         }
       }
-      requestAnimationFrame(loop);
-    };
-    requestAnimationFrame(loop);
+      if (any) raf = requestAnimationFrame(loop);
+    }
+    arm();
   }
 </script>
 </body>

@@ -41,9 +41,8 @@
      sections and the page renders normally. -->
 <div id="mq-pages">
   <div class="mq-page" id="mq-page-0" style="--pg-h: 72px"><div class="mq-page-scale"></div></div>
-  <div class="mq-page" id="mq-page-1" style="--pg-h: 52px"><div class="mq-page-scale"></div></div>
+  <div class="mq-page" id="mq-page-1" style="--pg-h: 48px"><div class="mq-page-scale"></div></div>
   <div class="mq-page" id="mq-page-2" style="--pg-h: 48px"><div class="mq-page-scale"></div></div>
-  <div class="mq-page" id="mq-page-3" style="--pg-h: 48px"><div class="mq-page-scale"></div></div>
 </div>
 
 <script>
@@ -197,6 +196,17 @@ function boot() {
     kicker(c, ML, PT + 19, idx, label, W, MR);
     return { ML, hBase: PT + 25 + 42 + ASC(hSize) };
   }
+  // Butonul-link (2026-09-12): cutia .lnk măsurată din geamăn per pagină
+  // (x/y/w/h, baseline-ul textului, x-ul săgeții) — pictată identic.
+  interface LinkM { x: number; y: number; w: number; h: number; tx: number; ax: number; base: number; r: number; }
+  const linkM: (LinkM | null)[] = [null, null, null];
+  const linkSig: string[] = ['', '', ''];
+  function drawBtn(c: Ctx, m: LinkM, text: string) {
+    c.strokeStyle = SCR.hi; c.lineWidth = 1;
+    c.beginPath(); c.roundRect(m.x + .5, m.y + .5, m.w - 1, m.h - 1, m.r); c.stroke();
+    c.font = `600 15px ${F_HEAD}`; c.fillStyle = SCR.hi; c.fillText(text, m.tx, m.base);
+    c.fillStyle = SCR.red; c.fillText('→', m.ax, m.base);
+  }
   function drawLink(c: Ctx, x: number, base: number, text: string, alignRight = 0) {
     c.font = `600 15px ${F_HEAD}`;
     const lw = c.measureText(text).width;
@@ -212,30 +222,28 @@ function boot() {
     const t = copy.home.build, MR = Math.round(W * .15);
     const { ML, hBase } = pageTop(c, W, MR, '01', t.label, 72);
     const hBottom = heading(c, ML, hBase, t.h, 72, W - ML - MR);
-    const rowsTop = hBottom + 48;                     // .rate mt-12
-    const rows: [string, string, string][] = [...t.rows, [t.customWhat, t.customCta + ' →', '']];
+    // Tabel de specificație (2026-09-12): eticheta serviciului (mono, ca
+    // .lbl) + ce primești, pe aceeași linie de bază — fără leadere și
+    // fără etichete-categorie în dreapta („doesn't make sense"). Coloana
+    // etichetei = 148px + gap 14px, ca .spec-row din CSS.
+    const rowsTop = hBottom + 48;                     // .spec mt-12
+    const rows: [string, string][] = [...t.rows, [t.moreLabel, t.moreCta + ' →']];
+    const COL = 162;
     c.lineWidth = 2;
     for (let i = 0; i < rows.length; i++) {
-      const top = rowsTop + i * 62, y = top + 36;     // 16 pad + half-leading + ascent
+      const top = rowsTop + i * 61, y = top + 36;     // 16 pad + 28 line + 16 pad + 1 border = 61 (măsurat din geamăn)
       c.strokeStyle = SCR.ln;
       c.beginPath(); c.moveTo(ML, top); c.lineTo(W - MR, top); c.stroke();
       const last = i === rows.length - 1;
+      (c as any).letterSpacing = '1.32px';            // .lbl: .12em of 11px
+      c.font = `500 11px ${F_MONO}`; c.fillStyle = SCR.mid;
+      c.fillText(rows[i][0].toUpperCase(), ML, y);
       (c as any).letterSpacing = '-0.2px';
-      c.font = `600 17px ${F_HEAD}`; c.fillStyle = SCR.hi;
-      c.fillText(rows[i][0], ML, y);
+      c.font = `600 17px ${F_HEAD}`; c.fillStyle = last ? SCR.red : SCR.hi;
+      c.fillText(rows[i][1], ML + COL, y);
       (c as any).letterSpacing = '0px';
-      const ww = c.measureText(rows[i][0]).width;
-      c.font = `600 17px ${F_MONO}`; c.fillStyle = last ? SCR.red : SCR.hi;
-      const pw = c.measureText(rows[i][1]).width;
-      c.fillText(rows[i][1], W - MR - pw, y);
-      leader(c, ML + ww + 24, W - MR - pw - 24, y - 5);
-      if (rows[i][2]) {
-        c.font = `500 11px ${F_MONO}`; c.fillStyle = SCR.mid;
-        const sw = c.measureText(rows[i][2].toUpperCase()).width;
-        c.fillText(rows[i][2].toUpperCase(), W - MR - sw, y + 20);
-      }
     }
-    const rateBottom = rowsTop + rows.length * 62;
+    const rateBottom = rowsTop + rows.length * 61;
     c.strokeStyle = SCR.ln;
     c.beginPath(); c.moveTo(ML, rateBottom); c.lineTo(W - MR, rateBottom); c.stroke();
     c.font = `400 15.5px ${F_HEAD}`; c.fillStyle = SCR.mid;
@@ -247,9 +255,10 @@ function boot() {
   // ── §02 page — the Blueprint sentence ──
   function paintSec02(c: Ctx, W: number, H: number) {
     const t = copy.home.mech, MR = Math.round(W * .15);
-    const { ML, hBase } = pageTop(c, W, MR, '02', t.label, 52);
-    const hBottom = heading(c, ML, hBase, t.h, 52, W - ML - MR);
-    drawLink(c, ML, hBottom + 32 + 19, t.link);       // .lnk mt-8
+    const { ML, hBase } = pageTop(c, W, MR, '02', t.label, 48);
+    const hBottom = heading(c, ML, hBase, t.h, 48, W - ML - MR);
+    if (linkM[1]) drawBtn(c, linkM[1], t.link);
+    else drawLink(c, ML, hBottom + 32 + 19, t.link);  // .lnk mt-8 (fallback, până la prima măsurare)
   }
 
   // ── §03 page — proof, landscape: heading left, stamp right, the two
@@ -320,18 +329,8 @@ function boot() {
     let ey = bBase;
     const exLh = proofM ? proofM.exLh : 26;
     for (const line of wrapText(c, t.exhibit, proofM ? proofM.exW : 470)) { c.fillText(line, ML, ey); ey += exLh; }
-    drawLink(c, 0, proofM?.linkBase || bBase, t.link, W - MR);
-  }
-
-  // ── §04 page — the objection, before the CTA ──
-  function paintSec04(c: Ctx, W: number, H: number) {
-    const t = copy.home.objection, MR = Math.round(W * .15);
-    const { ML, hBase } = pageTop(c, W, MR, '04', t.label, 48);
-    const hBottom = heading(c, ML, hBase, t.h, 48, W - ML - MR);
-    c.font = `400 17px ${F_HEAD}`; c.fillStyle = SCR.mid;
-    const proseW = c.measureText('0').width * 62;   // = DOM .prose-w (62ch)
-    let py = hBottom + 24 + 20;                     // p mt-6 + half-leading + ascent
-    for (const line of wrapText(c, t.p, proseW)) { c.fillText(line, ML, py); py += 28; }
+    if (linkM[2]) drawBtn(c, linkM[2], t.link);
+    else drawLink(c, 0, proofM?.linkBase || bBase, t.link, W - MR);
   }
 
   // ── TOC page — the prospectus contents ──
@@ -361,7 +360,6 @@ function boot() {
       ['01', copy.home.build.label],
       ['02', copy.home.mech.label],
       ['03', copy.home.proof.label],
-      ['04', copy.home.objection.label],
     ];
     let y = 260;
     for (const [idx, label] of items) {
@@ -485,22 +483,9 @@ function boot() {
     c.restore();
   }
 
-  // 04 — an empty, dashed exhibit frame: the case study that isn't there yet.
-  function motif04(c: Ctx, W: number, H: number) {
-    const x0 = W * .15, y0 = H * .32, fw = W * .46, fh = H * .40;
-    c.strokeStyle = SCR.ln; c.lineWidth = 2;
-    c.setLineDash([10, 10]);
-    c.beginPath(); c.roundRect(x0, y0, fw, fh, 14); c.stroke();
-    c.setLineDash([]);
-    bar(c, x0 + fw * .12, y0 + fh * .36, fw * .5, 8, 4, 'rgba(139,143,148,.35)');
-    bar(c, x0 + fw * .12, y0 + fh * .54, fw * .32, 8, 4, 'rgba(139,143,148,.28)');
-    datumCross(c, x0 + fw * .80, y0 + fh * .76, 10, .3);
-  }
-
   function paintCover01(c: Ctx, W: number, H: number) { paintCover(c, W, H, '01', copy.home.build.label, motif01); }
   function paintCover02(c: Ctx, W: number, H: number) { paintCover(c, W, H, '02', copy.home.mech.label, motif02); }
   function paintCover03(c: Ctx, W: number, H: number) { paintCover(c, W, H, '03', copy.home.proof.label, motif03); }
-  function paintCover04(c: Ctx, W: number, H: number) { paintCover(c, W, H, '04', copy.home.objection.label, motif04); }
 
   // Rounded-corner shape/box — replaces BoxGeometry for every panel
   // silhouette, so the screens read as rounded cards, not slabs.
@@ -667,14 +652,18 @@ function boot() {
   // §02 and §04 are cut to their CONTENT height (2026-08-31: at 4.3/4.37
   // they parked with the whole lower half empty — an unfinished slide).
   // The painted layout is unchanged; only the box shrank onto it.
-  const pMain = mkPanel(10, 5.7, .12, 128, paintSec01, paintCover01);
-  const pAdm  = mkPanel(7, 3.4, .10, 160, paintSec02, paintCover02);
+  // 2026-09-12: 5.7 → 5.45 — tabelul are 4 rânduri, nu 5 (meniul cu leadere a murit).
+  const pMain = mkPanel(10, 5.45, .12, 128, paintSec01, paintCover01);
+  // 2026-09-12: 7×2.95 citea „prea alungit" (feedback) — 6×3.25 (titlul la
+  // 48px, în 672px logici), raport ~1.85, ca §01/§03.
+  const pAdm  = mkPanel(6, 3.25, .10, 160, paintSec02, paintCover02);
   const pSide = mkPanel(2.8, 6, .10, 192, paintToc);
   // §03's page is landscape (was a portrait "phone") — it parks over a
   // landscape section, and every floating object is a page now anyway.
-  const pMobi = mkPanel(7.5, 4.37, .08, 160, paintSec03, paintCover03);
-  const pObj  = mkPanel(7.5, 2.5, .08, 160, paintSec04, paintCover04);
-  const panels = [pMain, pAdm, pSide, pMobi, pObj];
+  // 2026-09-12: 4.37 → 3.95 — paragrafele de produs sunt mai scurte; cutia se
+  // strânge pe conținut (rândul de jos se măsoară din geamăn, deci se mută singur).
+  const pMobi = mkPanel(7.5, 3.95, .08, 160, paintSec03, paintCover03);
+  const panels = [pMain, pAdm, pSide, pMobi];   // §04 (obiecția) scoasă 2026-09-12
 
   // ═══════════════════════════════════════════════════════════════
   //  THE ARCHIVE — „călătoria camerei" (2026-09-01, decizia utilizatorului).
@@ -701,7 +690,6 @@ function boot() {
                                             //   (la −1.6/−20.5 umplea tot cadrul: fov-ul de 32°
                                             //   face din orice „graze" apropiat un perete)
     [[-4, .2, -28],      [.03, .16, 0]],    // pMobi  · §03
-    [[3, 1, -41],        [-.02, -.10, 0]],  // pObj   · §04 — fundul arhivei
   ];
   const STATION: Station[] = ST_DEF.map(([p, r]) => {
     const e = new THREE.Euler(r[0], r[1], r[2]);
@@ -713,7 +701,7 @@ function boot() {
     };
   });
   // Care panou andochează la care secțiune (pSide nu andochează niciodată).
-  const DIVE_PANEL = [0, 1, 3, 4];
+  const DIVE_PANEL = [0, 1, 3];
   const PARK_DIST = 5;   // distanța de parcare — folosită și de waypointurile de andocare
 
   // Cadrele-constante ale călătoriei: deschiderea largă și retragerea finală.
@@ -727,9 +715,11 @@ function boot() {
   // cadru pe măsură ce te retragi pe lângă ele. (Prima variantă „ridicare
   // deasupra §04" zbura peste propria țintă și înclina camera în podea —
   // cadru gol.) Fără întoarcere de 180°: privirea e −z de la cap la coadă.
-  const FIN1_CAM = new THREE.Vector3(0.8, 5, -18);     // retragerea, deja înălțată
+  // 2026-09-12: cu §04 scoasă, fundul arhivei e §03 (z −28). FIN1 la −18 era la
+  // doar 10u de placă: la retragere §03 ieșea tăiată pe marginea stângă.
+  const FIN1_CAM = new THREE.Vector3(-0.5, 5, -6);     // retragerea, deja înălțată — 22u în spatele §03
   const FIN2_CAM = new THREE.Vector3(0.5, 8.5, 6);     // cadrul larg, de la intrare
-  const FIN_TGT = new THREE.Vector3(0.5, 1.2, -28);    // adânc, între §03 și §04
+  const FIN_TGT = new THREE.Vector3(-1.5, 1.0, -26);   // adânc, pe §03 — fundul arhivei din 2026-09-12
   // În final, paginile se ÎNTORC spre camera care se retrage (altfel cadrul
   // larg le-ar arăta spatele). Constante — FIN2 e constantă.
   const qFace: THREE.Quaternion[] = STATION.map((st) => {
@@ -737,18 +727,51 @@ function boot() {
     return new THREE.Quaternion().setFromRotationMatrix(m);
   });
 
+  // ═══════════════════════════════════════════════════════════════
+  //  SISTEMUL VIU DE LA HERO (2026-09-12) — „întreg → părți → întreg".
+  //  La hero paginile se ÎNTORC spre vizitator (qHero, ponderat HERO_MIX
+  //  ca adâncimea să rămână lizibilă), se CONDENSEAZĂ din ceață pe stații
+  //  (deschiderea, o dată per încărcare) și sunt legate de liniile roșii
+  //  ale finalului. Stațiile tot nu călătoresc; toate termenele pe timp
+  //  sunt ponderate la EXACT 0 pe orice pagină parcată — platourile
+  //  rămân identice pixel cu pixel pentru crossfade-ul cu geamănul DOM.
+  // ═══════════════════════════════════════════════════════════════
+  // Per pagină: §01 e cea mai apropiată și cea mai lată — întoarsă complet
+  // spre cameră ieșea din cadru pe dreapta; restul se întorc mai mult.
+  const HERO_MIX = [.4, .8, .8, .8];
+  const qHero: THREE.Quaternion[] = STATION.map((st) => {
+    const m = new THREE.Matrix4().lookAt(HERO_CAM, st.pos, new THREE.Vector3(0, 1, 0));
+    return new THREE.Quaternion().setFromRotationMatrix(m);
+  });
+  // Deschiderea: fiecare pagină pornește OPEN_DEPTH mai adânc pe −n (în
+  // ceață) + un decalaj lateral mic, alternant, și se așază cu eo() în
+  // OPEN_DUR din tween, decalată OPEN_STAG per pagină (≈120ms). Pe
+  // adâncime, nu lateral, și FĂRĂ yaw suplimentar: „condensare", nu
+  // „zbor" — zborul de card cu yaw era exact ce citea „programatic".
+  const OPEN_DEPTH = 1.4, OPEN_DUR = .65, OPEN_STAG = .06;
+  const OPEN_SIDE = [.4, -.4, .3, -.4];
+  // Respirația: perioade prime între ele (7/11/13/17/19/23s) — nu se
+  // sincronizează niciodată. Amplitudini în unități de lume (~4-5px pe
+  // §01 la hero, ~1px pe §04). Roll mereu 0 (banking-ul a fost respins:
+  // parkPose copiază quaternionul camerei).
+  const TAU = Math.PI * 2;
+  const BR_Y = .04, BR_X = .012, BR_PITCH = .010, BR_YAW = .008;
+  const VEL_PITCH = .021;                 // ≈1,2°: înclinare spre direcția de scroll
+  const CAM_DX = .015, CAM_DY = .015;     // deriva „din mână" a camerei, unități de lume
+  const CAM_TX = .003, CAM_TY = .003;     // deriva privirii, radiani (× distanța la țintă)
+
   // Traseul camerei + LUT-ul lui de arc — reconstruite la fiecare refresh
   // (waypointurile de andocare depind de scara de parcare și de header).
   let path = new THREE.CatmullRomCurve3([HERO_CAM, FIN2_CAM]);
   let totalLen = 1;
-  let dockArc = [0, .25, .5, .75];
+  let dockArc = [0, .33, .66];
   let arcFin1 = .9;
   let hOff = 0;
-  const TGT = [0, 1, 2, 3].map(() => new THREE.Vector3());  // țintele de andocare
+  const TGT = [0, 1, 2].map(() => new THREE.Vector3());  // țintele de andocare
 
-  const secEls = ['s01', 's02', 's03', 's04', 'cta'].map((id) => document.getElementById(id));
-  const innerEls = ['s01-inner', 's02-inner', 's03-inner', 's04-inner'].map((id) => document.getElementById(id));
-  const pageEls = [0, 1, 2, 3].map((i) => document.getElementById(`mq-page-${i}`));
+  const secEls = ['s01', 's02', 's03', 'cta'].map((id) => document.getElementById(id));
+  const innerEls = ['s01-inner', 's02-inner', 's03-inner'].map((id) => document.getElementById(id));
+  const pageEls = [0, 1, 2].map((i) => document.getElementById(`mq-page-${i}`));
   // Reparent each section's real HTML into its fixed page twin. The
   // sections stay behind as empty 100vh scroll spacers (the timeline's
   // measurements don't change), and without JS the untouched server HTML
@@ -758,10 +781,10 @@ function boot() {
     if (el && shell) shell.appendChild(el);
   });
 
-  let pcs: number[] = [.2, .4, .6, .78];     // dive centers (progress space)
+  let pcs: number[] = [.25, .5, .72];     // dive centers (progress space)
   let pcCta = .95, finStart = .84;           // CTA center / finale begins
   let holds: [number, number, number, number][] = [];
-  let hudCuts: number[] = [.1, .3, .5, .7];
+  let hudCuts: number[] = [.1, .35, .6, .85];
   // Idle-settle magnet state — refreshed by buildTimeline(), read by the
   // trigger's snapTo closure, so refresh/resize re-syncs the magnet free.
   let snapPts: number[] = [];                // rest points: top + plateau centers
@@ -822,6 +845,47 @@ function boot() {
         const measured = (probe.getBoundingClientRect().bottom - sc.getBoundingClientRect().top) / (wPx / pnl.texW);
         probe.remove();
         sc.style.paddingTop = `${Math.round(pnl.texW * .01 + target - measured)}px`;
+      }
+      // Butonul-link al paginii (2026-09-12): cutia .lnk, baseline-ul și
+      // x-ul săgeții (::after nu se poate selecta — textul se măsoară cu un
+      // Range, săgeata stă la gap-ul de 8px după el). Dacă geometria s-a
+      // schimbat, pagina se repictează din valorile noi.
+      {
+        const s = wPx / pnl.texW;
+        const scRect = sc.getBoundingClientRect();
+        const lnk = sc.querySelector('a.lnk') as HTMLElement | null;
+        let m: LinkM | null = null;
+        if (lnk) {
+          const r = lnk.getBoundingClientRect();
+          const rg = document.createRange(); rg.selectNodeContents(lnk);
+          const tr = rg.getBoundingClientRect();
+          // Într-un inline-flex, o sondă pusă direct în link devine ITEM de
+          // flex (centrat vertical) și raportează centrul cutiei, nu
+          // baseline-ul — deci textul se împachetează temporar într-un
+          // span inline și sonda intră în EL.
+          const tn = lnk.firstChild as Node;
+          const wrap = document.createElement('span');
+          lnk.insertBefore(wrap, tn); wrap.appendChild(tn);
+          const pr = document.createElement('span');
+          pr.style.cssText = 'display:inline-block;width:0;height:0;padding:0;margin:0;border:0;';
+          wrap.insertBefore(pr, wrap.firstChild);
+          const base = (pr.getBoundingClientRect().bottom - scRect.top) / s;
+          pr.remove(); lnk.insertBefore(tn, wrap); wrap.remove();
+          const gap = parseFloat(getComputedStyle(lnk).columnGap) || 8;
+          m = {
+            x: (r.left - scRect.left) / s, y: (r.top - scRect.top) / s, w: r.width / s, h: r.height / s,
+            tx: (tr.left - scRect.left) / s, ax: (tr.right - scRect.left) / s + gap, base,
+            r: parseFloat(getComputedStyle(lnk).borderTopLeftRadius) || 6,
+          };
+        }
+        linkM[k] = m;
+        const sig = JSON.stringify(m);
+        if (sig !== linkSig[k]) {
+          linkSig[k] = sig;
+          const paint = [paintSec01, paintSec02, paintSec03][k];
+          const j = texJobs.find((j) => j.paint === paint);
+          if (j) paintJob(j);
+        }
       }
       // §03 only: measure the twin's honesty stamp — box center/size,
       // rotation, border, and each line's font + baseline — in LOGICAL px
@@ -918,8 +982,8 @@ function boot() {
     const centers = secEls.map((el, i) => el
       ? Math.min(Math.max((el.offsetTop + el.offsetHeight / 2 - innerHeight / 2) / max, 0), 1)
       : .2 + i * .19);
-    pcs = centers.slice(0, 4);
-    pcCta = centers[4];
+    pcs = centers.slice(0, 3);
+    pcCta = centers[3];
     const F = innerHeight / max;             // one viewport-height, in progress units
     // The page parks at TEXT size (never full screen). Park blend runs
     // [pc-C → pc-PK], holds parked across [pc-PK → pc+PK]. The plateau is
@@ -935,8 +999,8 @@ function boot() {
     snapPK  = PK;
     snapCap = .5 * F;
     snapPts = [0, ...pcs, pcCta, 1];         // 0 = hero top, 1 = footer bottom
-    finStart = pcs[3] + C;                   // finalul începe când §04 e complet de-andocat
-    hudCuts = [pcs[0] - A, (pcs[0] + pcs[1]) / 2, (pcs[1] + pcs[2]) / 2, (pcs[2] + pcs[3]) / 2, (pcs[3] + pcCta) / 2];
+    finStart = pcs[2] + C;                   // finalul începe când §03 e complet de-andocat
+    hudCuts = [pcs[0] - A, (pcs[0] + pcs[1]) / 2, (pcs[1] + pcs[2]) / 2, (pcs[2] + pcCta) / 2];
 
     // ── Stațiile, pre-scalate la scara de parcare (formula parkPose,
     // fără camera vie — doar fov/aspect/viewport): la andocare stația
@@ -977,8 +1041,6 @@ function boot() {
       dockP[1],
       new THREE.Vector3(0.9, 2.7, -17.6),    // arc spre dreapta, pe lângă cuprins (~2,6u)
       dockP[2],
-      new THREE.Vector3(-1.6, 2.0, -31.5),   // arc spre stânga
-      dockP[3],
       FIN1_CAM.clone(),
       FIN2_CAM.clone(),
     ];
@@ -993,15 +1055,15 @@ function boot() {
       return lens[i0] + (lens[i0 + 1] - lens[i0]) * (x - i0);
     };
     // CR neînchisă atinge punctul de control k la t = k/(N−1).
-    dockArc = [1, 3, 5, 7].map((k) => arcAtT(k / (CPTS.length - 1)));
-    arcFin1 = arcAtT(8 / (CPTS.length - 1));
+    dockArc = [1, 3, 5].map((k) => arcAtT(k / (CPTS.length - 1)));
+    arcFin1 = arcAtT(6 / (CPTS.length - 1));
 
     // Assert temporar de dev (regula mărimii aparente): pe fiecare
     // apropiere, distanța cameră→stația următoare trebuie să scadă
     // monoton și să nu coboare sub PARK_DIST înainte de andocare.
     if (import.meta.env.DEV) {
       const v = new THREE.Vector3();
-      for (let k = 0; k < 4; k++) {
+      for (let k = 0; k < 3; k++) {
         const a0 = k === 0 ? 0 : dockArc[k - 1];
         let best = Infinity;
         for (let j = 0; j <= 200; j++) {
@@ -1017,6 +1079,15 @@ function boot() {
     }
   }
   buildTimeline();
+
+  // Ceasul deschiderii — la FIECARE încărcare (regula utilizatorului din
+  // 2026-08-28: „vreau mereu animația când deschid site-ul"). Textul din
+  // hero aterizează la ~0,85s (seq-in); paginile la 1,3–1,8s; liniile la
+  // 1,0–1,4s; particulele la 1,6–2,0s — textul întâi, sistemul se
+  // formează în spatele lui. Ponderat cu heroW, deci un deep-link sau un
+  // flick spre §01 nu vede niciodată o pagină deplasată.
+  const openSt = { t: 0 };
+  const openTw = gsap.to(openSt, { t: 1, duration: 2, ease: 'none', delay: .1 });
 
   // ═══════════════════════════════════════════════════════════════
   //  CONNECTIONS (draw themselves in Phase 4)
@@ -1048,7 +1119,7 @@ function boot() {
       const d = Math.sign(r.dot(new THREE.Vector3().subVectors(toward, p))) || 1;
       return p.addScaledVector(r, d * panels[i].w * .5 * .4);
     };
-    ([[0, 1, 1], [1, 3, -1], [3, 4, 1], [2, 1, -1]] as [number, number, number][]).forEach(([a, b, side]) => {
+    ([[0, 1, 1], [1, 3, -1], [2, 1, -1]] as [number, number, number][]).forEach(([a, b, side]) => {
       const pa = edge(a, STATION[b].pos), pb = edge(b, STATION[a].pos);
       const mid = pa.clone().lerp(pb, .5);
       const perp = new THREE.Vector3().subVectors(pb, pa).cross(new THREE.Vector3(0, 1, 0)).normalize();
@@ -1227,9 +1298,11 @@ function boot() {
   // THREE.Timer pentru un delta și un elapsed).
   let prevMs = performance.now();
   let fid: number;
-  let lastHud = -1, lastPct = -1, lastSp = -1, idleTick = 0;
-  const lastPg = [false, false, false, false];
-  const parkBy = [0, 0, 0, 0, 0];            // per-panel park blend, 0…1
+  let lastHud = -1, lastPct = -1, lastSp = -1, idleTick = 0, devTick = 0;
+  let lastLbl = '';
+  let vel = 0;                               // viteza de scroll, progres/s, amortizată
+  const lastPg = [false, false, false];
+  const parkBy = [0, 0, 0, 0];            // per-panel park blend, 0…1
   const _pRt = new THREE.Vector3(), _pUp2 = new THREE.Vector3();
   // Culoarea muchiilor e acum constantă (vechea nuanțare pe fillT a murit
   // cu track-urile de opacitate) — o singură scriere, la boot.
@@ -1277,18 +1350,26 @@ function boot() {
   // tronson e smoothstep pe domeniul de ARC (LUT-ul normalizează vitezele
   // între tronsoane de lungimi diferite): croazieră ~constantă în unități
   // de lume, C1 peste tot.
+  // Ponderea „hero" a sistemului viu: 1 la sp=0, EXACT 0 de la marginea
+  // platoului §01 (ss taie la 1). Citește pcs/snapPK vii, deci fiecare
+  // refresh o re-derivă gratis.
+  function heroWOf(sp2: number): number {
+    const e0 = pcs[0] - snapPK;
+    return 1 - ss(e0 > 1e-6 ? sp2 / e0 : 1);
+  }
+
   function arcOf(sp2: number): number {
     const e0 = pcs[0] - snapPK;
     if (sp2 <= e0) return dockArc[0] * ss(e0 > 1e-6 ? sp2 / e0 : 1);
-    for (let k = 0; k < 4; k++) {
+    for (let k = 0; k < 3; k++) {
       if (sp2 <= pcs[k] + snapPK) return dockArc[k];
-      if (k < 3 && sp2 <= pcs[k + 1] - snapPK) {
+      if (k < 2 && sp2 <= pcs[k + 1] - snapPK) {
         const x = (sp2 - pcs[k] - snapPK) / Math.max(pcs[k + 1] - pcs[k] - 2 * snapPK, 1e-6);
         return dockArc[k] + (dockArc[k + 1] - dockArc[k]) * ss(x);
       }
     }
     if (sp2 <= pcCta)
-      return dockArc[3] + (arcFin1 - dockArc[3]) * ss((sp2 - pcs[3] - snapPK) / Math.max(pcCta - pcs[3] - snapPK, 1e-6));
+      return dockArc[2] + (arcFin1 - dockArc[2]) * ss((sp2 - pcs[2] - snapPK) / Math.max(pcCta - pcs[2] - snapPK, 1e-6));
     return arcFin1 + (totalLen - arcFin1) * ss((sp2 - pcCta) / Math.max(1 - pcCta, 1e-6));
   }
 
@@ -1300,15 +1381,15 @@ function boot() {
   function lookTgt(sp2: number, out: THREE.Vector3): THREE.Vector3 {
     const e0 = pcs[0] - snapPK;
     if (sp2 <= e0) return out.lerpVectors(HERO_TGT, TGT[0], ss(((e0 > 1e-6 ? sp2 / e0 : 1) - .30) / .70));
-    for (let k = 0; k < 4; k++) {
+    for (let k = 0; k < 3; k++) {
       if (sp2 <= pcs[k] + snapPK) return out.copy(TGT[k]);
-      if (k < 3 && sp2 <= pcs[k + 1] - snapPK) {
+      if (k < 2 && sp2 <= pcs[k + 1] - snapPK) {
         const x = (sp2 - pcs[k] - snapPK) / Math.max(pcs[k + 1] - pcs[k] - 2 * snapPK, 1e-6);
         return out.lerpVectors(TGT[k], TGT[k + 1], ss((x - .10) / .45));
       }
     }
     if (sp2 <= pcCta)
-      return out.lerpVectors(TGT[3], FIN_TGT, ss((sp2 - pcs[3] - snapPK) / Math.max(pcCta - pcs[3] - snapPK, 1e-6)));
+      return out.lerpVectors(TGT[2], FIN_TGT, ss((sp2 - pcs[2] - snapPK) / Math.max(pcCta - pcs[2] - snapPK, 1e-6)));
     return out.copy(FIN_TGT);
   }
 
@@ -1317,7 +1398,11 @@ function boot() {
   // apoi blend-ul cT existent spre parkPose — acum o corecție ~zero,
   // stația fiind deja pre-scalată și waypointul aliniat.
   const _tgt = new THREE.Vector3();
-  function sceneAt(sp2: number): number {
+  const _qW = new THREE.Quaternion(), _eW = new THREE.Euler(), _rt = new THREE.Vector3();
+  const openBy = [0, 0, 0, 0];            // per-panel: cât s-a condensat (deschiderea)
+  // sp2 = progresul; t = timpul (s); heroW = ponderea sistemului viu de la
+  // hero; vn = viteza de scroll normalizată 0..1; vs = semnul ei.
+  function sceneAt(sp2: number, t: number, heroW: number, vn: number, vs: number): number {
     path.getPointAt(cl(arcOf(sp2) / totalLen), cam.position);
     cam.lookAt(lookTgt(sp2, _tgt));
     cam.updateMatrixWorld();
@@ -1332,11 +1417,39 @@ function boot() {
     const finFace = eio(cl((sp2 - finStart) / Math.max(pcCta - finStart, .001)));
     for (let i = 0; i < panels.length; i++) {
       const g = panels[i].group;
-      g.position.copy(STATION[i].pos);
-      g.quaternion.copy(STATION[i].quat);
-      let s0 = STATION[i].scale;
+      const st = STATION[i];
+      g.position.copy(st.pos);
+      g.quaternion.copy(st.quat);
+      let s0 = st.scale;
+      // Hero: pagina se întoarce spre vizitator; se dezleagă pe drumul
+      // spre §01 (heroW → 0 prin ss, C1, viteză zero la capete).
+      if (heroW > 0) g.quaternion.slerp(qHero[i], heroW * HERO_MIX[i]);
       if (finFace > 0) g.quaternion.slerp(qFace[i], finFace);
       const cT = parkBy[i];
+      // Deschiderea: condensare din ceață, pe −n, cu stagger per pagină.
+      const oi = eo(cl((openSt.t - i * OPEN_STAG) / OPEN_DUR));
+      openBy[i] = oi;
+      const oa = (1 - oi) * heroW;
+      if (oa > 0) {
+        g.position.addScaledVector(st.n, -OPEN_DEPTH * oa);
+        g.position.addScaledVector(_rt.set(1, 0, 0).applyQuaternion(st.quat), OPEN_SIDE[i] * oa);
+      }
+      // Respirația + înclinarea de viteză. Ponderea: (1−cT) × distanță
+      // (placa care VINE nu bâțâie la 5u) și EXACT 0 pe platou (cT≥.999,
+      // unde geamănul DOM e aprins). Post-multiplicare = axe locale.
+      const wi = cT >= .999 ? 0 : (1 - cT) * ss((st.pos.distanceTo(cam.position) - 4) / 6);
+      if (wi > 0) {
+        const ph = panels[i].seed;
+        g.position.y += BR_Y * Math.sin(t * TAU / 7 + ph) * wi;
+        g.position.addScaledVector(_rt.set(1, 0, 0).applyQuaternion(st.quat), BR_X * Math.sin(t * TAU / 17 + ph * 1.3) * wi);
+        _eW.set(
+          (BR_PITCH * Math.sin(t * TAU / 11 + ph) + VEL_PITCH * vs * vn) * wi,
+          BR_YAW * Math.sin(t * TAU / 13 + ph * 1.7) * wi,
+          0);
+        g.quaternion.multiply(_qW.setFromEuler(_eW));
+      }
+      // Blend-ul de parcare — ULTIMUL: la cT=1 suprascrie complet poza,
+      // oricare ar fi deltele de mai sus.
       if (cT > 0) {
         parkPose(panels[i]);
         const e = eio(cT);
@@ -1360,6 +1473,15 @@ function boot() {
     // the playhead up to the scrollbar over ~0.25s, so wheel steps blend.
     sp = prox.p;
 
+    // Viteza de scroll (progres/s), amortizată ~0,5s: „respirația" de
+    // viteză — ceața, particulele și înclinarea plăcilor răspund aceleiași
+    // valori. Cade singură la 0 când te oprești.
+    const rawV = lastSp < 0 ? 0 : (sp - lastSp) / Math.max(dt, 1e-3);
+    vel += (Math.max(-.3, Math.min(.3, rawV)) - vel) * .12;
+    const vn = cl(Math.abs(vel) / .15);
+    const vs = Math.sign(vel);
+    const heroW = heroWOf(sp);
+
     // Footer fade: 1 cât timp footerul e sub viewport, 0 înainte ca el să
     // fie pe jumătate vizibil (×.55 — plăcile mari ale cadrului final
     // ajungeau semi-transparente peste textul juridic la fade-ul întreg).
@@ -1371,7 +1493,7 @@ function boot() {
 
     // ── Toată scena, dintr-o singură funcție: camera pe traseu + panourile
     // pe stații (+ blend-ul de parcare). ──
-    const diveHold = sceneAt(sp);
+    const diveHold = sceneAt(sp, t, heroW, vn, vs);
 
     // Geamănul DOM: pornit doar cât pagina e exact parcată (platoul
     // trapezoidului) — ambele straturi statice, crossfade pur.
@@ -1387,7 +1509,15 @@ function boot() {
     if (pDamp > 0) {
       _pRt.setFromMatrixColumn(cam.matrix, 0);
       _pUp2.setFromMatrixColumn(cam.matrix, 1);
-      cam.position.addScaledVector(_pRt, smx * .30 * pDamp).addScaledVector(_pUp2, -smy * .45 * pDamp);
+      // + deriva „din mână" (2026-09-12): sume de sinusuri pe poziție și pe
+      // țintă, aceeași amortizare ca paralaxa — zero pe platouri. Prima
+      // de tăiat dacă textul din hero pare că „înoată".
+      const dT = cam.position.distanceTo(_tgt);
+      cam.position
+        .addScaledVector(_pRt, (smx * .30 + CAM_DX * Math.sin(t * TAU / 13)) * pDamp)
+        .addScaledVector(_pUp2, (-smy * .45 + CAM_DY * Math.sin(t * TAU / 17 + 1)) * pDamp);
+      _tgt.addScaledVector(_pRt, CAM_TX * dT * Math.sin(t * TAU / 19 + 2) * pDamp)
+          .addScaledVector(_pUp2, CAM_TY * dT * Math.sin(t * TAU / 23 + 3) * pDamp);
       cam.lookAt(_tgt);
     }
 
@@ -1403,7 +1533,10 @@ function boot() {
       // sub minimul ~5,2u al oricărei apropieri ne-blendate (cT=0), deci
       // predarea către blend-ul de parcare nu clipește niciodată.
       const dCam = pnl.group.position.distanceTo(cam.position);
-      const damp = (cT > 0 ? 1 : (1 - diveHold) * ss((dCam - 2.5) / 2));
+      let damp = (cT > 0 ? 1 : (1 - diveHold) * ss((dCam - 2.5) / 2));
+      // Deschiderea: fețele se aprind pe măsură ce pagina se condensează.
+      // Exact 1 oriunde heroW=0, deci opacitățile parcate nu se ating.
+      if (heroW > 0) damp *= 1 - heroW * (1 - eo(cl(openBy[i] * 1.5)));
       // „Apariția textului": blur → clar la parcare; la plecare, înapoi.
       const resolve = eo(cl((cT - .55) / .35));
       // „Albumul se deschide": coperta se topește în blur devreme în
@@ -1419,27 +1552,38 @@ function boot() {
       pnl.fMatS.opacity = i === 2 ? faceVis : faceVis * resolve;
     }
 
-    // ── Convergence: connections draw between §04 and the CTA ──
-    const connP = cl((sp - finStart) / Math.max(pcCta - finStart, .001));
-    const connDraw = eo(connP);
-    for (const cn of conns) {
-      cn.mat.opacity = connP * .65 * ff;
-      cn.line.geometry.setDrawRange(0, Math.floor(cn.nPts * connDraw));
+    // ── Connections: the whole. At the HERO they draw themselves during
+    // the opening (§01→§02 first, then outward at ~140ms — the "builds
+    // something"), pulse ±8% (not a glow) and fade with heroW toward §01
+    // (they don't un-draw; opacity is 0 long before the range snaps).
+    // In the FINALE they draw on again between §04 and the CTA, as before. ──
+    const connFin = cl((sp - finStart) / Math.max(pcCta - finStart, .001));
+    const finDraw = eo(connFin);
+    for (let k = 0; k < conns.length; k++) {
+      const cn = conns[k];
+      const hk = heroW > 0 ? eo(cl((openSt.t - .5 - k * .07) / .30)) : 0;
+      const pulse = 1 - .08 * (.5 + .5 * Math.sin(t * TAU / 6 + k));
+      cn.mat.opacity = Math.max(connFin, hk * heroW) * .65 * ff * pulse;
+      cn.line.geometry.setDrawRange(0, Math.floor(cn.nPts * Math.max(finDraw, hk)));
     }
-    // Ceața se subțiază pe final ca liniile lungi ale arhivei să se
-    // citească în cadrul larg (scroll-driven, deci demand rendering intact).
-    (S.fog as THREE.FogExp2).density = .022 - .008 * connP;
+    // Ceața: se subțiază pe final (liniile lungi în cadrul larg) și la hero
+    // (§04 stă la ~52u — fără asta fundul întregului abia se vede); se
+    // îngroașă puțin la scroll rapid.
+    (S.fog as THREE.FogExp2).density = .022 - .008 * connFin - .004 * heroW + .003 * vn;
 
-    // ── Data particles (appear after connections) ──
-    const ptclVis = cl((sp - (finStart + pcCta) / 2) / Math.max((1 - finStart) / 2, .001));
+    // ── Data particles: on the lines at the hero (after they draw) and in
+    // the finale; faster while you scroll fast. ──
+    const ptclVis = Math.max(
+      cl((sp - (finStart + pcCta) / 2) / Math.max((1 - finStart) / 2, .001)),
+      eo(cl((openSt.t - .8) / .2)) * heroW);
     for (const pt of ptcls) {
       const m = pt.mesh.material as THREE.MeshStandardMaterial;
       m.opacity = eo(ptclVis) * .85 * ff;
       m.emissiveIntensity = ptclVis * 3 * ff;
       if (ptclVis > 0) {
-        pt.ph = (pt.ph + dt * pt.spd) % 1;
+        pt.ph = (pt.ph + dt * pt.spd * (1 + 2 * vn)) % 1;
         pt.mesh.position.copy(conns[pt.ci].curve.getPointAt(pt.ph));
-        pt.mesh.scale.setScalar(1 + Math.sin(t * 6 + pt.ph * 10) * .25);
+        pt.mesh.scale.setScalar(1 + Math.sin(t * 3 + pt.ph * 10) * .25);
       }
     }
 
@@ -1447,9 +1591,9 @@ function boot() {
     gm1.opacity = (.15 + sp * .15) * ff;
     gm2.opacity = (.08 + sp * .10) * ff;
 
-    // ── Red point light (grows in Phase 4) ──
-    rPt.intensity = connP * 5;
-    rPt.distance = 25 + connP * 30;
+    // ── Red point light: a low ember at the hero, full in the finale ──
+    rPt.intensity = Math.max(connFin, heroW * .35) * 5;
+    rPt.distance = 25 + connFin * 30;
     if (sp > .9) { rPt.intensity = 5 + (Math.sin((sp - .9) * 80) * .5 + .5) * 4; }
     rPt.intensity *= ff;
 
@@ -1469,26 +1613,39 @@ function boot() {
     }
     if (hs && hp) {
       const pct = Math.round(sp * 100);
-      if (pct !== lastPct) {
-        lastPct = pct;
-        hp.textContent = `${pct} %`;
-        if (sp < hudCuts[0])      hs.textContent = 'PROSPECTUS // 5 PAGES';
-        else if (sp < hudCuts[1]) hs.textContent = 'SECTION 01 // SERVICES';
-        else if (sp < hudCuts[2]) hs.textContent = 'SECTION 02 // BLUEPRINT';
-        else if (sp < hudCuts[3]) hs.textContent = 'SECTION 03 // PROOF';
-        else if (sp < hudCuts[4]) hs.textContent = 'SECTION 04 // OBJECTION';
-        else                      hs.textContent = 'SYSTEM // CONNECTED';
+      if (pct !== lastPct) { lastPct = pct; hp.textContent = `${pct} %`; }
+      let lbl: string;
+      if (sp < hudCuts[0])      lbl = openSt.t < 1 && heroW > 0 ? 'SYSTEM // FORMING' : 'PROSPECTUS // 4 PAGES';
+      else if (sp < hudCuts[1]) lbl = 'SECTION 01 // SERVICES';
+      else if (sp < hudCuts[2]) lbl = 'SECTION 02 // BLUEPRINT';
+      else if (sp < hudCuts[3]) lbl = 'SECTION 03 // PROOF';
+      else                      lbl = 'SYSTEM // CONNECTED';
+      if (lbl !== lastLbl) { lastLbl = lbl; hs.textContent = lbl; }
+    }
+
+    // Invariantul platoului, verificat la rulare (DEV): o pagină parcată
+    // exact (cT=1) trebuie să stea pe parkPose la 1e-5 — altfel geamănul
+    // DOM ar face crossfade peste un card care se mișcă.
+    if (import.meta.env.DEV && (++devTick % 30) === 0) {
+      for (let k = 0; k < DIVE_PANEL.length; k++) {
+        const i = DIVE_PANEL[k];
+        if (parkBy[i] < 1) continue;
+        const pnl = panels[i]; parkPose(pnl);
+        const g = pnl.group;
+        const dp = g.position.distanceTo(_covPos), da = g.quaternion.angleTo(_covQ), ds = Math.abs(g.scale.x - _covS);
+        if (dp > 1e-5 || da > 1e-5 || ds > 1e-5)
+          console.warn(`[mq] pagina ${k} e parcată dar nu pe parkPose: dPos=${dp.toExponential(2)} dAng=${da.toExponential(2)} dS=${ds.toExponential(2)}`);
       }
     }
 
-    // Demand rendering: when the scene is genuinely static (no scrub
-    // catch-up in flight, parallax settled, no particles, nothing external
-    // invalidated the frame), drop to a ~2fps heartbeat instead of a full
-    // stop — a page that presents zero frames stalls screenshot/capture
-    // pipelines and similar tooling.
+    // Rendering (2026-09-12): the scene now breathes on its own, so it
+    // renders every frame while the canvas is visible (ff > 0). Over the
+    // footer (ff = 0) the old ~2fps heartbeat remains — a page that
+    // presents zero frames stalls screenshot/capture pipelines. rAF itself
+    // pauses in hidden tabs.
     const moving = needsFrame || sp !== lastSp
       || Math.abs(tmx - smx) > .002 || Math.abs(tmy - smy) > .002
-      || ptclVis > 0;
+      || ff > 0;
     if (moving || ++idleTick >= 30) { R.render(S, cam); needsFrame = false; idleTick = 0; }
     lastSp = sp;
   }
@@ -1500,6 +1657,7 @@ function boot() {
     cancelAnimationFrame(fid);
     tw.scrollTrigger?.kill();
     tw.kill();
+    openTw.kill();
     removeEventListener('resize', onR);
     removeEventListener('mousemove', onMM);
     R.dispose();

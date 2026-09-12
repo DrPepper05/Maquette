@@ -10,9 +10,9 @@ const d = copy.screens.gigtim;
   <div class="scr-body">
     <p class="sub">{d.sec}</p>
     <h4>{d.h}</h4>
-    <ol>
-      {d.steps.map(([lead, rest, tag]) => (
-        <li><b>{lead}</b> {rest} <em>{tag}</em></li>
+    <ol style={`--n:${d.steps.length}`}>
+      {d.steps.map(([lead, rest, tag], i) => (
+        <li style={`--i:${i}`}><b>{lead}</b> {rest} <em>{tag}</em></li>
       ))}
     </ol>
     <div class="out">

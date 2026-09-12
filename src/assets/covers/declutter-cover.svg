@@ -12,8 +12,8 @@
     <path d="M920 560v24M908 572h24"/>
   </g>
 
-  <!-- the tangle -->
-  <g fill="none" stroke-linecap="round">
+  <!-- the tangle (breathes slowly when inline — .cv-tangle) -->
+  <g class="cv-tangle" fill="none" stroke-linecap="round">
     <path d="M180 400 C220 310 350 290 380 370 C405 435 300 470 260 420 C225 375 310 335 360 365 C420 400 380 490 300 490 C220 490 170 450 190 390" stroke="#8B8F94" stroke-width="2.5" opacity=".5"/>
     <path d="M140 430 C210 350 440 330 470 420 C490 485 350 525 260 500 C180 480 160 430 230 400 C300 370 440 385 450 440" stroke="#C7CACF" stroke-width="2" opacity=".35"/>
     <path d="M320 430 C340 390 420 395 415 435 C410 475 335 475 330 435 C327 410 385 400 400 430" stroke="#8B8F94" stroke-width="3" opacity=".6"/>
@@ -21,8 +21,8 @@
     <path d="M160 480 C230 530 380 535 440 480" stroke="#8B8F94" stroke-width="2" opacity=".22"/>
   </g>
 
-  <!-- stray thoughts around the tangle -->
-  <g stroke="#8B8F94" stroke-width="3" stroke-linecap="round" opacity=".55">
+  <!-- stray thoughts around the tangle (drift — .cv-strays / .cv-strays-red) -->
+  <g class="cv-strays" stroke="#8B8F94" stroke-width="3" stroke-linecap="round" opacity=".55">
     <path d="M96 320l34 -10"/>
     <path d="M120 520l30 14"/>
     <path d="M236 250l26 12"/>
@@ -32,7 +32,7 @@
     <path d="M70 420l28 2"/>
     <path d="M350 218l24 14"/>
   </g>
-  <g stroke="#D9573A" stroke-width="3" stroke-linecap="round" opacity=".85">
+  <g class="cv-strays-red" stroke="#D9573A" stroke-width="3" stroke-linecap="round" opacity=".85">
     <path d="M180 262l30 8"/>
     <path d="M512 450l28 -4"/>
   </g>

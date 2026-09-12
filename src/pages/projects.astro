@@ -5,9 +5,14 @@ import AmbientCards from '../components/AmbientCards.astro';
 import ExhibitActions from '../components/ExhibitActions.astro';
 import DeclutterApp from '../components/screens/DeclutterApp.astro';
 import GigTimDoc from '../components/screens/GigTimDoc.astro';
+/* Copertele sunt SVG INLINE (2026-09-12) — componente Astro, ca grupurile
+   lor să poată respira din CSS (.cv-*). Cheia e slug-ul exponatului. */
+import DeclutterCover from '../assets/covers/declutter-cover.svg';
+import GigTimCover from '../assets/covers/gigtim-cover.svg';
 import { copy } from '../copy';
 const t = copy.projects;
 const email = 'contact@maquette.ro';
+const COVERS: Record<string, typeof DeclutterCover | undefined> = { declutter: DeclutterCover, gigtim: GigTimCover };
 ---
 <Base route="projects" title={t.title} desc={t.desc}>
 
@@ -20,7 +25,9 @@ const email = 'contact@maquette.ro';
   <!-- ── Exponatele — unul pe ecran, cu figură mare și acțiuni.
        Id-urile sunt ex-*, niciodată s01…cta (alea trezesc canvas-ul).
        Eticheta de stadiu trebuie să rămână adevărată. ── -->
-  {t.exhibits.map((p, i) => (
+  {t.exhibits.map((p, i) => {
+    const Cover = p.cover ? COVERS[p.slug] : undefined;
+    return (
     <section class="wrap sec rise exhibit" id={`ex-${p.slug}`}>
       <SectionHead index={String(i + 1).padStart(2, '0')} title="Exhibit" />
       <AmbientCards n={i} />
@@ -35,8 +42,8 @@ const email = 'contact@maquette.ro';
         <div class="flip-inner">
           <article class="card-page album flip-front">
             <div class="album-cover">
-              {p.cover ? (
-                <img class="cover-img" src={p.cover} alt={`${p.name} — cover`} loading="lazy" />
+              {Cover ? (
+                <Cover class="cover-svg" />
               ) : (
                 <div class="cover-live" inert>
                   {p.slug === 'declutter' ? <DeclutterApp /> : <GigTimDoc />}
@@ -75,7 +82,8 @@ const email = 'contact@maquette.ro';
         </div>
       </div>
     </section>
-  ))}
+    );
+  })}
 
   <!-- ── Cererile — exclusiv aici, în ordinea asta ── -->
   <section class="wrap sec rise">

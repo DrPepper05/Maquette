@@ -33,12 +33,15 @@
       <path d="M820 614v18"/><circle cx="820" cy="600" r="7" fill="#0F1013"/>
     </g>
   </g>
-  <circle cx="600" cy="380" r="3" fill="#D9573A"/>
-  <circle cx="820" cy="160" r="3" fill="#D9573A"/>
-  <circle cx="380" cy="600" r="3" fill="#D9573A"/>
+  <!-- pin centres (pulse when inline — .cv-pin-dots) -->
+  <g class="cv-pin-dots">
+    <circle cx="600" cy="380" r="3" fill="#D9573A"/>
+    <circle cx="820" cy="160" r="3" fill="#D9573A"/>
+    <circle cx="380" cy="600" r="3" fill="#D9573A"/>
+  </g>
 
-  <!-- shift tickets: a time bar and two lines of text -->
-  <g>
+  <!-- shift tickets: a time bar and two lines of text (float — .cv-tickets) -->
+  <g class="cv-tickets">
     <g>
       <rect x="430" y="200" width="176" height="72" rx="12" fill="#14171B" stroke="#262B33" stroke-width="2"/>
       <rect x="450" y="218" width="76" height="9" rx="4.5" fill="#D9573A" opacity=".95"/>

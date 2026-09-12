@@ -26,26 +26,24 @@ const t = copy.home;
     </div>
   </section>
 
-  <!-- ── 01 · Ce construim — aceleași rânduri cu puncte de ghidaj, dar
-       coloana din dreapta e etichetă de categorie, nu preț (2026-08-25).
-       Fiecare secțiune e un „slide" de 100vh; cardul 3D al secțiunii se
-       apropie și devine fundal exact când slide-ul e centrat. ── -->
+  <!-- ── 01 · Ce construim — tabel de specificație (2026-09-12): eticheta
+       serviciului + ce primești, pe aceeași linie de bază; ultimul rând e
+       linkul spre /services. Fiecare secțiune e un „slide" de 100vh; cardul
+       3D al secțiunii parchează exact când slide-ul e centrat. ── -->
   <section id="s01" class="wrap sec slide">
     <div id="s01-inner" class="slide-inner">
       <SectionHead index="01" title={t.build.label} />
       <h3 class="t-h2 max-w-[24ch]">{t.build.h}</h3>
-      <div class="rate mt-12">
-        {t.build.rows.map(([what, tag, sub]) => (
-          <div class="rate-row">
+      <div class="spec mt-12">
+        {t.build.rows.map(([name, what]) => (
+          <div class="spec-row">
+            <span class="lbl">{name}</span>
             <span class="what">{what}</span>
-            <i class="dots" aria-hidden="true"></i>
-            <span class="price">{tag}{sub && <em>{sub}</em>}</span>
           </div>
         ))}
-        <a href={routes.services} class="rate-row rate-custom">
-          <span class="what">{t.build.customWhat}</span>
-          <i class="dots" aria-hidden="true"></i>
-          <span class="price">{t.build.customCta} →</span>
+        <a href={routes.services} class="spec-row spec-more">
+          <span class="lbl">{t.build.moreLabel}</span>
+          <span class="what">{t.build.moreCta} →</span>
         </a>
       </div>
       <p class="mt-8 text-[15.5px] max-w-[60ch]" style="color: var(--mid)">{t.build.note}</p>
@@ -89,15 +87,6 @@ const t = copy.home;
         <p class="text-[15.5px] max-w-[48ch]" style="color: var(--mid)">{t.proof.exhibit}</p>
         <a href={routes.projects} class="lnk">{t.proof.link}</a>
       </div>
-    </div>
-  </section>
-
-  <!-- ── 04 · O singură obiecție, fix înainte de CTA ── -->
-  <section id="s04" class="wrap sec slide">
-    <div id="s04-inner" class="slide-inner">
-      <SectionHead index="04" title={t.objection.label} />
-      <h3 class="t-h2">{t.objection.h}</h3>
-      <p class="mt-6 prose-w" style="color: var(--mid)">{t.objection.p}</p>
     </div>
   </section>
 

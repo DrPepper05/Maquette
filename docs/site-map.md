@@ -29,52 +29,52 @@ Site **doar în engleză**, pagini la rădăcină. Șase rute:
 
 ---
 
-## 2. Homepage — 6 secțiuni, ≤400 de cuvinte
+## 2. Homepage — 5 secțiuni (hero + 3 + CTA din 2026-09-12), ≤300 de cuvinte
 
 Scheletul de slide-uri și id-urile (`hero`, `s01`–`s04`, `cta`, `s0N-inner`) **nu se schimbă** — canvas-ul își măsoară cronologia din ele.
 
-### 01 — Hero
+### 01 — Hero *(revizuit 2026-09-12 — decizia utilizatorului: „too much words for the landing page… essence… in the first 30s figure out what Maquette does". Titlul = problema + promisiunea; lede-ul = ce, pentru cine, cum.)*
 
 > `FIRST THE MODEL. THEN THE SYSTEM.` *(kicker mono)*
 >
-> # We build web apps and automations for companies that have outgrown spreadsheets.
+> # Custom software for growing companies, modelled before it is built.
 >
-> We start with the model, not the code — a Blueprint before anything big.
+> Automations, web apps and AR product viewers for small and mid-sized companies. Modelled first, built second, priced before you commit.
 >
 > **[Start with a Blueprint → /contact]**  [How every build starts → /blueprint]
 
-### 02 — WHAT WE BUILD *(revizuit 2026-08-25: fără prețuri — coloana dreaptă e etichetă mono de categorie)*
+### 02 — WHAT WE BUILD *(2026-09-12, runda a doua: TABEL DE SPECIFICAȚIE — meniul cu leadere și etichete-categorie în dreapta „doesn't make sense")*
 
-> ## Automation, web systems, and apps.
+> ## Automations, web systems, apps.
 >
-> | Quotes, invoices and reports that run themselves | AUTOMATION |
-> | Two systems connected — ERP, website, email | AUTOMATION |
-> | Presentation websites, catalogues, client portals | WEB BUILD |
-> | Mobile apps and AR product viewers — your product at true scale | APP · AR/3D |
-> | Something specific — a configurator, an integration, an unusual system | **See the services** |
+> | AUTOMATIONS | Quotes, invoices, reports and hand-offs that run without a person |
+> | WEB SYSTEMS | Websites, catalogues and client portals your own team edits |
+> | APPS & AR | Mobile and desktop apps; your product in the customer’s room, at true scale |
+> | ANYTHING ELSE | **See the services →** |
 >
-> No menu prices — every build is scoped and quoted for the client it is for. A 30-minute call gives you a real range; the Blueprint turns it into a firm number.
-
-*(2026-08-31: nota veche promitea „the firm number comes after a 30-minute call" — contrazicea mecanismul „apel → interval; Blueprint → cifra fermă" și pagina de contact.)*
+> No price list — every build is quoted for the company it is for. Thirty minutes gives you a real range; the Blueprint gives you the firm number.
 
 ### 03 — THE BLUEPRINT *(o propoziție; mecanismul complet pe /blueprint)*
 
-> ## Every build starts with a Blueprint: a spec, an architecture, a clickable prototype, and a document that stays yours even if you build elsewhere.
+> ## See the whole system before you commit to it — spec, architecture, a clickable prototype, a firm price. The document stays yours.
 >
-> [See what's in it →](/blueprint)
+> [What is in a Blueprint →](/blueprint)
 
 ### 04 — PROOF
 
-Neschimbat în substanță: cele două carduri (Declutter `PROTOTYPE`, GigTim `BEING SCOPED`) + ștampila `DELIVERED PROJECTS · 00` + „the third exhibit is this site". Linkul: **[See the exhibition →](/projects)**. *(2026-08-31: fraza exponatului e acum „designed, written and built by hand" — vechiul „about 250 bytes of JavaScript" era fals de când homepage-ul livrează Three.js/GSAP, ~684 KB.)*
+> ## Our own products go through the same Blueprint.
+>
+> **Declutter** `PROTOTYPE` — For the thoughts you meant to bring to therapy and forgot. Health data, treated as such: encrypted, stored in the EU, never used to train a model.
+> **GigTim** `BEING SCOPED` — Short shifts for students. Spec, architecture and numbers first — no code until the model holds.
+>
+> Ștampila `DELIVERED PROJECTS · 00` + „The third exhibit is this site, designed and built by hand." · **[See the exhibition →](/projects)**
 
-### 05 — THE QUESTION EVERYONE ASKS
-
-Neschimbat: „Where are the case studies?" + răspunsul onest.
+*(05 — obiecția „Where are the case studies?" a fost SCOASĂ 2026-09-12 la cererea utilizatorului. Homepage = hero + 3 secțiuni + CTA.)*
 
 ### 06 — CTA (blocul roșu)
 
-> ## Thirty minutes, and you leave with a real range.
-> No strings and no sales deck. You tell us what hurts, we tell you what it would cost and how long it would take — even if we never work together.
+> ## Thirty minutes. You leave with a real range.
+> No sales deck. You tell us what hurts; we tell you what fixing it would cost and how long it would take — even if we never work together.
 >
 > **[Start with a Blueprint → /contact]**
 

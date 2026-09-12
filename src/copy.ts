@@ -36,80 +36,76 @@ export const copy = {
 
   home: {
     title: 'Maquette — software studio',
-    desc: 'We build web apps, automations and AR product viewers for companies that have outgrown spreadsheets. We start with the model: a Blueprint before anything big.',
+    desc: 'Custom software for growing companies: automations, web apps and AR product viewers. Every build starts with a Blueprint, so you see the model before you commit.',
     kicker: 'First the model. Then the system.',
     /* Titlul se randează în trei bucăți: cuvântul din mijloc e îmbinarea mono —
        un singur cuvânt, maxim, pe titlu (docs/brand.md § Mișcările). */
-    h1a: 'We build web apps and automations for companies that have outgrown ',
-    h1mono: 'spreadsheets',
-    h1b: '.',
-    h1: 'We build web apps and automations for companies that have outgrown spreadsheets.',
-    lede: 'We start with the model, not the code — a Blueprint before anything big.',
+    /* Revizie 2026-09-12 (decizia utilizatorului: „too much words… essence… in
+       the first 30s figure out what Maquette does"): titlul = problema +
+       promisiunea; lede-ul = ce, pentru cine, cum. */
+    /* 2026-09-12, a doua rundă: fără „spreadsheets" (utilizatorul: „i dislike deeply"). */
+    h1a: 'Custom software for growing companies, ',
+    h1mono: 'modelled',
+    h1b: ' before it is built.',
+    h1: 'Custom software for growing companies, modelled before it is built.',
+    lede: 'Automations, web apps and AR product viewers for small and mid-sized companies. Modelled first, built second, priced before you commit.',
     heroLink: 'How every build starts',
 
-    /* 01 — ce construim: aceleași rânduri cu puncte de ghidaj, dar coloana
-       din dreapta e etichetă mono de categorie, NU preț (decizie 2026-08-25:
-       zero cifre pe site). Al treilea slot al tuplei rămâne pentru sub-etichetă
-       — gol acum; canvas-ul (paintSec01) pictează aceleași tuple. */
+    /* 01 — ce construim: TABEL DE SPECIFICAȚIE (2026-09-12, feedback: meniul
+       cu leadere și etichete-categorie în dreapta „doesn't make sense"):
+       [eticheta serviciului, ce primești]. Canvas-ul (paintSec01) pictează
+       aceleași tuple; ultimul rând e linkul spre /services. Zero prețuri. */
     build: {
       label: 'What we build',
-      h: 'Automation, web systems, and apps.',
+      h: 'Automations, web systems, apps.',
       rows: [
-        ['Quotes, invoices and reports that run themselves', 'Automation', ''],
-        ['Two systems connected — ERP, website, email', 'Automation', ''],
-        ['Presentation websites, catalogues, client portals', 'Web build', ''],
-        ['Mobile apps and AR product viewers — your product at true scale', 'App · AR/3D', ''],
-      ] as [string, string, string][],
-      customWhat: 'Something specific — a configurator, an integration, an unusual system',
-      customCta: 'See the services',
-      note: 'No menu prices — every build is scoped and quoted for the client it is for. A 30-minute call gives you a real range; the Blueprint turns it into a firm number.',
+        ['Automations', 'Quotes, invoices, reports and hand-offs that run without a person'],
+        ['Web systems', 'Websites, catalogues and client portals your own team edits'],
+        ['Apps & AR', 'Mobile and desktop apps; your product in the customer’s room, at true scale'],
+      ] as [string, string][],
+      moreLabel: 'Anything else',
+      moreCta: 'See the services',
+      note: 'No price list — every build is quoted for the company it is for. Thirty minutes gives you a real range; the Blueprint gives you the firm number.',
     },
 
     /* 02 — Blueprint-ul, comprimat la o propoziție. Mecanismul complet
        stă pe /blueprint. Fără cifră și fără zile. */
     mech: {
       label: 'The Blueprint',
-      h: 'Every build starts with a Blueprint: a spec, an architecture, a clickable prototype, and a document that stays yours even if you build elsewhere.',
-      link: "See what's in it",
+      h: 'See the whole system before you commit to it — spec, architecture, a clickable prototype, a firm price. The document stays yours.',
+      link: 'What is in a Blueprint',
     },
 
     /* 04 — dovada. Etichetele de stadiu trebuie să rămână adevărate. */
     proof: {
       label: 'Proof',
-      h: 'We run our own ideas through the process we sell.',
+      h: 'Our own products go through the same Blueprint.',
       cards: [
         {
           name: 'Declutter',
           stage: 'Prototype',
-          p: 'The things you meant to say in therapy, and forget by the time you get there. What you write there is health data, and we treat it that way: encrypted, stored in the EU, no model trained on it.',
+          p: 'For the thoughts you meant to bring to therapy and forgot. Health data, treated as such: encrypted, stored in the EU, never used to train a model.',
         },
         {
           name: 'GigTim',
           stage: 'Being scoped',
-          p: 'Short shifts for students. It goes through its own Blueprint first: spec, architecture and numbers before the first line of code.',
+          p: 'Short shifts for students. Spec, architecture and numbers first — no code until the model holds.',
         },
       ],
       /* Fost „about 250 bytes of JavaScript" — fals de când homepage-ul
          livrează Three.js + GSAP (~684 KB). Regula de aur (2026-08-31). */
-      exhibit: 'The third exhibit is this site — designed, written and built by hand.',
+      exhibit: 'The third exhibit is this site, designed and built by hand.',
       link: 'See the exhibition',
       /* Ștampila onestității — o singură instanță pe site. Se actualizează
          când realitatea se schimbă; nu se șterge cât timp e adevărată. */
       stamp: ['Delivered projects', '00', 'updated Aug 2026'],
     },
 
-    /* 05 — o singură obiecție, cea care blochează totul, fix înainte de CTA. */
-    objection: {
-      label: 'The question everyone asks',
-      h: 'Where are the case studies?',
-      p: "There aren't any yet — none we could publish with written client consent, and we don't publish without it. Until then we show working deliverables instead: a real Blueprint sample, two products of our own, and this site. The first delivered project goes up the day a client signs off.",
-    },
-
     /* „real range", nu „a number" — apelul dă intervalul, Blueprint-ul
        cifra fermă (aliniat 2026-08-31 cu /contact și mecanismul). */
     end: {
-      h: 'Thirty minutes, and you leave with a real range.',
-      p: 'No strings and no sales deck. You tell us what hurts, we tell you what it would cost and how long it would take — even if we never work together.',
+      h: 'Thirty minutes. You leave with a real range.',
+      p: 'No sales deck. You tell us what hurts; we tell you what fixing it would cost and how long it would take — even if we never work together.',
     },
   },
 
@@ -120,7 +116,7 @@ export const copy = {
     desc: 'Automations, websites and web apps, and applications including AR product viewers. Scoped and quoted per client.',
     eyebrow: 'Services',
     h1: 'Automation, web systems, and apps — each built from a model first.',
-    lede: 'Three kinds of work, one process: we define the system with you, then build it in phases. No menu prices — every build is quoted for the client it is for.',
+    lede: 'Three kinds of work, one process: we model the system with you, then build it in phases. No price list — every build is quoted for the company it is for.',
     ctaRow: 'Talk to us',
     items: [
       {
@@ -129,7 +125,7 @@ export const copy = {
         p: 'We connect the tools you already have and automate the routine between them. Sold in hours saved, not in features — and the numbers come from you, in the first call.',
         points: [
           'Quotes, invoices and reports that generate themselves',
-          'Two systems connected — ERP, website, email, spreadsheets',
+          'Two systems connected — ERP, website, email',
           'Stock, orders and notifications kept in sync',
           'Monitoring and upkeep, with a monthly report on what ran',
         ],
@@ -163,8 +159,8 @@ export const copy = {
       link: 'See the Blueprint',
     },
     end: {
-      h: 'Thirty minutes, and you leave with a real range.',
-      p: 'You tell us what hurts, we tell you what it would cost and how long it would take — even if we never work together.',
+      h: 'Thirty minutes. You leave with a real range.',
+      p: 'You tell us what hurts; we tell you what fixing it would cost and how long it would take — even if we never work together.',
     },
   },
 
@@ -254,7 +250,7 @@ export const copy = {
       ] as [string, string][],
     },
 
-    end: { h: 'Thirty minutes, and you leave with a real range.' },
+    end: { h: 'Thirty minutes. You leave with a real range.' },
   },
 
   /* Expoziția (fost Lab, 2026-08-25): un exponat pe ecran, cu figură mare
@@ -270,8 +266,10 @@ export const copy = {
       {
         slug: 'declutter',
         /* Copertă: ilustrație SVG proprie (NU captură falsă) — supraîncărcarea
-           cognitivă rezolvată în grupuri; ecranul live coboară în insert. */
-        cover: base + '/img/declutter-cover.svg',
+           cognitivă rezolvată în grupuri. Din 2026-09-12 e SVG inline din
+           src/assets/covers/ (pagina o alege după slug); câmpul e doar
+           marcajul „are copertă" — gol, cade pe ecranul live. */
+        cover: 'declutter-cover',
         name: 'Declutter',
         stage: 'Prototype · updated August 2026',
         h: 'The things you meant to say in therapy, and forget by the time you get there.',
@@ -290,8 +288,8 @@ export const copy = {
       {
         slug: 'gigtim',
         /* Copertă: ilustrație SVG proprie — schimburi scurte pe harta unui
-           campus; documentul Blueprint live coboară în insert. */
-        cover: base + '/img/gigtim-cover.svg',
+           campus. Inline din src/assets/covers/ (vezi Declutter). */
+        cover: 'gigtim-cover',
         name: 'GigTim',
         stage: 'Being scoped · going through its own Blueprint',
         h: 'Short shifts for students. The business posts it, the student takes it.',
