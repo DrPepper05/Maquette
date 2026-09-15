@@ -19,8 +19,8 @@ const t = copy.services;
     <section class="wrap sec rise">
       <SectionHead index={String(i + 1).padStart(2, '0')} title={s.label} />
       <AmbientCards n={i} />
-      <!-- cardul-pagină (varianta deschisă): tot conținutul ofertei -->
-      <div class="float-card card-page-lite" data-tilt="2">
+      <!-- cardul-pagină (întunecat, ca pe toate taburile din 2026-09-15): tot conținutul ofertei -->
+      <div class="float-card card-page" data-tilt="2">
         <h2 class="t-h2 max-w-[24ch]">{s.h}</h2>
         <p class="mt-6 prose-w" style="color: var(--mid)">{s.p}</p>
         <ul class="m-0 mt-8 p-0 list-none grid max-w-[74ch]">
@@ -39,7 +39,7 @@ const t = copy.services;
   <section class="wrap sec rise">
     <SectionHead index="04" title={t.pricing.label} />
     <AmbientCards n={0} />
-    <div class="float-card card-page-lite" data-tilt="2">
+    <div class="float-card card-page" data-tilt="2">
       <h2 class="t-h2 max-w-[24ch]">{t.pricing.h}</h2>
       <p class="mt-6 prose-w" style="color: var(--mid)">{t.pricing.p}</p>
       <a href={routes.blueprint} class="lnk mt-8">{t.pricing.link}</a>

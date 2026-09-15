@@ -154,22 +154,13 @@
     mix-blend-mode: screen;
     opacity: calc(var(--glare, 0) * .9);
   }
-  .card-page-lite.float-card::before {  /* pe hârtie: puncte de cerneală, blend normal */
-    background: radial-gradient(circle, rgb(20 20 18 / .3) .7px, transparent 1px) 0 0 / 7px 7px;
-    mix-blend-mode: normal;
-    opacity: calc(var(--glare, 0) * .3);
-  }
-  .card-page-lite.float-card::after {   /* pe hârtie: luciu alb, blend normal */
-    background: radial-gradient(circle 360px at var(--mx, 50%) var(--my, 50%), rgb(255 255 255 / .55), transparent 70%);
-    mix-blend-mode: normal;
-    opacity: calc(var(--glare, 0) * .8);
-  }
 
   /* ── cardul-pagină: TOT blocul de conținut al unei secțiuni e un card.
-     Două suprafețe, împărțite pe taburi până alege utilizatorul:
-     .card-page (întunecat, ca paginile parcate de pe homepage) pe
-     /projects și /contact; .card-page-lite (hârtie ridicată) pe
-     /services și /blueprint. Schimbarea = un singur nume de clasă. ── */
+     O singură suprafață, ÎNTUNECATĂ (ca paginile parcate de pe homepage),
+     pe toate taburile: /projects, /contact, /services, /blueprint.
+     Decizia utilizatorului, 2026-09-15: „carduri gri/albe… poți să le
+     faci și pe alea negre?" — varianta .card-page-lite (hârtie ridicată,
+     cu holo-ul ei de puncte de cerneală) a fost ștearsă. ── */
   .card-page {
     position: relative; z-index: 1;
     background: var(--scr-bg);
@@ -188,12 +179,12 @@
     color: var(--ink);
   }
   .card-page .fld::placeholder { color: var(--mid); }
-  .card-page-lite {
-    position: relative; z-index: 1;
-    background: var(--paper-2);
-    border: 1px solid var(--hairline);
-    border-radius: clamp(20px, 2.6vw, 36px);
-    padding: clamp(24px, 3.5vw, 52px);
+  /* figura din /blueprint §05 stă acum pe card întunecat: crop marks
+     de cerneală ar fi invizibile pe #0F1013 — le trecem pe hârtie. */
+  .card-page .fig-frame { --mk: rgb(242 240 236 / .35); }
+  .card-page .figure .screen {
+    border-color: var(--scr-edge);            /* ecranul e același #0F1013 ca */
+    box-shadow: 0 24px 48px rgb(0 0 0 / .5);  /* cardul: muchie + umbră îl separă */
   }
 
 
@@ -699,21 +690,27 @@
      copertă în buclă lentă, perioade prime (7/9/11s). Transformările de
      grup re-rasterizează SVG-ul, deci sunt PAUZATE cât cardul e în afara
      viewportului (.is-vis din JS-ul din Base). ── */
-  .album-cover .cover-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-  .cover-svg .cv-tangle { transform-box: fill-box; transform-origin: center; animation: cv-breathe 11s ease-in-out infinite; }
-  .cover-svg .cv-strays { animation: cv-drift 9s ease-in-out infinite; }
-  .cover-svg .cv-strays-red { animation: cv-glow 5s ease-in-out infinite; }
-  .cover-svg .cv-pin-dots circle { animation: cv-pulse 2.8s ease-in-out infinite; }
-  .cover-svg .cv-pin-dots circle:nth-child(2) { animation-delay: .9s; }
-  .cover-svg .cv-pin-dots circle:nth-child(3) { animation-delay: 1.8s; }
-  .cover-svg .cv-tickets > g { animation: cv-drift 7s ease-in-out infinite; }
-  .cover-svg .cv-tickets > g:nth-child(2) { animation-duration: 9s; animation-delay: -3s; }
-  .cover-svg .cv-tickets > g:nth-child(3) { animation-duration: 11s; animation-delay: -5s; }
-  @keyframes cv-breathe { 50% { transform: rotate(1.6deg) scale(1.025); } }
-  @keyframes cv-drift   { 50% { transform: translateY(-5px); } }
-  @keyframes cv-glow    { 0%, 100% { opacity: .6; } 50% { opacity: .9; } }
-  @keyframes cv-pulse   { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
-  .float-card:not(.is-vis) .cover-svg * { animation-play-state: paused; }
+  /* copertele = capturi reale (2026-09-15). GigTim umple TOATĂ fața
+     (`.cover-img`, pagina lui e deja întunecată); Declutter = DOUĂ ecrane de
+     telefon alăturate, decalate ușor pe verticală (7% / 12% — ritm, cerut
+     înapoi de utilizator) și ÎNTREGI în card — bazele cad sub scrim, unde
+     stă titlul, deci bara de jos a aplicației nu concurează cu el. (Varianta „ambele ca telefon" a fost respinsă.) */
+  .album-cover .cover-img { object-position: center top; }
+  .album-cover .cover-phones { position: absolute; inset: 0; }
+  .album-cover .cover-phone {
+    position: absolute; top: 7%; left: 9%;
+    /* ramă mai scundă decât ecranul real (390×844): capturile sunt ancorate
+       sus și se taie jos (bara de input + zona goală) — la proporție
+       reală telefonul citea „prea lung" (feedback 2026-09-15). */
+    width: 38%; aspect-ratio: 390 / 700;
+    border-radius: clamp(16px, 2.6vw, 34px);
+    overflow: hidden;
+    border: 1px solid rgb(255 255 255 / .14);
+    box-shadow: 0 24px 70px rgb(0 0 0 / .6);
+    background: #F4F2ED;
+  }
+  .album-cover .cover-phone + .cover-phone { left: 53%; top: 12%; }
+  .album-cover .cover-phone img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
 }
 
 /* ═══ MIȘCAREA — totul nativ, ~250 de octeți de JS (fallback-ul IO). ═══ */
@@ -812,7 +809,6 @@ html.js-anim [data-seq] [data-seq-i]:nth-child(5) { animation-delay: .32s; }
      dar oprirea explicită e mai clară decât o buclă de .01ms */
   .scr-bar > span:first-child::before, .scr-bar b::after,
   .doc ol li, .dcl ul li,
-  .cover-svg * { animation: none !important; }
   ::view-transition-group(*),
   ::view-transition-old(*),
   ::view-transition-new(*) { animation: none !important; }

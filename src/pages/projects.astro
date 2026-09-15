@@ -5,14 +5,22 @@ import AmbientCards from '../components/AmbientCards.astro';
 import ExhibitActions from '../components/ExhibitActions.astro';
 import DeclutterApp from '../components/screens/DeclutterApp.astro';
 import GigTimDoc from '../components/screens/GigTimDoc.astro';
-/* Copertele sunt SVG INLINE (2026-09-12) — componente Astro, ca grupurile
-   lor să poată respira din CSS (.cv-*). Cheia e slug-ul exponatului. */
-import DeclutterCover from '../assets/covers/declutter-cover.svg';
-import GigTimCover from '../assets/covers/gigtim-cover.svg';
+/* Copertele sunt CAPTURI REALE (2026-09-15, decizia utilizatorului — a
+   respins ilustrațiile-casă). GigTim = hero-ul site-ului rulat local, pe
+   TOATĂ fața (.cover-img). Declutter = DOUĂ cadre ale prototipului Expo la
+   390×844 (harta gândurilor; foaia de coach cu două gânduri selectate), ca
+   două telefoane alăturate (.cover-phones) — fața umplută uniform.
+   Cheia e slug-ul exponatului. */
+import declutterShot from '../assets/covers/declutter-shot.webp';
+import declutterShot2 from '../assets/covers/declutter-shot-2.webp';
+import gigtimShot from '../assets/covers/gigtim-shot.webp';
 import { copy } from '../copy';
 const t = copy.projects;
 const email = 'contact@maquette.ro';
-const COVERS: Record<string, typeof DeclutterCover | undefined> = { declutter: DeclutterCover, gigtim: GigTimCover };
+const SHOTS: Record<string, { img: ImageMetadata; phones?: ImageMetadata[] } | undefined> = {
+  declutter: { img: declutterShot, phones: [declutterShot, declutterShot2] },
+  gigtim: { img: gigtimShot },
+};
 ---
 <Base route="projects" title={t.title} desc={t.desc}>
 
@@ -26,14 +34,14 @@ const COVERS: Record<string, typeof DeclutterCover | undefined> = { declutter: D
        Id-urile sunt ex-*, niciodată s01…cta (alea trezesc canvas-ul).
        Eticheta de stadiu trebuie să rămână adevărată. ── -->
   {t.exhibits.map((p, i) => {
-    const Cover = p.cover ? COVERS[p.slug] : undefined;
+    const shot = p.cover ? SHOTS[p.slug] : undefined;
     return (
     <section class="wrap sec rise exhibit" id={`ex-${p.slug}`}>
       <SectionHead index={String(i + 1).padStart(2, '0')} title="Exhibit" />
       <AmbientCards n={i} />
 
       <!-- cardul-album PĂTRAT, o singură vedere (2026-08-28): fața e doar
-           coperta — ilustrația SVG, numele, eticheta de stadiu și butonul
+           coperta — captura reală, numele, eticheta de stadiu și butonul
            „View more" (proeminent, hârtie pe întuneric). TOT textul stă pe
            SPATELE cardului: teza, secțiunile lungi și acțiunile — „View
            more" îl întoarce 180° pe Y. Rotația stă pe .flip-inner,
@@ -42,8 +50,18 @@ const COVERS: Record<string, typeof DeclutterCover | undefined> = { declutter: D
         <div class="flip-inner">
           <article class="card-page album flip-front">
             <div class="album-cover">
-              {Cover ? (
-                <Cover class="cover-svg" />
+              {shot ? (
+                shot.phones ? (
+                  <div class="cover-phones">
+                    {shot.phones.map((im, k) => (
+                      <div class="cover-phone">
+                        <img src={im.src} width={im.width} height={im.height} alt={k === 0 ? p.fig.title : ''} loading="lazy" decoding="async" />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <img class="cover-img" src={shot.img.src} width={shot.img.width} height={shot.img.height} alt={p.fig.title} loading="lazy" decoding="async" />
+                )
               ) : (
                 <div class="cover-live" inert>
                   {p.slug === 'declutter' ? <DeclutterApp /> : <GigTimDoc />}

@@ -37,7 +37,7 @@ const t = copy.blueprint;
   <section class="wrap sec rise">
     <SectionHead index="02" title={t.get.label} />
     <AmbientCards n={0} />
-    <div class="float-card card-page-lite" data-tilt="2">
+    <div class="float-card card-page" data-tilt="2">
     <ol class="m-0 p-0 list-none grid">
       {t.get.deliverables.map(([h, p], i) => (
         <li class="row-line grid gap-x-10 gap-y-1 md:grid-cols-[44px_240px_1fr]">
@@ -53,7 +53,7 @@ const t = copy.blueprint;
   <!-- ── 03 · Procesul — pași, nu zile (2026-08-25) ── -->
   <section class="wrap sec rise">
     <SectionHead index="03" title={t.process.label} />
-    <div class="float-card card-page-lite" data-tilt="2">
+    <div class="float-card card-page" data-tilt="2">
     <dl class="m-0 grid">
       {t.process.rows.map(([d, p]) => (
         <div class="row-line grid gap-x-10 gap-y-1 md:grid-cols-[120px_1fr]">
@@ -84,7 +84,7 @@ const t = copy.blueprint;
   <section class="wrap sec rise">
     <SectionHead index="05" title={t.sample.label} />
     <AmbientCards n={1} />
-    <div class="float-card card-page-lite" data-tilt="2">
+    <div class="float-card card-page" data-tilt="2">
     <h2 class="t-h2">{t.sample.h}</h2>
     <div class="mt-10 max-w-[720px]">
       <Figure index="01" title={t.sample.fig.title} kind="deliverable" tech={t.sample.fig.tech}>
@@ -97,7 +97,7 @@ const t = copy.blueprint;
   <!-- ── 06 · Pentru cine e / nu e ── -->
   <section class="wrap sec rise">
     <SectionHead index="06" title={t.fit.label} />
-    <div class="float-card card-page-lite" data-tilt="2">
+    <div class="float-card card-page" data-tilt="2">
     <div class="grid gap-x-14 gap-y-8 md:grid-cols-2">
       <ul class="m-0 p-0 list-none grid content-start">
         {t.fit.yes.map((li) => (
@@ -121,7 +121,7 @@ const t = copy.blueprint;
   <section class="wrap sec rise">
     <SectionHead index="07" title={t.q.label} />
     <AmbientCards n={2} />
-    <div class="float-card card-page-lite" data-tilt="2">
+    <div class="float-card card-page" data-tilt="2">
     <div class="grid max-w-[74ch]">
       {t.q.items.map(([q, a]) => (
         <div class="row-line">

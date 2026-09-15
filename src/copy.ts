@@ -265,10 +265,10 @@ export const copy = {
     exhibits: [
       {
         slug: 'declutter',
-        /* Copertă: ilustrație SVG proprie (NU captură falsă) — supraîncărcarea
-           cognitivă rezolvată în grupuri. Din 2026-09-12 e SVG inline din
-           src/assets/covers/ (pagina o alege după slug); câmpul e doar
-           marcajul „are copertă" — gol, cade pe ecranul live. */
+        /* Copertă: captură REALĂ a prototipului (2026-09-15) — ecranul
+           „mental load map" cu gânduri, din src/assets/covers/ (pagina o
+           alege după slug); câmpul e doar marcajul „are copertă" — gol,
+           cade pe ecranul live. */
         cover: 'declutter-cover',
         name: 'Declutter',
         stage: 'Prototype · updated August 2026',
@@ -276,7 +276,7 @@ export const copy = {
         p: 'Two weeks pass between sessions, and the thoughts you meant to bring vanish by the time you are in the room. You write one down in three seconds; it comes back before the session, grouped — not as a list of forty notes. Capture and grouping work today. The pre-session return is being built.',
         noteH: 'What you write there is health data.',
         noteP: 'We treat it as such: encrypted, stored in the European Union, no advertising trackers, and no model is trained on your content. A therapist does not ask what features you have — they ask where their patients’ data lives.',
-        fig: { title: 'Declutter — capture and return', tech: 'Prototype UI · 2026' },
+        fig: { title: 'Declutter — the mental load map', tech: 'Prototype, screenshot · 2026' },
         /* Spatele cardului — „Read more". Secțiuni scurte, ton onest. */
         more: [
           ['The trigger is the session', 'Notes apps archive thoughts; Declutter returns them. Everything you capture comes back before your session, grouped by theme — work, sleep, the thing you keep postponing. You walk in with your agenda already in hand.'],
@@ -287,8 +287,8 @@ export const copy = {
       },
       {
         slug: 'gigtim',
-        /* Copertă: ilustrație SVG proprie — schimburi scurte pe harta unui
-           campus. Inline din src/assets/covers/ (vezi Declutter). */
+        /* Copertă: captură REALĂ a hero-ului GigTim (2026-09-15), rulat
+           local la 390×844 — harta orașului + un anunț de tură. Vezi Declutter. */
         cover: 'gigtim-cover',
         name: 'GigTim',
         stage: 'Being scoped · going through its own Blueprint',
@@ -296,7 +296,7 @@ export const copy = {
         p: 'A restaurant needs two people on Saturday night; a student has three free hours on Tuesday. Demand and supply keep missing each other for lack of a channel. GigTim is being scoped right now, through exactly the process we sell — spec, architecture and numbers before the first line of code. The hard part is not the app but the first city: one campus and one neighbourhood, not a national launch.',
         noteH: 'Short-term work has a legal shape in Romania.',
         noteP: 'Day-labourer status, self-employment or a fixed-term contract — each carries different obligations for the business hiring. A platform that brokers work cannot sidestep that. Which is why the legal shape gets decided in the Blueprint, not after launch.',
-        fig: { title: 'GigTim — its own Blueprint', tech: 'Document, draft · 2026' },
+        fig: { title: 'GigTim — the landing page', tech: 'Web prototype, screenshot · 2026' },
         more: [
           ['The gap, and the product', 'A restaurant needs two extra people on Saturday night; a student has three free hours on Tuesday. There is no channel between them. So: the business posts a shift with a time and a price, the student takes it in one tap. That is the whole product.'],
           ['Density before features', 'A marketplace with no local density is an empty room. The plan starts with one campus and one neighbourhood — not a national launch.'],
