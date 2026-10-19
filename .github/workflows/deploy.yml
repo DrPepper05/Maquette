@@ -2,9 +2,9 @@
 # Pages trebuie setat pe „GitHub Actions" (Settings → Pages → Source),
 # altfel GitHub rulează build-ul lui Jekyll implicit, care pică pe .astro.
 #
-# SITE/BASE_PATH: pe github.io site-ul stă sub /Maquette/. Când domeniul
-# maquette.ro e activ (custom domain pe Pages), șterge cele două env-uri —
-# config-ul revine la valorile implicite (site maquette.ro, base /).
+# Site-ul se servește pe domeniul propriu maquette.ro (custom domain în
+# Settings → Pages + înregistrări DNS în Cloudflare). Config-ul Astro
+# folosește valorile implicite: site maquette.ro, base /.
 name: Deploy to GitHub Pages
 
 on:
@@ -24,9 +24,6 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      SITE: https://drpepper05.github.io
-      BASE_PATH: /Maquette
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
