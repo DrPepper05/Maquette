@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Contact & Prototype Request preview – Maquette</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/base.css">
+<link rel="stylesheet" href="../components/contact/contact.css">
+<style>
+  /* Standalone preview bar */
+  .preview-banner {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 176, 32, 0.15);
+    border-bottom: 1px solid rgba(255, 176, 32, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 8px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+  }
+  .preview-banner a {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .preview-banner a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+<div class="site-backdrop" id="siteBackdrop" aria-hidden="true">
+  <div class="site-room" id="globalRoom"></div>
+  <div class="site-grain"></div>
+  <div class="site-shade"></div>
+</div>
+<div class="preview-banner">
+  <span>Previewing component: <strong>Contact & Prototype Request</strong> (<code>contact</code>)</span>
+  <a href="index.html">← Back to Component Catalog</a>
+</div>
+<section id="contact" aria-label="Contact and free prototype inquiry">
+  <div class="room" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="box">
+      <div>
+        <span class="eyebrow">Start here</span>
+        <h2>Let’s discuss your prototype.</h2>
+        <p class="lead">Four short fields. We reply within one working day, usually with a call invitation.</p>
+        <p class="mono" style="margin-top: 24px;">hello@maquette.example</p>
+      </div>
+      <form id="f">
+        <label>Name
+          <input name="n" required autocomplete="name">
+        </label>
+        <label>Email
+          <input name="e" type="email" required autocomplete="email">
+        </label>
+        <label>What do you need?
+          <select name="service" id="project">
+            <option>A website</option>
+            <option>An automation</option>
+            <option>Custom software</option>
+            <option>Not sure yet</option>
+          </select>
+        </label>
+        <label>Tell us a bit about it
+          <textarea name="details"></textarea>
+        </label>
+        <button class="btn" type="submit">Request my free prototype</button>
+        <div id="ok" role="status">Preview only: the form is not connected yet. Please email us instead.</div>
+      </form>
+    </div>
+  </div>
+</section>
+<script src="../components/contact/contact.js"></script>
+</body>
+</html>
+

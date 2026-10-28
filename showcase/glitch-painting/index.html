@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Glitch Painting — Maquette Component Lab</title>
+<meta name="description" content="A standalone canvas glitch effect: sliced artwork, RGB channel split, scanlines and signal bursts.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/lab.css">
+<link rel="stylesheet" href="glitch.css">
+</head>
+<body>
+<header class="lab-bar">
+  <a class="lab-back" href="../index.html"><span>←</span> All components</a>
+  <div class="lab-brand">Maquette <em>Lab</em></div>
+  <span class="lab-tech">Canvas 2D · RGB split</span>
+</header>
+
+<main class="glitch-shell" id="glitchStage">
+  <canvas class="glitch-canvas" id="glitchCanvas" role="img" aria-label="Glitch artwork"></canvas>
+  <div class="glitch-shade" aria-hidden="true"></div>
+  <div class="lab-grain" aria-hidden="true"></div>
+
+  <div class="glitch-intro">
+    <span class="lab-kicker">Signal study 03</span>
+    <h1 class="lab-title">Glitch<br><em>painting.</em></h1>
+    <p class="lab-desc">A framed artifact caught mid-transmission. Signal loss tears the image into slices, shifts its channels and drags scanlines across the surface.</p>
+  </div>
+
+  <aside class="glitch-meta" aria-live="polite">
+    <span class="glitch-num" id="glitchNum">01</span>
+    <div>
+      <h2 class="glitch-name" id="glitchTitle">Northwind</h2>
+      <p class="glitch-cat" id="glitchCategory">Fleet Logistics Software · 2026</p>
+      <p class="glitch-tag" id="glitchTag">Fleet operations, one screen.</p>
+    </div>
+  </aside>
+
+  <div class="lab-rail glitch-rail">
+    <button type="button" class="lab-btn" id="glitchTrigger">Trigger glitch</button>
+    <label class="glitch-slider">
+      <span>Intensity</span>
+      <input type="range" id="glitchIntensity" min="0" max="100" value="35" aria-label="Glitch intensity">
+    </label>
+    <span class="lab-count" id="glitchCount">01 — 05</span>
+    <button type="button" class="lab-round" id="glitchPrev" aria-label="Previous painting">←</button>
+    <button type="button" class="lab-round" id="glitchNext" aria-label="Next painting">→</button>
+  </div>
+
+  <p class="lab-hint">Click the image<br>Space: burst · G: burst</p>
+  <p class="sr-only" id="glitchLive" aria-live="polite"></p>
+</main>
+
+<script src="../shared/projects.js"></script>
+<script src="glitch.js"></script>
+</body>
+</html>

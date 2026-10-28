@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Visitor Information / FAQ preview – Maquette</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/base.css">
+<link rel="stylesheet" href="../components/faq/faq.css">
+<style>
+  /* Standalone preview bar */
+  .preview-banner {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 176, 32, 0.15);
+    border-bottom: 1px solid rgba(255, 176, 32, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 8px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+  }
+  .preview-banner a {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .preview-banner a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+<div class="site-backdrop" id="siteBackdrop" aria-hidden="true">
+  <div class="site-room" id="globalRoom"></div>
+  <div class="site-grain"></div>
+  <div class="site-shade"></div>
+</div>
+<div class="preview-banner">
+  <span>Previewing component: <strong>Visitor Information / FAQ</strong> (<code>faq</code>)</span>
+  <a href="index.html">← Back to Component Catalog</a>
+</div>
+<section id="faq" aria-label="Questions and answers">
+  <div class="room" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="intro">
+      <span class="eyebrow">Good to know</span>
+      <h2>Questions, answered.</h2>
+      <p class="lead">Everything about how we work, free prototypes, and project delivery.</p>
+    </div>
+
+    <div class="faq">
+      <details>
+        <summary>What does it cost?</summary>
+        <p>It depends on the scope, so we talk about it after the free prototype, when we both know what is being built.</p>
+      </details>
+      <details>
+        <summary>Is the prototype really free?</summary>
+        <p>Yes. If it is not what you need, you keep the conversation and we part as friends.</p>
+      </details>
+      <details>
+        <summary>Do you use AI?</summary>
+        <p>Yes. Agents handle the routine work, and a developer reviews and decides on everything that reaches your project.</p>
+      </details>
+      <details>
+        <summary>What happens after launch?</summary>
+        <p>Everything is handed over. If you want us to stay on, we agree on support separately.</p>
+      </details>
+    </div>
+
+    <div class="rfoot">
+      <span class="sc-count">01 — 04</span>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
+

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Story Component Preview (Foggy Particle Simulation) – Maquette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles/base.css">
+<link rel="stylesheet" href="../header/header.css">
+<link rel="stylesheet" href="story.css">
+</head>
+<body>
+<!-- component: header for context -->
+<header>
+  <div class="wrap">
+    <a class="logo" href="#top"><i></i>Maquette</a>
+    <nav>
+      <a href="#process">The tour</a>
+      <a class="cta" href="#contact">Free prototype</a>
+    </nav>
+  </div>
+</header>
+
+<!-- component: story (foggy idea variant) -->
+<section id="story" aria-label="From idea to product">
+<div class="stage" id="stage">
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <div class="pool"></div>
+  <div class="hud">
+    <div class="meter mono">
+      <span>idea clarity</span>
+      <span class="bar"><b id="bar"></b></span>
+      <span id="pct">0%</span>
+    </div>
+    <div class="label">
+      <b id="lt">Fig. 1: The brief</b>
+      <span id="ld">A foggy idea, on loan from you. Please touch it.</span>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="wrap">
+    <div class="txt">
+      <span class="mono">Websites · Automations · Software</span>
+      <h1>From foggy idea to finished product.</h1>
+      <p>Tell us what is stuck. In about a week we turn it into a working prototype, free. Then we build the real thing, with a demo every week.</p>
+      <div class="row">
+        <a class="btn" href="#contact">Get my free prototype</a>
+        <a class="btn ghost" href="#build">See what we build</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel" id="process">
+  <div class="wrap">
+    <div class="txt">
+      <span class="mono">Step 1</span>
+      <h2>You show us the mess.</h2>
+      <p>A short call and four form fields: what is stuck, who uses it, what done looks like. We read the fog together, with no jargon.</p>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="wrap">
+    <div class="txt">
+      <span class="mono">Step 2</span>
+      <h2>We smooth it into a plan.<span class="free">free</span></h2>
+      <p>You get a clickable prototype with real screens in about a week. No cost, no commitment.</p>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="wrap">
+    <div class="txt">
+      <span class="mono">Step 3</span>
+      <h2>The plan stands up.</h2>
+      <p>Once you approve the maquette, we build the real product with a demo every week. Agents do the routine work, and a developer reviews every decision.</p>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="wrap">
+    <div class="txt">
+      <span class="mono">Step 4</span>
+      <h2>You keep the model.</h2>
+      <p>Source code, design files and a walkthrough are all yours. Support after launch is optional.</p>
+      <div class="row">
+        <a class="btn" href="#contact">Start with a free prototype</a>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="story.js"></script>
+</body>
+</html>

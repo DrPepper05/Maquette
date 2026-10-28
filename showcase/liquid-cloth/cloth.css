@@ -1,0 +1,268 @@
+/* ===== Liquid Cloth: single WebGL silk poster ===== */
+
+.cloth-shell {
+  position: relative;
+  height: 100svh;
+  min-height: 620px;
+  overflow: hidden;
+  padding-top: 64px;
+  isolation: isolate;
+  background: #080709;
+}
+
+.cloth-room {
+  position: absolute;
+  inset: 64px 0 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(52% 55% at 58% 48%, rgba(38, 62, 96, 0.5), transparent 74%),
+    radial-gradient(70% 60% at 82% 24%, rgba(56, 189, 248, 0.14), transparent 70%),
+    radial-gradient(55% 50% at 20% 78%, rgba(232, 158, 40, 0.1), transparent 68%);
+  transition: background 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cloth-intro {
+  position: absolute;
+  top: calc(64px + clamp(22px, 4.2vh, 52px));
+  left: clamp(20px, 4.2vw, 64px);
+  z-index: 10;
+  width: min(370px, 33vw);
+  pointer-events: none;
+}
+
+.cloth-frame {
+  --pad: 40px;
+  position: absolute;
+  left: 58%;
+  top: 51%;
+  z-index: 4;
+  height: min(64vh, 580px);
+  aspect-ratio: 4 / 5;
+  max-width: 44vw;
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  outline: none;
+  touch-action: manipulation;
+}
+
+.cloth-frame:active {
+  cursor: grabbing;
+}
+
+.cloth-frame:focus-visible .cloth-glow {
+  opacity: 0.9;
+}
+
+.cloth-frame:focus-visible::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border: 1px solid rgba(232, 158, 40, 0.6);
+  border-radius: 26px;
+  pointer-events: none;
+}
+
+.cloth-canvas {
+  position: absolute;
+  left: calc(var(--pad) * -1);
+  top: calc(var(--pad) * -1);
+  width: calc(100% + var(--pad) * 2);
+  height: calc(100% + var(--pad) * 2);
+  z-index: 2;
+  display: block;
+}
+
+.cloth-glow {
+  position: absolute;
+  inset: -14%;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 50%;
+  opacity: 0.7;
+  background:
+    radial-gradient(closest-side, rgba(56, 189, 248, 0.26), rgba(56, 189, 248, 0.08) 52%, transparent 74%),
+    radial-gradient(closest-side at 62% 68%, rgba(232, 158, 40, 0.16), transparent 70%);
+  transition: opacity 0.6s ease, background 0.8s ease;
+}
+
+.cloth-meta {
+  position: absolute;
+  left: clamp(20px, 4.2vw, 64px);
+  bottom: clamp(100px, 13vh, 130px);
+  z-index: 12;
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(12px, 1.6vw, 22px);
+  pointer-events: none;
+}
+
+.cloth-num {
+  padding-top: 2px;
+  font: 500 0.74rem 'DM Mono', monospace;
+  letter-spacing: 0.12em;
+  color: var(--accent, #38bdf8);
+  font-variant-numeric: tabular-nums;
+  transition: color 0.5s ease;
+}
+
+.cloth-name {
+  margin: 0;
+  font: 700 clamp(1.15rem, 1.7vw, 1.5rem) / 1 'Bricolage Grotesque', sans-serif;
+  letter-spacing: -0.025em;
+}
+
+.cloth-cat {
+  margin: 7px 0 0;
+  font: 500 0.62rem 'DM Mono', monospace;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(245, 241, 233, 0.55);
+}
+
+.cloth-tag {
+  margin: 7px 0 0;
+  font-size: 0.82rem;
+  color: rgba(245, 241, 233, 0.72);
+}
+
+.cloth-rail {
+  z-index: 16;
+  gap: 10px;
+}
+
+.cloth-rail .lab-btn {
+  padding: 10px 15px;
+  font-size: 0.66rem;
+}
+
+.cloth-rail .lab-btn[aria-pressed="true"] {
+  color: #0b0a0c;
+  border-color: var(--accent, #38bdf8);
+  background: var(--accent, #38bdf8);
+}
+
+.cloth-slider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px 0 4px;
+  font: 500 0.6rem 'DM Mono', monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(245, 241, 233, 0.55);
+  white-space: nowrap;
+}
+
+.cloth-slider input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 104px;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(to right, rgba(56, 189, 248, 0.75), rgba(245, 241, 233, 0.18));
+  outline: none;
+  cursor: pointer;
+}
+
+.cloth-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 1px solid rgba(11, 10, 12, 0.8);
+  background: var(--gold);
+  box-shadow: 0 0 12px rgba(232, 158, 40, 0.55);
+}
+
+.cloth-slider input[type="range"]::-moz-range-thumb {
+  width: 13px;
+  height: 13px;
+  border: 1px solid rgba(11, 10, 12, 0.8);
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 12px rgba(232, 158, 40, 0.55);
+}
+
+@media (max-width: 900px) {
+  .cloth-intro {
+    width: min(320px, 42vw);
+  }
+  .cloth-frame {
+    left: 62%;
+    height: min(58vh, 500px);
+  }
+  .cloth-slider span {
+    display: none;
+  }
+  .cloth-slider input[type="range"] {
+    width: 80px;
+  }
+}
+
+@media (max-width: 720px) {
+  .cloth-shell {
+    padding-top: 56px;
+  }
+  .cloth-room {
+    inset: 56px 0 0;
+  }
+  .cloth-intro {
+    top: calc(56px + 16px);
+    left: 18px;
+    right: 18px;
+    width: auto;
+  }
+  .cloth-intro .lab-desc {
+    display: none;
+  }
+  .cloth-frame {
+    --pad: 26px;
+    left: 50%;
+    top: 54%;
+    height: min(54vh, 430px);
+    max-width: 80vw;
+  }
+  .cloth-meta {
+    left: 18px;
+    bottom: 124px;
+  }
+  .cloth-tag {
+    display: none;
+  }
+  .cloth-rail {
+    bottom: 16px;
+    width: calc(100vw - 24px);
+    max-width: 420px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: calc(100vw - 24px);
+    border-radius: 22px;
+    gap: 6px;
+    padding: 6px;
+  }
+  .cloth-rail .lab-btn,
+  .cloth-slider {
+    font-size: 0.56rem;
+  }
+  .cloth-rail .lab-round {
+    width: 38px;
+    height: 38px;
+  }
+  .cloth-rail .lab-count {
+    min-width: 56px;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+  }
+  .cloth-slider input[type="range"] {
+    width: 64px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cloth-room,
+  .cloth-glow {
+    transition: none;
+  }
+}

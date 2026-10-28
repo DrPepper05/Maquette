@@ -1,0 +1,66 @@
+<section id="work" class="gallery-hero-section" aria-label="Selected work and collection">
+  <div class="gallery-track" id="galleryTrack">
+    <div class="gallery-sticky" id="gallerySticky">
+      <!-- Atmospheric room lighting: pinned with 3D gallery, scrolls away together when track finishes -->
+      <div class="room" id="room" aria-hidden="true"></div>
+
+      <!-- Hero text on the left: original company text, scrolls up on scroll -->
+      <div class="hero-intro" id="heroIntro">
+        <span class="mono hero-kicker">Websites · Automations · Software</span>
+        <h1 class="hero-title">From foggy idea<br>to finished product.</h1>
+        <p class="hero-desc">Tell us what is stuck. In about a week we turn it into a working prototype, free. Then we build the real thing, with a demo every week.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#contact">Get my free prototype</a>
+          <a class="btn ghost" href="#services">See what we build</a>
+        </div>
+        <div class="hero-scroll-cue" id="heroScrollCue" role="button" tabindex="0" aria-label="Scroll to explore gallery">
+          <div class="scroll-mouse">
+            <div class="scroll-dot"></div>
+          </div>
+          <span>Scroll to explore</span>
+        </div>
+      </div>
+
+      <!-- Scrim: blurs background meshes behind text, ensures perfect legibility, leaves main painting untouched -->
+      <div class="hero-scrim" id="heroScrim" aria-hidden="true"></div>
+
+      <!-- 3D Showcase: fully integrated, main picture crisp on the right -->
+      <div class="showcase" id="showcase" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Selected work">
+        <div class="perspective">
+          <svg class="trail" aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <g id="trailG" fill="none" stroke="#38bdf8" stroke-width="1.1">
+              <path class="trail-a" id="trailA" vector-effect="non-scaling-stroke"/>
+              <path class="trail-b" id="trailB" vector-effect="non-scaling-stroke"/>
+              <path class="trail-c" id="trailC" vector-effect="non-scaling-stroke" stroke-width=".8"/>
+            </g>
+          </svg>
+          <div class="pieces" id="pieces"></div>
+        </div>
+        <canvas class="crumple" id="crumple" aria-hidden="true"></canvas>
+        
+        <div class="showcase-top" id="showcaseTop" aria-hidden="true">
+          <span class="sc-brand">Portfolio</span>
+          <span class="sc-kicker">Selected Work · 2024–2026</span>
+        </div>
+        
+        <aside class="showcase-meta" id="meta">
+          <div id="metaInner">
+            <p class="sc-kick" id="metaKick">Fleet Logistics Software · 2026</p>
+            <h3 id="metaTitle">Northwind</h3>
+            <p class="sc-desc" id="metaDesc">Northwind Logistics — Fleet operations, one screen.</p>
+          </div>
+        </aside>
+        
+        <div class="showcase-controls" id="showcaseControls">
+          <button type="button" id="prev" aria-label="Previous project">←</button>
+          <button type="button" id="next" aria-label="Next project">→</button>
+          <span class="sc-count" id="count">01 — 05</span>
+        </div>
+        
+        <div class="showcase-stack" id="stack" aria-hidden="true">Next.js · Postgres · tRPC</div>
+        <p class="sr-only" id="live" aria-live="polite"></p>
+      </div>
+
+    </div>
+  </div>
+</section>

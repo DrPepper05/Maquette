@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Architectural Folio / Leporello Book — Maquette Component Lab</title>
+<meta name="description" content="Direction B: An artisan architectural monograph and model-making handbook with fold-out plates.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/lab.css">
+<link rel="stylesheet" href="book.css">
+</head>
+<body class="book-body">
+
+<header class="lab-bar">
+  <a class="lab-back" href="../index.html"><span>←</span> Maquette site</a>
+  <div class="lab-brand">Maquette <em>Showcase · Study 16</em></div>
+  <span class="lab-tech">Direction B · Architectural Folio</span>
+</header>
+
+<div class="desk-surface" aria-hidden="true"></div>
+<div class="desk-grain" aria-hidden="true"></div>
+
+<!-- Controller Navigation Bar -->
+<nav class="book-controller-bar" aria-label="Book Navigation and Mode Switcher">
+  <div class="controller-left">
+    <span class="monograph-emblem">Folio No. 01</span>
+    <span class="book-title-tag">A Book for a Maquette</span>
+  </div>
+
+  <div class="view-modes-group" role="group" aria-label="Folio view mode">
+    <button type="button" class="btn-view-mode active" id="modeSpread" aria-label="View as book page spread">
+      📖 Monograph Spread
+    </button>
+    <button type="button" class="btn-view-mode" id="modeLeporello" aria-label="View as unfolded leporello accordion">
+      📜 Leporello Unfolded
+    </button>
+  </div>
+
+  <div class="controller-right">
+    <span class="page-indicator" id="pageIndicator">Plate 01 of 04</span>
+    <button type="button" class="btn-turn-arrow" id="btnPrevPage" aria-label="Previous plate">←</button>
+    <button type="button" class="btn-turn-arrow" id="btnNextPage" aria-label="Next plate">→</button>
+  </div>
+</nav>
+
+<main class="book-stage">
+  <!-- Monograph Cloth Binder Shell -->
+  <div class="monograph-binder" id="monographBinder">
+    <div class="folio-ribbon" aria-hidden="true"></div>
+
+    <!-- Edge Thumb Tabs -->
+    <div class="book-thumb-tabs" role="tablist" aria-label="Monograph plates">
+      <button type="button" class="thumb-tab active" role="tab" aria-selected="true">
+        <span>01</span> Plate I: The Survey
+      </button>
+      <button type="button" class="thumb-tab" role="tab" aria-selected="false">
+        <span>02</span> Plate II: The Maquette [Free]
+      </button>
+      <button type="button" class="thumb-tab" role="tab" aria-selected="false">
+        <span>03</span> Plate III: Assembly Demos
+      </button>
+      <button type="button" class="thumb-tab" role="tab" aria-selected="false">
+        <span>04</span> Plate IV: Handover Deed
+      </button>
+    </div>
+
+    <!-- MODE 1: MONOGRAPH FOLIO SPREAD -->
+    <div class="monograph-spread">
+      <!-- Left Page: Curatorial Text & Marginalia -->
+      <article class="page-sheet page-left">
+        <div>
+          <div class="page-folio-header">
+            <span class="page-caput" id="pageCaput">Caput I · The Survey</span>
+            <span class="page-roman" id="pageRoman">PLATE I</span>
+          </div>
+
+          <h1 class="page-title" id="pageTitle">You show us the mess.</h1>
+          <p class="page-lead" id="pageLead">A 20-minute conversation and four form fields. No jargon, no RFPs. We read your raw processes, sticky notes, and spreadsheet mazes together to isolate what is genuinely stuck.</p>
+        </div>
+
+        <div class="page-marginalia" id="pageMarginalia">
+          <em>PLATE I</em> Survey Observation: Every enduring structure begins with an honest survey of the existing terrain and its real bottlenecks.
+        </div>
+      </article>
+
+      <!-- Right Page: Blueprint Plate & Technical Ledger -->
+      <aside class="page-sheet page-right" aria-label="Plate Blueprint and Specifications">
+        <div>
+          <div class="plate-seal-badge" id="plateBadge">
+            Field Survey · Unsorted Fog
+          </div>
+
+          <div class="plate-diagram-box" id="plateDiagram" aria-hidden="true">
+            <!-- SVG Blueprint inserted by book.js -->
+          </div>
+
+          <dl class="plate-ledger" id="plateLedger">
+            <!-- Technical specs inserted by book.js -->
+          </dl>
+        </div>
+
+        <div class="plate-footer-row">
+          <span>ARCHITECTURAL MONOGRAPH</span>
+          <span id="platePageNum">01 · 04</span>
+        </div>
+      </aside>
+    </div>
+
+    <!-- MODE 2: LEPORELLO ACCORDION UNOLD -->
+    <div class="leporello-container" aria-label="Leporello Unfolded Plates">
+      <!-- FOLD 01 -->
+      <div class="leporello-fold">
+        <div>
+          <span class="fold-caput">Plate I · Survey</span>
+          <h2 class="fold-title">You show us the mess.</h2>
+          <p class="fold-desc">20 minutes, 4 fields. No jargon, no RFPs. We read the fog together and isolate what is stuck.</p>
+        </div>
+        <div class="fold-visual" aria-hidden="true">
+          <svg viewBox="0 0 200 120" fill="none">
+            <circle cx="40" cy="35" r="3" fill="#c88a58"/>
+            <circle cx="80" cy="25" r="4" fill="#c88a58"/>
+            <circle cx="110" cy="50" r="4.5" fill="#e89e28"/>
+            <circle cx="65" cy="90" r="3" fill="#c88a58"/>
+            <path d="M40,35 L80,25 L110,50 L65,90 Z" stroke="#c88a58" stroke-dasharray="3 3"/>
+            <line x1="110" y1="50" x2="160" y2="50" stroke="#e89e28" stroke-width="1.2"/>
+            <polygon points="160,50 152,46 152,54" fill="#e89e28"/>
+          </svg>
+        </div>
+        <span class="fold-tag">20 Min Walkthrough</span>
+      </div>
+
+      <!-- FOLD 02 -->
+      <div class="leporello-fold">
+        <div>
+          <span class="fold-caput">Plate II · Maquette</span>
+          <h2 class="fold-title">We smooth it into a plan.</h2>
+          <p class="fold-desc">A real, clickable prototype in about a week. You click every button. Free, zero obligation.</p>
+        </div>
+        <div class="fold-visual" aria-hidden="true">
+          <svg viewBox="0 0 200 120" fill="none">
+            <rect x="25" y="15" width="150" height="90" rx="6" stroke="#e89e28" fill="#141217"/>
+            <line x1="25" y1="32" x2="175" y2="32" stroke="rgba(245,241,233,0.15)"/>
+            <rect x="36" y="42" width="45" height="18" rx="3" fill="rgba(232,158,40,0.18)" stroke="#e89e28"/>
+            <rect x="36" y="68" width="70" height="7" rx="2" fill="rgba(245,241,233,0.2)"/>
+            <circle cx="135" cy="70" r="6" stroke="#e89e28"/>
+          </svg>
+        </div>
+        <span class="fold-tag">✦ 100% Free · 1 Week</span>
+      </div>
+
+      <!-- FOLD 03 -->
+      <div class="leporello-fold">
+        <div>
+          <span class="fold-caput">Plate III · Assembly</span>
+          <h2 class="fold-title">The plan stands up.</h2>
+          <p class="fold-desc">Weekly Friday builds at 16:00 CET. Autonomous scripts do routine work; engineers make decisions.</p>
+        </div>
+        <div class="fold-visual" aria-hidden="true">
+          <svg viewBox="0 0 200 120" fill="none">
+            <g stroke="#38bdf8" stroke-width="1">
+              <rect x="25" y="75" width="45" height="25" rx="3" fill="rgba(56,189,248,0.1)"/>
+              <rect x="78" y="55" width="45" height="45" rx="3" fill="rgba(56,189,248,0.15)"/>
+              <rect x="131" y="30" width="45" height="70" rx="3" fill="rgba(56,189,248,0.22)"/>
+            </g>
+            <path d="M47,75 L78,55 L131,30" stroke="#e89e28" stroke-dasharray="2 2"/>
+          </svg>
+        </div>
+        <span class="fold-tag">Weekly Friday Demos</span>
+      </div>
+
+      <!-- FOLD 04 -->
+      <div class="leporello-fold">
+        <div>
+          <span class="fold-caput">Plate IV · The Deed</span>
+          <h2 class="fold-title">You own the model.</h2>
+          <p class="fold-desc">100% repository handover, plain code, design tokens, and zero vendor lock-in.</p>
+        </div>
+        <div class="fold-visual" aria-hidden="true">
+          <svg viewBox="0 0 200 120" fill="none">
+            <rect x="30" y="20" width="140" height="80" rx="6" stroke="#34d399" fill="#121513"/>
+            <circle cx="100" cy="50" r="10" stroke="#e89e28"/>
+            <line x1="100" y1="60" x2="100" y2="80" stroke="#e89e28" stroke-width="1.5"/>
+            <line x1="100" y1="72" x2="107" y2="72" stroke="#e89e28" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <span class="fold-tag">✦ 100% Deed Ownership</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="book.js"></script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Story: Foggy Idea to Finished Product preview – Maquette</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/base.css">
+<link rel="stylesheet" href="../components/header/header.css">
+<link rel="stylesheet" href="../components/story/story.css">
+<style>
+  /* Standalone preview bar */
+  .preview-banner {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 176, 32, 0.15);
+    border-bottom: 1px solid rgba(255, 176, 32, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 8px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+  }
+  .preview-banner a {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .preview-banner a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+<div class="site-backdrop" id="siteBackdrop" aria-hidden="true">
+  <div class="site-room" id="globalRoom"></div>
+  <div class="site-grain"></div>
+  <div class="site-shade"></div>
+</div>
+<div class="preview-banner">
+  <span>Previewing component: <strong>Story: Foggy Idea to Finished Product</strong> (<code>story</code>)</span>
+  <a href="index.html">← Back to Component Catalog</a>
+</div>
+<header id="siteHeader">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Maquette">Maquette</a>
+    <div class="nav-cluster">
+      <nav class="nav-desktop" aria-label="Main Navigation">
+        <a href="#work">Collection</a>
+        <a href="#services">Services</a>
+        <a href="#why">Values</a>
+        <a href="#faq">Visitor info</a>
+        <a class="cta" href="#contact">Free prototype</a>
+      </nav>
+      <a class="nav-mobile-cta cta" href="#contact">Free prototype</a>
+      <button type="button" class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+    <div class="mobile-drawer-inner">
+      <div class="mobile-drawer-kicker">Navigation</div>
+      <nav class="mobile-nav-links" aria-label="Mobile Navigation">
+        <a href="#work" class="mobile-nav-link">
+          <span class="m-num">01</span>
+          <span class="m-text">Collection</span>
+        </a>
+        <a href="#services" class="mobile-nav-link">
+          <span class="m-num">02</span>
+          <span class="m-text">Services</span>
+        </a>
+        <a href="#why" class="mobile-nav-link">
+          <span class="m-num">03</span>
+          <span class="m-text">Values</span>
+        </a>
+        <a href="#faq" class="mobile-nav-link">
+          <span class="m-num">04</span>
+          <span class="m-text">Visitor info</span>
+        </a>
+      </nav>
+      <div class="mobile-drawer-footer">
+        <a class="btn" href="#contact" id="mobileDrawerCta">Request free prototype</a>
+        <p class="mono mobile-drawer-email">hello@maquette.example</p>
+      </div>
+    </div>
+  </div>
+</header>
+<section id="story" aria-label="From idea to product">
+<div class="stage" id="stage">
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <div class="pool"></div>
+  <div class="hud">
+    <div class="meter mono">
+      <span>idea clarity</span>
+      <span class="bar"><b id="bar"></b></span>
+      <span id="pct">0%</span>
+    </div>
+    <div class="label">
+      <b id="lt">Fig. 1: The brief</b>
+      <span id="ld">A foggy idea, on loan from you. Please touch it.</span>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="wrap">
+    <div class="txt">
+      <span class="mono">Websites · Automations · Software</span>
+      <h1>From foggy idea to finished product.</h1>
+      <p>Tell us what is stuck. In about a week we turn it into a working prototype, free. Then we build the real thing, with a demo every week.</p>
+      <div class="row">
+        <a class="btn" href="#contact">Get my free prototype</a>
+        <a class="btn ghost" href="#build">See what we build</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel" id="process">
+  <div class="wrap">
+    <div class="txt">
+      <span class="mono">Step 1</span>
+      <h2>You show us the mess.</h2>
+      <p>A short call and four form fields: what is stuck, who uses it, what done looks like. We read the fog together, with no jargon.</p>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="wrap">
+    <div class="txt">
+      <span class="mono">Step 2</span>
+      <h2>We smooth it into a plan.<span class="free">free</span></h2>
+      <p>You get a clickable prototype with real screens in about a week. No cost, no commitment.</p>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="wrap">
+    <div class="txt">
+      <span class="mono">Step 3</span>
+      <h2>The plan stands up.</h2>
+      <p>Once you approve the maquette, we build the real product with a demo every week. Agents do the routine work, and a developer reviews every decision.</p>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="wrap">
+    <div class="txt">
+      <span class="mono">Step 4</span>
+      <h2>You keep the model.</h2>
+      <p>Source code, design files and a walkthrough are all yours. Support after launch is optional.</p>
+      <div class="row">
+        <a class="btn" href="#contact">Start with a free prototype</a>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="../components/story/story.js"></script>
+</body>
+</html>
+

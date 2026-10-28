@@ -1,0 +1,470 @@
+/* ===== Showcase Study: DNA Sinus Trail with 4 Alternating Waving Cards ===== */
+:root {
+  --bg: #09080b;
+  --bg-deep: #060507;
+  --panel: #131116;
+  --bone: #f5f1e9;
+  --mute: rgba(245, 241, 233, 0.72);
+  --dim: rgba(245, 241, 233, 0.38);
+  --line: rgba(245, 241, 233, 0.12);
+  --line-strong: rgba(245, 241, 233, 0.22);
+  --gold: #e89e28;
+  --gold-glow: rgba(232, 158, 40, 0.35);
+  --amber: #d99b26;
+  --bronze: #c88a58;
+  --cyan: #38bdf8;
+  --emerald: #34d399;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body.map-body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--bone);
+  font: 400 1rem/1.6 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Background museum drafting grid */
+.map-canvas-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(245, 241, 233, 0.022) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(245, 241, 233, 0.022) 1px, transparent 1px);
+  background-size: 36px 36px;
+  background-position: center center;
+}
+
+.map-ambient-pools {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 65% 45% at 20% 15%, rgba(200, 138, 88, 0.12), transparent 70%),
+    radial-gradient(ellipse 70% 50% at 80% 85%, rgba(232, 158, 40, 0.10), transparent 70%),
+    radial-gradient(ellipse 60% 45% at 50% 50%, rgba(56, 189, 248, 0.06), transparent 70%);
+}
+
+/* Wayfinding Sticky HUD / Navigation */
+.map-hud {
+  position: sticky;
+  top: 56px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 12px clamp(16px, 3.4vw, 40px);
+  background: rgba(9, 8, 11, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+
+.hud-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 200px;
+}
+
+.hud-floor-tag {
+  font: 700 0.68rem 'DM Mono', monospace;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+.hud-stage-name {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--bone);
+  transition: color 0.25s ease;
+}
+
+.hud-stations-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.hud-stations-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.station-pill {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: rgba(245, 241, 233, 0.04);
+  color: var(--mute);
+  font: 600 0.82rem 'Plus Jakarta Sans', sans-serif;
+  padding: 7px 15px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+}
+
+.station-pill:hover {
+  background: rgba(245, 241, 233, 0.08);
+  color: var(--bone);
+  border-color: var(--line-strong);
+}
+
+.station-pill.active {
+  background: rgba(232, 158, 40, 0.15);
+  color: var(--gold);
+  border-color: var(--gold);
+  box-shadow: 0 0 16px rgba(232, 158, 40, 0.25);
+}
+
+.pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.hud-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.clarity-label {
+  font: 700 0.72rem 'DM Mono', monospace;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+.clarity-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.clarity-bar {
+  width: 80px;
+  height: 5px;
+  background: rgba(245, 241, 233, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.clarity-bar-fill {
+  width: 25%;
+  height: 100%;
+  background: var(--gold);
+  transition: width 0.4s ease;
+  box-shadow: 0 0 8px var(--gold);
+}
+
+#clarityText {
+  font: 700 0.76rem 'DM Mono', monospace;
+  color: var(--gold);
+  min-width: 32px;
+}
+
+/* Main Shell */
+.map-shell {
+  position: relative;
+  z-index: 10;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: clamp(32px, 4vw, 56px) clamp(16px, 3.4vw, 40px) 96px;
+}
+
+/* Header */
+.map-intro {
+  margin-bottom: 24px;
+  max-width: 760px;
+}
+
+.map-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 700 0.72rem 'DM Mono', monospace;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.map-kicker::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+}
+
+.map-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  margin: 0 0 12px;
+}
+
+.map-title em {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--bronze);
+}
+
+.map-lead {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: var(--mute);
+  margin: 0;
+}
+
+/* ============================================================ */
+/* THE DNA SINE ROW CONTAINER                                   */
+/* ============================================================ */
+.dna-row-container {
+  position: relative;
+  width: 100%;
+  margin: 28px 0 44px;
+  padding: 48px 0;
+}
+
+/* Single Dotted DNA Sine Wave SVG Canvas */
+.dna-svg-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 4;
+  overflow: visible;
+}
+
+.dna-single-path {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 2.2px;
+  stroke-dasharray: 5 7;
+  stroke-linecap: round;
+  animation: dnaDrift 28s linear infinite;
+  filter: drop-shadow(0 0 10px rgba(232, 158, 40, 0.55));
+}
+
+@keyframes dnaDrift {
+  to { stroke-dashoffset: -240; }
+}
+
+/* Station Nodes on the DNA Sine Path */
+.dna-station-node {
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.dna-station-node:hover {
+  transform: scale(1.15);
+}
+
+.dna-node-ring {
+  fill: none;
+  stroke: rgba(232, 158, 40, 0.4);
+  stroke-width: 1.5px;
+  stroke-dasharray: 3 3;
+  animation: ringSpin 16s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes ringSpin {
+  to { transform: rotate(360deg); }
+}
+
+.dna-node-circle {
+  fill: #151319;
+  stroke: var(--gold);
+  stroke-width: 2px;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 0 8px rgba(232, 158, 40, 0.4));
+}
+
+.dna-station-node:hover .dna-node-circle,
+.dna-station-node.active .dna-node-circle {
+  fill: var(--gold);
+  stroke: #ffffff;
+  filter: drop-shadow(0 0 16px var(--gold));
+}
+
+.dna-node-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  fill: #f5f1e9;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+  transition: fill 0.3s ease;
+}
+
+.dna-station-node:hover .dna-node-num,
+.dna-station-node.active .dna-node-num {
+  fill: #161005;
+}
+
+/* ============================================================ */
+/* 4 CARDS: ONE A LITTLE BIT UP, ONE A LITTLE BIT DOWN          */
+/* ============================================================ */
+.dna-cards-row {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(16px, 2.4vw, 28px);
+  max-width: 1260px;
+  margin: 0 auto;
+}
+
+.card-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+/* Alternating Up & Down Stagger */
+.card-wrapper.step-up {
+  transform: translateY(-28px);
+}
+
+.card-wrapper.step-down {
+  transform: translateY(28px);
+}
+
+/* Waving Liquid Cloth Card */
+.card-cloth {
+  position: relative;
+  width: 100%;
+  min-height: 330px;
+  border-radius: 20px;
+  outline: none;
+  cursor: pointer;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  will-change: transform;
+}
+
+.card-cloth:hover,
+.card-cloth.active {
+  transform: scale(1.025);
+}
+
+.card-cloth canvas {
+  position: absolute;
+  left: -40px;
+  top: -40px;
+  pointer-events: none;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.85));
+}
+
+.card-cloth-link {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  border-radius: inherit;
+  text-decoration: none;
+}
+
+/* Card active indicator halo */
+.card-cloth.active::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 23px;
+  border: 1.5px solid var(--gold);
+  box-shadow: 0 0 20px var(--gold-glow);
+  pointer-events: none;
+}
+
+/* Bottom CTA Panel */
+.map-foot-strip {
+  margin-top: 56px;
+  background: linear-gradient(145deg, #16131a, #0f0d12);
+  border: 1px solid var(--line-strong);
+  border-radius: 18px;
+  padding: 22px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.foot-strip-text h3 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.foot-strip-text p {
+  color: var(--mute);
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+.btn-strip-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gold);
+  color: #161005;
+  font: 700 0.88rem 'Plus Jakarta Sans', sans-serif;
+  padding: 12px 26px;
+  border-radius: 999px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  white-space: nowrap;
+}
+
+.btn-strip-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 24px rgba(232, 158, 40, 0.45);
+}
+
+/* Responsive */
+@media (max-width: 1080px) {
+  .dna-row-container {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 56px 16px;
+  }
+  .dna-cards-row {
+    display: flex;
+    min-width: 1040px;
+  }
+  .card-wrapper {
+    min-width: 250px;
+    flex: 1;
+    scroll-snap-align: center;
+  }
+}

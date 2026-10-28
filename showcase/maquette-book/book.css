@@ -1,0 +1,554 @@
+/* ===== Showcase Study: Architectural Folio / Leporello Book ===== */
+:root {
+  --bg: #09080b;
+  --book-desk: #110f14;
+  --cloth-cover: #18151c;
+  --page-bg: #151319;
+  --page-border: rgba(245, 241, 233, 0.12);
+  --paper-tint: #f5f1e9;
+  --bone: #f5f1e9;
+  --mute: rgba(245, 241, 233, 0.68);
+  --dim: rgba(245, 241, 233, 0.38);
+  --gold: #e89e28;
+  --gold-foil: #f0ad38;
+  --gold-glow: rgba(232, 158, 40, 0.28);
+  --amber: #d99b26;
+  --bronze: #c88a58;
+  --cyan: #38bdf8;
+  --emerald: #34d399;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body.book-body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--bone);
+  font: 400 1rem/1.65 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Desk Surface Background */
+.desk-surface {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 30%, rgba(200, 138, 88, 0.12), transparent 70%),
+    radial-gradient(ellipse 80% 60% at 50% 85%, rgba(17, 15, 20, 0.95), #070608 90%);
+}
+
+.desk-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/><feColorMatrix values='0 0 0 0 .5 0 0 0 0 .48 0 0 0 0 .45 0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Book Chrome Controller Header */
+.book-controller-bar {
+  position: sticky;
+  top: 64px;
+  z-index: 30;
+  background: rgba(12, 11, 14, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--page-border);
+  padding: 12px clamp(16px, 3.4vw, 44px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.controller-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.monograph-emblem {
+  font: 700 0.72rem 'DM Mono', monospace;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.book-title-tag {
+  font: italic 1.05rem 'Instrument Serif', Georgia, serif;
+  color: var(--bone);
+}
+
+/* Mode Switcher Buttons */
+.view-modes-group {
+  display: flex;
+  background: var(--cloth-cover);
+  border: 1px solid var(--page-border);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.btn-view-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 16px;
+  color: var(--mute);
+  font: 600 0.76rem 'DM Mono', monospace;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-view-mode:hover {
+  color: var(--bone);
+}
+
+.btn-view-mode.active {
+  background: rgba(232, 158, 40, 0.16);
+  color: var(--gold);
+  box-shadow: inset 0 0 0 1px var(--gold);
+}
+
+.controller-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-indicator {
+  font: 600 0.76rem 'DM Mono', monospace;
+  letter-spacing: 0.18em;
+  color: var(--mute);
+}
+
+.btn-turn-arrow {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--page-border);
+  background: var(--cloth-cover);
+  color: var(--bone);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font: 400 1rem sans-serif;
+  transition: all 0.25s ease;
+}
+
+.btn-turn-arrow:hover:not(:disabled) {
+  border-color: var(--gold);
+  background: #24202a;
+}
+
+.btn-turn-arrow:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Main Container Shell */
+.book-stage {
+  position: relative;
+  z-index: 10;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: clamp(36px, 5vw, 64px) clamp(16px, 3.4vw, 40px) 100px;
+}
+
+/* Book Cover Spine & Folio Binding Wrapper */
+.monograph-binder {
+  background: var(--cloth-cover);
+  border: 1px solid rgba(245, 241, 233, 0.16);
+  border-radius: 28px;
+  box-shadow:
+    0 40px 100px -20px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    inset 0 0 80px rgba(0, 0, 0, 0.6);
+  padding: clamp(20px, 3.5vw, 44px);
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Gold Folio Ribbon Bookmark */
+.folio-ribbon {
+  position: absolute;
+  top: -12px;
+  right: 60px;
+  width: 28px;
+  height: 70px;
+  background: linear-gradient(180deg, #e89e28, #c47a46);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+  z-index: 25;
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+  pointer-events: none;
+}
+
+/* Plate Thumb Tabs Bar */
+.book-thumb-tabs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--page-border);
+  padding-bottom: 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.book-thumb-tabs::-webkit-scrollbar { display: none; }
+
+.thumb-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 8px;
+  background: rgba(245, 241, 233, 0.03);
+  border: 1px solid var(--page-border);
+  color: var(--mute);
+  font: 600 0.74rem 'DM Mono', monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+}
+
+.thumb-tab:hover {
+  color: var(--bone);
+  border-color: rgba(245, 241, 233, 0.3);
+}
+
+.thumb-tab.active {
+  background: rgba(232, 158, 40, 0.15);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* MODE 1: MONOGRAPH FOLIO SPREAD */
+.monograph-spread {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--page-bg);
+  border: 1px solid var(--page-border);
+  border-radius: 20px;
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+  min-height: 600px;
+}
+
+/* Book Gutter Fold Shadow */
+.monograph-spread::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 32px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.4), transparent 50%, rgba(0, 0, 0, 0.4));
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Left Page: Curatorial Text */
+.page-sheet {
+  padding: clamp(32px, 4vw, 56px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.page-left {
+  border-right: 1px solid rgba(245, 241, 233, 0.06);
+}
+
+.page-folio-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--page-border);
+  padding-bottom: 14px;
+  margin-bottom: 30px;
+}
+
+.page-caput {
+  font: 700 0.72rem 'DM Mono', monospace;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.page-roman {
+  font: italic 1rem 'Instrument Serif', Georgia, serif;
+  color: var(--dim);
+}
+
+.page-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(2rem, 3.4vw, 2.9rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin: 0 0 20px;
+  color: var(--bone);
+}
+
+.page-lead {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--mute);
+  margin: 0 0 28px;
+}
+
+/* Curatorial Marginalia / Footnotes */
+.page-marginalia {
+  border-top: 1px solid var(--page-border);
+  padding-top: 18px;
+  margin-top: 24px;
+  font: italic 0.95rem/1.6 'Instrument Serif', Georgia, serif;
+  color: var(--mute);
+}
+
+.page-marginalia em {
+  font-family: 'DM Mono', monospace;
+  font-style: normal;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  margin-right: 8px;
+}
+
+/* Right Page: Blueprint Plate */
+.page-right {
+  background: #0f0d12;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.plate-diagram-box {
+  background: #080709;
+  border: 1px solid var(--page-border);
+  border-radius: 14px;
+  padding: 24px;
+  margin: 20px 0;
+  position: relative;
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+}
+
+.plate-diagram-box svg {
+  width: 100%;
+  height: 100%;
+  max-height: 240px;
+}
+
+/* Wax / Embossed Seal Badge */
+.plate-seal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: rgba(232, 158, 40, 0.10);
+  border: 1px dashed var(--gold);
+  color: var(--gold);
+  font: 700 0.72rem 'DM Mono', monospace;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.plate-seal-badge.emerald {
+  background: rgba(52, 211, 153, 0.10);
+  border-color: var(--emerald);
+  color: var(--emerald);
+}
+
+/* Plate Technical Ledger Table */
+.plate-ledger {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px 24px;
+  border-top: 1px solid var(--page-border);
+  padding-top: 20px;
+}
+
+.ledger-item dt {
+  font: 600 0.68rem 'DM Mono', monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 4px;
+}
+
+.ledger-item dd {
+  margin: 0;
+  font: 600 0.88rem 'Plus Jakarta Sans', sans-serif;
+  color: var(--bone);
+}
+
+/* Plate Footer Numbering */
+.plate-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--page-border);
+  padding-top: 14px;
+  margin-top: 20px;
+  font: 500 0.72rem 'DM Mono', monospace;
+  letter-spacing: 0.18em;
+  color: var(--dim);
+}
+
+/* MODE 2: LEPORELLO ACCORDION UNOLD */
+.leporello-container {
+  display: none;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  background: var(--page-bg);
+  border: 1px solid var(--page-border);
+  border-radius: 20px;
+  overflow-x: auto;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+}
+
+.monograph-binder.view-leporello .monograph-spread {
+  display: none;
+}
+
+.monograph-binder.view-leporello .leporello-container {
+  display: grid;
+}
+
+/* Each Leporello Fold Panel */
+.leporello-fold {
+  padding: 36px 28px;
+  border-right: 1px dashed rgba(245, 241, 233, 0.14);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 290px;
+  background: var(--page-bg);
+  transition: background 0.3s ease;
+}
+
+.leporello-fold:last-child {
+  border-right: 0;
+}
+
+.leporello-fold:hover {
+  background: #191620;
+}
+
+/* Leporello Seam Crease Line */
+.leporello-fold::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -1px;
+  width: 2px;
+  background: linear-gradient(180deg, transparent, rgba(232, 158, 40, 0.3), transparent);
+  pointer-events: none;
+}
+
+.fold-caput {
+  font: 700 0.7rem 'DM Mono', monospace;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.fold-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  margin: 0 0 14px;
+}
+
+.fold-desc {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--mute);
+  margin: 0 0 24px;
+}
+
+.fold-visual {
+  height: 160px;
+  background: #09080b;
+  border: 1px solid var(--page-border);
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 20px;
+  padding: 14px;
+}
+
+.fold-visual svg {
+  width: 100%;
+  height: 100%;
+}
+
+.fold-tag {
+  font: 600 0.72rem 'DM Mono', monospace;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+
+/* Responsive adjustments */
+@media (max-width: 960px) {
+  .monograph-spread {
+    grid-template-columns: 1fr;
+  }
+  .page-left {
+    border-right: 0;
+    border-bottom: 1px solid var(--page-border);
+  }
+  .monograph-spread::before {
+    display: none;
+  }
+  .leporello-container {
+    grid-template-columns: 1fr;
+  }
+  .leporello-fold {
+    border-right: 0;
+    border-bottom: 1px dashed rgba(245, 241, 233, 0.14);
+    min-width: auto;
+  }
+}
+
+@media (max-width: 680px) {
+  .book-controller-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .controller-left, .controller-right {
+    justify-content: space-between;
+  }
+  .plate-ledger {
+    grid-template-columns: 1fr;
+  }
+}

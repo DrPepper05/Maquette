@@ -1,0 +1,126 @@
+/* ===== Contact Component (Portfolio Gallery Standard) ===== */
+#contact {
+  position: relative;
+  background: transparent;
+  overflow: visible;
+}
+
+#contact .room {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -100px;
+  bottom: -60px;
+  z-index: 0;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 160px, #000 calc(100% - 100px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 160px, #000 calc(100% - 100px), transparent 100%);
+  background:
+    radial-gradient(ellipse 75% 65% at 65% 50%, rgba(120, 40, 48, 0.42), transparent 72%),
+    radial-gradient(ellipse 65% 55% at 70% 45%, rgba(223, 114, 73, 0.25), transparent 70%),
+    radial-gradient(ellipse 55% 50% at 22% 55%, rgba(232, 158, 40, 0.18), transparent 66%);
+}
+
+#contact .wrap {
+  position: relative;
+  z-index: 3;
+}
+
+#contact .box {
+  background: rgba(23, 21, 26, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 36px;
+  padding: clamp(28px, 5vw, 60px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 44px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+#contact h2 {
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+}
+
+#contact form {
+  display: grid;
+  gap: 16px;
+}
+
+#contact label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.92rem;
+  color: var(--mute);
+}
+
+#contact input,
+#contact select,
+#contact textarea {
+  font: inherit;
+  color: var(--bone);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 13px 18px;
+  width: 100%;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#contact textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+#contact input:focus,
+#contact select:focus,
+#contact textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(232, 158, 40, 0.2);
+}
+
+#contact #ok {
+  display: none;
+  color: var(--gold);
+  font-size: 0.92rem;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(232, 158, 40, 0.1);
+  border: 1px solid rgba(232, 158, 40, 0.24);
+}
+
+@media (max-width: 860px) {
+  #contact .box {
+    grid-template-columns: 1fr;
+    border-radius: 28px;
+    padding: 32px 24px;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  #contact {
+    padding: 64px 0 56px;
+  }
+
+  #contact .box {
+    padding: 24px 16px;
+    border-radius: 22px;
+    gap: 24px;
+  }
+
+  #contact input,
+  #contact select,
+  #contact textarea {
+    font-size: 16px; /* Prevents iOS auto-zoom on input focus */
+    padding: 13px 14px;
+    border-radius: 14px;
+  }
+
+  #contact form .btn {
+    width: 100%;
+    text-align: center;
+    padding: 15px 20px;
+  }
+}

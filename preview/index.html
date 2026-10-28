@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Component Catalog – Maquette</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/base.css">
+<style>
+  body {
+    padding: 60px 0 100px;
+  }
+  .catalog-header {
+    margin-bottom: 48px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 32px;
+  }
+  .catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+  .catalog-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+  }
+  .catalog-card:hover {
+    border-color: rgba(255, 176, 32, 0.35);
+    transform: translateY(-2px);
+  }
+  .card-head h3 {
+    margin: 8px 0 12px;
+    font-size: 1.8rem;
+  }
+  .card-head a {
+    text-decoration: none;
+  }
+  .card-head a:hover {
+    color: var(--gold);
+  }
+  .catalog-card p {
+    color: var(--mute);
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+  }
+  .card-links {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .btn-sm {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    background: var(--gold);
+    color: #1a1205;
+    transition: opacity 0.2s ease;
+  }
+  .btn-sm:hover {
+    opacity: 0.9;
+  }
+  .btn-sm.ghost {
+    background: transparent;
+    color: var(--bone);
+    border: 1px solid var(--line);
+  }
+  .btn-sm.ghost:hover {
+    border-color: var(--bone);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="catalog-header">
+    <span class="mono">Maquette Architecture</span>
+    <h1 style="margin: 12px 0 16px;">Component Catalog</h1>
+    <p style="color: var(--mute); font-size: 1.15rem; max-width: 60ch;">
+      Every website component is isolated and runnable independently so you or any AI agent can inspect, develop, and preview each component in separation.
+    </p>
+    <div style="margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap;">
+      <a class="btn" href="../index.html">View Full Website ↗</a>
+      <a class="btn ghost" href="../showcase/index.html">Component Showcase &amp; Lab ↗</a>
+    </div>
+  </div>
+
+  <div class="catalog-grid">
+    
+      <div class="catalog-card">
+        <div class="card-head">
+          <span class="mono">header</span>
+          <h3><a href="header.html">Header Navigation</a></h3>
+        </div>
+        <p>Isolated component preview with live styles, fonts, and scripts.</p>
+        <div class="card-links">
+          <a class="btn-sm" href="header.html" target="_blank">Open Preview ↗</a>
+          <a class="btn-sm ghost" href="../components/header/index.html" target="_blank">Component Folder View ↗</a>
+        </div>
+      </div>
+    
+
+      <div class="catalog-card">
+        <div class="card-head">
+          <span class="mono">story</span>
+          <h3><a href="story.html">Story: Foggy Idea to Finished Product</a></h3>
+        </div>
+        <p>Isolated component preview with live styles, fonts, and scripts.</p>
+        <div class="card-links">
+          <a class="btn-sm" href="story.html" target="_blank">Open Preview ↗</a>
+          <a class="btn-sm ghost" href="../components/story/index.html" target="_blank">Component Folder View ↗</a>
+        </div>
+      </div>
+    
+
+      <div class="catalog-card">
+        <div class="card-head">
+          <span class="mono">services</span>
+          <h3><a href="services.html">Wings / Services</a></h3>
+        </div>
+        <p>Isolated component preview with live styles, fonts, and scripts.</p>
+        <div class="card-links">
+          <a class="btn-sm" href="services.html" target="_blank">Open Preview ↗</a>
+          <a class="btn-sm ghost" href="../components/services/index.html" target="_blank">Component Folder View ↗</a>
+        </div>
+      </div>
+    
+
+      <div class="catalog-card">
+        <div class="card-head">
+          <span class="mono">gallery</span>
+          <h3><a href="gallery.html">Collection 3D Showcase (Hero)</a></h3>
+        </div>
+        <p>Isolated component preview with live styles, fonts, and scripts.</p>
+        <div class="card-links">
+          <a class="btn-sm" href="gallery.html" target="_blank">Open Preview ↗</a>
+          <a class="btn-sm ghost" href="../components/gallery/index.html" target="_blank">Component Folder View ↗</a>
+        </div>
+      </div>
+    
+
+      <div class="catalog-card">
+        <div class="card-head">
+          <span class="mono">why</span>
+          <h3><a href="why.html">Why / How We Work With You</a></h3>
+        </div>
+        <p>Isolated component preview with live styles, fonts, and scripts.</p>
+        <div class="card-links">
+          <a class="btn-sm" href="why.html" target="_blank">Open Preview ↗</a>
+          <a class="btn-sm ghost" href="../components/why/index.html" target="_blank">Component Folder View ↗</a>
+        </div>
+      </div>
+    
+
+      <div class="catalog-card">
+        <div class="card-head">
+          <span class="mono">faq</span>
+          <h3><a href="faq.html">Visitor Information / FAQ</a></h3>
+        </div>
+        <p>Isolated component preview with live styles, fonts, and scripts.</p>
+        <div class="card-links">
+          <a class="btn-sm" href="faq.html" target="_blank">Open Preview ↗</a>
+          <a class="btn-sm ghost" href="../components/faq/index.html" target="_blank">Component Folder View ↗</a>
+        </div>
+      </div>
+    
+
+      <div class="catalog-card">
+        <div class="card-head">
+          <span class="mono">contact</span>
+          <h3><a href="contact.html">Contact & Prototype Request</a></h3>
+        </div>
+        <p>Isolated component preview with live styles, fonts, and scripts.</p>
+        <div class="card-links">
+          <a class="btn-sm" href="contact.html" target="_blank">Open Preview ↗</a>
+          <a class="btn-sm ghost" href="../components/contact/index.html" target="_blank">Component Folder View ↗</a>
+        </div>
+      </div>
+    
+
+      <div class="catalog-card">
+        <div class="card-head">
+          <span class="mono">footer</span>
+          <h3><a href="footer.html">Footer</a></h3>
+        </div>
+        <p>Isolated component preview with live styles, fonts, and scripts.</p>
+        <div class="card-links">
+          <a class="btn-sm" href="footer.html" target="_blank">Open Preview ↗</a>
+          <a class="btn-sm ghost" href="../components/footer/index.html" target="_blank">Component Folder View ↗</a>
+        </div>
+      </div>
+    
+
+      <div class="catalog-card">
+        <div class="card-head">
+          <span class="mono">album</span>
+          <h3><a href="album.html">Selected Projects Album (Hero Alternative)</a></h3>
+        </div>
+        <p>Isolated component preview with live styles, fonts, and scripts.</p>
+        <div class="card-links">
+          <a class="btn-sm" href="album.html" target="_blank">Open Preview ↗</a>
+          <a class="btn-sm ghost" href="../components/album/index.html" target="_blank">Component Folder View ↗</a>
+        </div>
+      </div>
+    
+  </div>
+</div>
+</body>
+</html>
+

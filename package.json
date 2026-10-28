@@ -1,19 +1,20 @@
 {
   "name": "maquette-site",
+  "version": "1.0.0",
+  "description": "Maquette website - modular component architecture with cursive typography and 3D WebGL paper story",
   "type": "module",
-  "version": "0.1.0",
-  "private": true,
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview"
+    "build": "node preview.mjs all && node build.mjs",
+    "preview": "node preview.mjs all",
+    "serve": "npx -y serve .",
+    "dev": "node preview.mjs all && node build.mjs"
   },
-  "dependencies": {
-    "@tailwindcss/vite": "^4.1.0",
-    "@types/three": "^0.185.4",
-    "astro": "^5.13.0",
-    "gsap": "^3.15.0",
-    "tailwindcss": "^4.1.0",
-    "three": "^0.185.1"
-  }
+  "keywords": [
+    "maquette",
+    "webgl",
+    "threejs",
+    "components"
+  ],
+  "author": "Maquette Team",
+  "license": "UNLICENSED"
 }

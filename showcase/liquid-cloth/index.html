@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Liquid Cloth — Maquette Component Lab</title>
+<meta name="description" content="A standalone WebGL liquid-cloth poster: silk folds, drifting light and signal glitches on a single draggable card.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/lab.css">
+<link rel="stylesheet" href="cloth.css">
+</head>
+<body>
+<header class="lab-bar">
+  <a class="lab-back" href="../index.html"><span>←</span> All components</a>
+  <div class="lab-brand">Maquette <em>Lab</em></div>
+  <span class="lab-tech">WebGL · Cloth shader</span>
+</header>
+
+<main class="cloth-shell" id="clothStage">
+  <div class="cloth-room" id="clothRoom" aria-hidden="true"></div>
+  <div class="lab-grain" aria-hidden="true"></div>
+
+  <div class="cloth-intro">
+    <span class="lab-kicker">Material study 04</span>
+    <h1 class="lab-title">Liquid<br><em>cloth.</em></h1>
+    <p class="lab-desc">A silk poster suspended in a slow current. Hover to steady the surface, then let go. Click the fabric to send a signal through it.</p>
+  </div>
+
+  <div class="cloth-frame" id="clothFrame" tabindex="0" role="img" aria-label="Liquid cloth poster">
+    <div class="cloth-glow" id="clothGlow" aria-hidden="true"></div>
+    <canvas class="cloth-canvas" id="clothCanvas"></canvas>
+  </div>
+
+  <aside class="cloth-meta" aria-live="polite">
+    <span class="cloth-num" id="clothNum">01</span>
+    <div>
+      <h2 class="cloth-name" id="clothTitle">Northwind</h2>
+      <p class="cloth-cat" id="clothCategory">Fleet Logistics Software · 2026</p>
+      <p class="cloth-tag" id="clothTag">Fleet operations, one screen.</p>
+    </div>
+  </aside>
+
+  <div class="lab-rail cloth-rail">
+    <button type="button" class="lab-btn" id="clothStill" aria-pressed="false">Still</button>
+    <label class="cloth-slider">
+      <span>Current</span>
+      <input type="range" id="clothMotion" min="0" max="100" value="65" aria-label="Cloth current">
+    </label>
+    <button type="button" class="lab-btn" id="clothGlitch">Glitch</button>
+    <span class="lab-count" id="clothCount">01 — 05</span>
+    <button type="button" class="lab-round" id="clothPrev" aria-label="Previous poster">←</button>
+    <button type="button" class="lab-round" id="clothNext" aria-label="Next poster">→</button>
+  </div>
+
+  <p class="lab-hint">Hover: calm · Click: glitch<br>G: glitch · S: still</p>
+  <p class="sr-only" id="clothLive" aria-live="polite"></p>
+</main>
+
+<script src="../shared/projects.js"></script>
+<script src="cloth.js"></script>
+</body>
+</html>

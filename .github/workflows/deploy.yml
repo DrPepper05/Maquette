@@ -1,10 +1,6 @@
-# Build Astro și publică dist/ pe GitHub Pages.
-# Pages trebuie setat pe „GitHub Actions" (Settings → Pages → Source),
-# altfel GitHub rulează build-ul lui Jekyll implicit, care pică pe .astro.
-#
-# Site-ul se servește pe domeniul propriu maquette.ro (custom domain în
-# Settings → Pages + înregistrări DNS în Cloudflare). Config-ul Astro
-# folosește valorile implicite: site maquette.ro, base /.
+# Build and deploy to GitHub Pages.
+# Site is served on custom domain maquette.ro (custom domain in
+# Settings -> Pages + DNS records). Base path is root (/).
 name: Deploy to GitHub Pages
 
 on:

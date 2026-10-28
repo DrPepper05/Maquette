@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Story Component Preview – Maquette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles/base.css">
+<link rel="stylesheet" href="../../components/header/header.css">
+<link rel="stylesheet" href="../shared/lab.css">
+<link rel="stylesheet" href="story.css">
+<style>
+  .lab-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; }
+  header:not(.lab-bar) { top: 56px; }
+  #story { padding-top: 56px; }
+</style>
+</head>
+<body>
+<header class="lab-bar">
+  <a class="lab-back" href="../index.html"><span>←</span> All components</a>
+  <div class="lab-brand">Maquette <em>Story</em></div>
+  <span class="lab-tech">3D WebGL · Paper Unfold</span>
+</header>
+<!-- component: header for context -->
+<header>
+  <div class="wrap">
+    <a class="logo" href="#top"><i></i>Maquette</a>
+    <nav>
+      <a href="#process">The tour</a>
+      <a class="cta" href="#contact">Free prototype</a>
+    </nav>
+  </div>
+</header>
+
+<!-- component: story -->
+<section id="story">
+<div class="stage" id="stage">
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <div class="pool"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="hud">
+    <div class="meter mono">
+      <span>idea clarity</span>
+      <span class="bar"><b id="bar"></b></span>
+      <span id="pct">0%</span>
+    </div>
+    <div class="label">
+      <b id="lt">Fig. 1: The brief</b>
+      <span id="ld">Crumpled paper, on loan from you. Please touch it.</span>
+    </div>
+  </div>
+</div>
+
+<div class="panel l">
+  <div class="wrap">
+    <div class="txt">
+      <span class="mono">free admission · come in</span>
+      <h1>Your business runs on crumpled paper.</h1>
+      <p>We smooth it into a working prototype in about a week, free. Then we build the real thing: websites, automations and software for growing businesses.</p>
+      <div class="row">
+        <a class="btn" href="#contact">Get your free prototype</a>
+        <a class="btn ghost" href="#process">See how it works</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel r" id="process">
+  <div class="wrap">
+    <div class="txt">
+      <span class="mono">step 1 of 4 · 2–3 days</span>
+      <h2>You show us the mess.</h2>
+      <p>A short call and four form fields: what is stuck, who uses it, what done looks like. We read the crumpled paper together.</p>
+    </div>
+  </div>
+</div>
+
+<div class="panel r">
+  <div class="wrap">
+    <div class="txt">
+      <span class="mono">step 2 of 4 · about a week</span>
+      <h2>We smooth it into a plan.<span class="free">free</span></h2>
+      <p>You get a clickable prototype of your idea, with real screens and a real flow. It costs nothing, and you owe us nothing if it is not right.</p>
+    </div>
+  </div>
+</div>
+
+<div class="panel l">
+  <div class="wrap">
+    <div class="txt">
+      <span class="mono">step 3 of 4 · 2–8 weeks</span>
+      <h2>The plan stands up.</h2>
+      <p>Once you approve the maquette, we build the real product with a demo every week. Agents do the routine work, and people make every decision.</p>
+    </div>
+  </div>
+</div>
+
+<div class="panel l">
+  <div class="wrap">
+    <div class="txt">
+      <span class="mono">step 4 of 4 · 1 week</span>
+      <h2>You keep the model.</h2>
+      <p>Source code, design files and a walkthrough are all yours. Support after launch is optional.</p>
+      <div class="row">
+        <a class="btn" href="#contact">Get your free prototype</a>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="story.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Crumpled Paper — Maquette Component Lab</title>
+<meta name="description" content="A standalone WebGL crumpled-paper painting: fold, unfold and glitch a framed artwork in real time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/lab.css">
+<link rel="stylesheet" href="paper.css">
+</head>
+<body>
+<header class="lab-bar">
+  <a class="lab-back" href="../index.html"><span>←</span> All components</a>
+  <div class="lab-brand">Maquette <em>Lab</em></div>
+  <span class="lab-tech">WebGL · GLSL</span>
+</header>
+
+<main class="paper-shell" id="paperStage">
+  <div class="paper-room" id="paperRoom" aria-hidden="true"></div>
+  <canvas class="paper-canvas" id="paperCanvas" tabindex="0" role="img" aria-label="Crumpled paper artwork"></canvas>
+  <div class="paper-vignette" aria-hidden="true"></div>
+  <div class="lab-grain" aria-hidden="true"></div>
+
+  <div class="paper-intro">
+    <span class="lab-kicker">Motion study 02</span>
+    <h1 class="lab-title">Crumpled<br><em>paper.</em></h1>
+    <p class="lab-desc">A framed painting living on a sheet of archival paper. Fold it, flatten it, or let a signal tear through it.</p>
+  </div>
+
+  <aside class="paper-meta" aria-live="polite">
+    <span class="paper-num" id="paperNum">01</span>
+    <div>
+      <h2 class="paper-name" id="paperTitle">Northwind</h2>
+      <p class="paper-cat" id="paperCategory">Fleet Logistics Software · 2026</p>
+      <p class="paper-tag" id="paperTag">Fleet operations, one screen.</p>
+    </div>
+  </aside>
+
+  <div class="lab-rail paper-rail">
+    <button type="button" class="lab-btn" id="paperCrumpleBtn" aria-pressed="false">Crumple</button>
+    <button type="button" class="lab-btn" id="paperGlitchBtn">Glitch</button>
+    <span class="lab-count" id="paperCount">01 — 05</span>
+    <button type="button" class="lab-round" id="paperPrev" aria-label="Previous painting">←</button>
+    <button type="button" class="lab-round" id="paperNext" aria-label="Next painting">→</button>
+  </div>
+
+  <p class="lab-tagline">Paper · ink · folds<br>Three.js r128</p>
+  <p class="lab-hint">Drag to tilt<br>Space: fold · G: glitch</p>
+  <p class="sr-only" id="paperLive" aria-live="polite"></p>
+  <div class="paper-fallback" id="paperFallback" hidden>
+    WebGL is not available in this browser. The paper simulation has been disabled.
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="../shared/projects.js"></script>
+<script src="../shared/paper-shaders.js"></script>
+<script src="paper.js"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Footer preview – Maquette</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/base.css">
+<link rel="stylesheet" href="../components/footer/footer.css">
+<style>
+  /* Standalone preview bar */
+  .preview-banner {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 176, 32, 0.15);
+    border-bottom: 1px solid rgba(255, 176, 32, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 8px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+  }
+  .preview-banner a {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .preview-banner a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+<div class="site-backdrop" id="siteBackdrop" aria-hidden="true">
+  <div class="site-room" id="globalRoom"></div>
+  <div class="site-grain"></div>
+  <div class="site-shade"></div>
+</div>
+<div class="preview-banner">
+  <span>Previewing component: <strong>Footer</strong> (<code>footer</code>)</span>
+  <a href="index.html">← Back to Component Catalog</a>
+</div>
+<footer>
+  <div class="wrap">
+    <span>© 2026 Maquette</span>
+    <span>From foggy idea to finished product · Free prototypes</span>
+  </div>
+</footer>
+
+</body>
+</html>
+

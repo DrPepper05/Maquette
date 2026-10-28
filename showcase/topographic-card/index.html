@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Topographic Process Card — Maquette Component Lab</title>
+<meta name="description" content="The complete four-station process map rendered as a single panoramic WebGL waving liquid cloth card with procedural contours and interactive sine trace.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/lab.css">
+<link rel="stylesheet" href="card.css">
+</head>
+<body class="map-body">
+
+<header class="lab-bar">
+  <a class="lab-back" href="../index.html"><span>←</span> Maquette site</a>
+  <div class="lab-brand">Maquette <em>Showcase · Study 17</em></div>
+  <span class="lab-tech">Single Waving Topographic Card · WebGL</span>
+</header>
+
+<div class="map-canvas-grid" aria-hidden="true"></div>
+<div class="map-ambient-pools" aria-hidden="true"></div>
+<div class="lab-grain" aria-hidden="true"></div>
+
+<!-- Wayfinding Sticky HUD / 1-2-3-4 Progress Indicator -->
+<nav class="map-hud" aria-label="Process Step Navigation">
+  <div class="hud-left">
+    <span class="hud-floor-tag">Process Specimen · Single Waving Card</span>
+    <span class="hud-stage-name" id="currentStageName">Station 01: Intake &amp; survey</span>
+  </div>
+
+  <div class="hud-stations-nav" role="tablist">
+    <button type="button" class="station-pill active" data-index="0" role="tab" aria-selected="true">
+      <span class="pill-dot"></span>01 Intake &amp; survey
+    </button>
+    <button type="button" class="station-pill" data-index="1" role="tab" aria-selected="false">
+      <span class="pill-dot"></span>02 1:1 Study Model [Free]
+    </button>
+    <button type="button" class="station-pill" data-index="2" role="tab" aria-selected="false">
+      <span class="pill-dot"></span>03 Structural assembly
+    </button>
+    <button type="button" class="station-pill" data-index="3" role="tab" aria-selected="false">
+      <span class="pill-dot"></span>04 Deed of handover
+    </button>
+  </div>
+
+  <div class="hud-right">
+    <span class="clarity-label">Progress</span>
+    <div class="clarity-badge">
+      <div class="clarity-bar">
+        <div class="clarity-bar-fill" id="clarityFill"></div>
+      </div>
+      <span id="clarityText">25%</span>
+    </div>
+  </div>
+</nav>
+
+<main class="map-shell">
+  <!-- Intro Header -->
+  <section class="map-intro">
+    <span class="map-kicker">How it works</span>
+    <h1 class="map-title">From stuck to <em>handed over.</em></h1>
+    <p class="map-lead">The complete four-station process map contained within a single panoramic waving liquid cloth card. Mathematical contour lines in studio colors, sine wave trace, and interactive waypoints.</p>
+  </section>
+
+  <!-- The Single Panoramic Waving Card Stage -->
+  <div class="map-stage" id="mapStage">
+    <!-- The Waving Liquid Cloth Card (100% width, no inner scroller) -->
+    <div class="card-cloth" id="mapCloth" role="region" aria-label="Process Map: From stuck to handed over">
+      <canvas id="clothCanvas" aria-hidden="true"></canvas>
+
+      <!-- Interactive Architectural Overlay -->
+      <div class="map-overlay" id="mapOverlay">
+        <!-- Scrim gradient for crystal-clear typography readability -->
+        <div class="map-scrim" aria-hidden="true"></div>
+
+        <!-- Sine Wave Trace Path -->
+        <svg class="trace" viewBox="0 0 1200 500" preserveAspectRatio="none" aria-hidden="true">
+          <path class="base" id="pb"/>
+          <path class="prog" id="pp" pathLength="1"/>
+        </svg>
+
+        <!-- Architectural Scale Bar -->
+        <svg class="scale" viewBox="0 0 84 8" fill="none" stroke="currentColor" aria-hidden="true">
+          <path d="M1 4h82M1 0v8M42 1.5v5M83 0v8"/>
+        </svg>
+
+        <!-- Architectural Compass Rose -->
+        <svg class="compass" id="compassRose" viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.1" aria-hidden="true">
+          <circle cx="30" cy="30" r="27"/>
+          <path d="M30 5 34 30 30 55 26 30Z"/>
+          <path d="M30 5 34 30H26Z" fill="var(--gold)" stroke="var(--gold)"/>
+          <text x="27.4" y="16" font-size="7" fill="currentColor" stroke="none" font-family="'DM Mono', monospace">N</text>
+        </svg>
+
+        <!-- 4 Station Columns (Populated & Synced by card.js) -->
+        <div class="cols" id="cols"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Foot CTA Strip -->
+  <section class="map-foot-strip">
+    <div class="foot-strip-text">
+      <h3>Ready to smooth out your idea?</h3>
+      <p>Tell us what is stuck. In about a week we deliver a working scale maquette for your team to test, at no cost.</p>
+    </div>
+    <a class="btn-strip-cta" href="../../#contact">
+      <span>Request Your Free Maquette</span>
+      <span aria-hidden="true">↗</span>
+    </a>
+  </section>
+</main>
+
+<script src="card.js"></script>
+</body>
+</html>

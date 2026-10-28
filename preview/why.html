@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Why / How We Work With You preview – Maquette</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/base.css">
+<link rel="stylesheet" href="../components/why/why.css">
+<style>
+  /* Standalone preview bar */
+  .preview-banner {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 176, 32, 0.15);
+    border-bottom: 1px solid rgba(255, 176, 32, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 8px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+  }
+  .preview-banner a {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .preview-banner a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+<div class="site-backdrop" id="siteBackdrop" aria-hidden="true">
+  <div class="site-room" id="globalRoom"></div>
+  <div class="site-grain"></div>
+  <div class="site-shade"></div>
+</div>
+<div class="preview-banner">
+  <span>Previewing component: <strong>Why / How We Work With You</strong> (<code>why</code>)</span>
+  <a href="index.html">← Back to Component Catalog</a>
+</div>
+<section id="why" aria-label="How we work">
+  <div class="room" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="intro">
+      <span class="eyebrow">How we work</span>
+      <h2>From stuck to <em>handed over.</em></h2>
+      <p class="lead">Four plain steps from the first conversation to 100% client ownership.</p>
+    </div>
+
+    <!-- The Waving Liquid Cloth Process Map (Directly inside .wrap with no inner scroller) -->
+    <div class="why-map" id="whyMapCloth" role="region" aria-label="Process Map: From stuck to handed over">
+      <canvas id="whyClothCanvas" aria-hidden="true"></canvas>
+
+      <div class="why-map-overlay" id="whyMapOverlay">
+        <!-- Scrim gradient for crystal-clear typography readability -->
+        <div class="why-scrim" aria-hidden="true"></div>
+
+        <!-- Sine Wave Trace Path -->
+        <svg class="why-trace" id="whyTraceSvg" viewBox="0 0 1200 500" preserveAspectRatio="none" aria-hidden="true">
+          <path class="why-base" id="whyPb"/>
+          <path class="why-prog" id="whyPp" pathLength="1"/>
+        </svg>
+
+        <!-- Architectural Scale Bar -->
+        <svg class="why-scale" viewBox="0 0 84 8" fill="none" stroke="currentColor" aria-hidden="true">
+          <path d="M1 4h82M1 0v8M42 1.5v5M83 0v8"/>
+        </svg>
+
+        <!-- Architectural Compass Rose -->
+        <svg class="why-compass" id="whyCompassRose" viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.1" aria-hidden="true">
+          <circle cx="30" cy="30" r="27"/>
+          <path d="M30 5 34 30 30 55 26 30Z"/>
+          <path d="M30 5 34 30H26Z" fill="var(--gold)" stroke="var(--gold)"/>
+          <text x="27.4" y="16" font-size="7" fill="currentColor" stroke="none" font-family="'DM Mono', monospace">N</text>
+        </svg>
+
+        <!-- 4 Interactive Station Columns -->
+        <div class="why-cols" id="whyCols"></div>
+      </div>
+    </div>
+
+    <div class="rfoot">
+      <span class="sc-count" id="whyCount">01 — 04 · The Maquette Method</span>
+    </div>
+  </div>
+</section>
+<script src="../components/why/why.js"></script>
+</body>
+</html>
+

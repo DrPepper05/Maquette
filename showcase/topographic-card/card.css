@@ -1,0 +1,601 @@
+/* ===== Showcase Study: Single Panoramic Waving Topographic Process Card ===== */
+:root {
+  --bg: #09080b;
+  --bg-deep: #060507;
+  --panel: #131116;
+  --bone: #f5f1e9;
+  --mute: rgba(245, 241, 233, 0.72);
+  --dim: rgba(245, 241, 233, 0.38);
+  --line: rgba(245, 241, 233, 0.12);
+  --line-strong: rgba(245, 241, 233, 0.22);
+  --gold: #e89e28;
+  --gold-glow: rgba(232, 158, 40, 0.4);
+  --amber: #d99b26;
+  --bronze: #c88a58;
+  --cyan: #38bdf8;
+  --emerald: #34d399;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body.map-body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--bone);
+  font: 400 1rem/1.6 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Background museum drafting grid */
+.map-canvas-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(245, 241, 233, 0.022) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(245, 241, 233, 0.022) 1px, transparent 1px);
+  background-size: 36px 36px;
+  background-position: center center;
+}
+
+.map-ambient-pools {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 65% 45% at 20% 15%, rgba(200, 138, 88, 0.14), transparent 70%),
+    radial-gradient(ellipse 70% 50% at 80% 85%, rgba(232, 158, 40, 0.12), transparent 70%),
+    radial-gradient(ellipse 60% 45% at 50% 50%, rgba(56, 189, 248, 0.08), transparent 70%);
+}
+
+/* Sticky Wayfinding HUD */
+.map-hud {
+  position: sticky;
+  top: 56px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 12px clamp(16px, 3.4vw, 40px);
+  background: rgba(9, 8, 11, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+
+.hud-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 220px;
+}
+
+.hud-floor-tag {
+  font: 700 0.68rem 'DM Mono', monospace;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+.hud-stage-name {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--bone);
+  transition: color 0.25s ease;
+}
+
+.hud-stations-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.hud-stations-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.station-pill {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: rgba(245, 241, 233, 0.04);
+  color: var(--mute);
+  font: 600 0.82rem 'Plus Jakarta Sans', sans-serif;
+  padding: 7px 15px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+}
+
+.station-pill:hover {
+  background: rgba(245, 241, 233, 0.08);
+  color: var(--bone);
+  border-color: var(--line-strong);
+}
+
+.station-pill.active {
+  background: rgba(232, 158, 40, 0.15);
+  color: var(--gold);
+  border-color: var(--gold);
+  box-shadow: 0 0 16px rgba(232, 158, 40, 0.25);
+}
+
+.pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.hud-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.clarity-label {
+  font: 700 0.72rem 'DM Mono', monospace;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+.clarity-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.clarity-bar {
+  width: 80px;
+  height: 5px;
+  background: rgba(245, 241, 233, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.clarity-bar-fill {
+  width: 25%;
+  height: 100%;
+  background: var(--gold);
+  transition: width 0.4s ease;
+  box-shadow: 0 0 8px var(--gold);
+}
+
+#clarityText {
+  font: 700 0.76rem 'DM Mono', monospace;
+  color: var(--gold);
+  min-width: 32px;
+}
+
+/* Main Shell: Full display matching site */
+.map-shell {
+  position: relative;
+  z-index: 10;
+  max-width: none;
+  width: 100%;
+  margin: 0 auto;
+  padding: clamp(32px, 4vw, 56px) clamp(24px, 4vw, 64px) 96px;
+}
+
+/* Header */
+.map-intro {
+  margin-bottom: 28px;
+  max-width: 760px;
+}
+
+.map-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 700 0.72rem 'DM Mono', monospace;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.map-kicker::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+}
+
+.map-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(2.2rem, 4.4vw, 3.4rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  margin: 0 0 12px;
+}
+
+.map-title em {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--bronze);
+}
+
+.map-lead {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: var(--mute);
+  margin: 0;
+}
+
+/* ============================================================ */
+/* THE SINGLE PANORAMIC WAVING CARD                             */
+/* ============================================================ */
+.map-stage {
+  position: relative;
+  width: 100%;
+  margin: 28px 0 48px;
+}
+
+/* Waving Liquid Cloth Card (Fluid, 100% width, no inner scroller) */
+.card-cloth {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 12 / 5;
+  min-height: 420px;
+  border-radius: 22px;
+  border: 1px solid var(--line-strong);
+  overflow: hidden;
+  background: #15121a;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+  transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.card-cloth:hover,
+.card-cloth:focus-within {
+  border-color: rgba(232, 158, 40, 0.4);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.8), 0 0 24px rgba(232, 158, 40, 0.18);
+}
+
+.card-cloth canvas {
+  position: absolute;
+  left: -40px;
+  top: -40px;
+  pointer-events: none;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.85));
+}
+
+/* Interactive Overlay on top of Waving Cloth */
+.map-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+/* Scrim Gradient: Ensures 100% typography contrast over contour lines */
+.map-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 32%,
+    rgba(12, 10, 15, 0.45) 52%,
+    rgba(12, 10, 15, 0.85) 74%,
+    rgba(12, 10, 15, 0.97) 100%
+  );
+  z-index: 1;
+}
+
+/* Sine Wave Trace */
+.trace {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.trace path {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.base {
+  stroke: rgba(245, 241, 233, 0.55);
+  stroke-width: 1.6px;
+  stroke-dasharray: 4 8;
+  stroke-linecap: round;
+}
+
+.prog {
+  stroke: var(--gold);
+  stroke-width: 3.2px;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.7s cubic-bezier(0.6, 0, 0.2, 1);
+  filter: drop-shadow(0 0 8px rgba(232, 158, 40, 0.85));
+}
+
+/* Architectural Drafting Decors */
+.scale {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  width: 90px;
+  height: 9px;
+  color: var(--bone);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.compass {
+  position: absolute;
+  right: 20px;
+  top: 18px;
+  width: 48px;
+  height: 48px;
+  color: var(--bone);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* 4 Station Interactive Columns */
+.cols {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.st {
+  position: relative;
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  padding: 0 24px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 8px;
+  outline: none;
+  transition: background 0.3s ease;
+}
+
+.st:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--gold);
+}
+
+/* Diamond Waypoint Node on Sine Wave */
+.node {
+  position: absolute;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.node i {
+  position: absolute;
+  left: -13px;
+  top: -13px;
+  width: 26px;
+  height: 26px;
+  transform: rotate(45deg);
+  border: 1.5px solid var(--st-color, var(--bone));
+  background: #09080b;
+  border-radius: 4px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.85);
+  transition: background 0.35s ease, border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.node b {
+  position: absolute;
+  left: -13px;
+  top: -13px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  font: 800 0.78rem 'DM Mono', monospace;
+  color: #ffffff;
+  opacity: 1;
+  transition: color 0.35s ease;
+}
+
+.node u {
+  position: absolute;
+  left: -32px;
+  top: -32px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px dashed var(--st-color, rgba(245, 241, 233, 0.45));
+  opacity: 0.65;
+  transition: all 0.45s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+/* Active & Done States */
+.st.on .node i,
+.st.done .node i {
+  background: var(--st-color, var(--gold));
+  border-color: var(--st-color, var(--gold));
+  box-shadow: 0 0 18px var(--st-color, var(--gold));
+}
+
+.st.on .node b,
+.st.done .node b {
+  color: #09080b;
+  font-weight: 800;
+}
+
+.st.on .node u {
+  border-color: var(--st-color, var(--gold));
+  opacity: 1;
+  width: 86px;
+  height: 86px;
+  left: -43px;
+  top: -43px;
+}
+
+/* Free Badge */
+.free {
+  position: absolute;
+  left: calc(50% + 36px);
+  font: 800 0.72rem 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #09080b;
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  padding: 3px 10px;
+  transform: translateY(-50%);
+  box-shadow: 0 0 14px rgba(232, 158, 40, 0.65);
+  opacity: 1;
+}
+
+/* Phase / Eyebrow Tag */
+.st-tag {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: clamp(0.72rem, 0.85vw, 0.82rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--st-color, var(--gold));
+  opacity: 1;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.95);
+  margin-bottom: 2px;
+}
+
+/* 100% White Full Opacity Station Typography */
+.st h3 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(1.2rem, 1.7vw, 1.85rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  margin: 0;
+  color: #ffffff;
+  opacity: 1;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.98), 0 4px 24px rgba(0, 0, 0, 0.98);
+  transition: color 0.25s ease, text-shadow 0.25s ease;
+}
+
+.st p {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(0.92rem, 1.08vw, 1.1rem);
+  font-weight: 500;
+  line-height: 1.55;
+  color: #ffffff;
+  opacity: 1;
+  max-width: 32ch;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.98), 0 3px 18px rgba(0, 0, 0, 0.98);
+  transition: color 0.25s ease;
+}
+
+.why-st:not(.on) h3,
+.why-st:not(.on) p,
+.why-st:not(.on) .why-tag,
+.st:not(.on) h3,
+.st:not(.on) p,
+.st:not(.on) .st-tag {
+  opacity: 1;
+}
+
+.st:hover h3,
+.st.on h3 {
+  color: #ffffff;
+  text-shadow: 0 0 24px var(--st-color, rgba(232, 158, 40, 0.7)), 0 2px 12px #000;
+}
+
+.st:hover p,
+.st.on p {
+  color: #ffffff;
+  opacity: 1;
+}
+
+/* Bottom CTA Strip */
+.map-foot-strip {
+  margin-top: 56px;
+  background: linear-gradient(145deg, #16131a, #0f0d12);
+  border: 1px solid var(--line-strong);
+  border-radius: 18px;
+  padding: 22px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.foot-strip-text h3 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.foot-strip-text p {
+  color: var(--mute);
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+.btn-strip-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gold);
+  color: #161005;
+  font: 700 0.88rem 'Plus Jakarta Sans', sans-serif;
+  padding: 12px 26px;
+  border-radius: 999px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  white-space: nowrap;
+}
+
+.btn-strip-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 24px rgba(232, 158, 40, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .map-shell {
+    padding: 28px 16px 80px;
+  }
+}

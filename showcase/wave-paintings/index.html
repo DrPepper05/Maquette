@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Waving Paintings — Maquette Component Lab</title>
+<meta name="description" content="A standalone sine-wave painting presentation: a scrollable, draggable carousel of framed artwork.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/lab.css">
+<link rel="stylesheet" href="wave.css">
+</head>
+<body>
+<header class="lab-bar">
+  <a class="lab-back" href="../index.html"><span>←</span> All components</a>
+  <div class="lab-brand">Maquette <em>Lab</em></div>
+  <span class="lab-tech">DOM · CSS 3D</span>
+</header>
+
+<main class="wave-shell">
+  <div class="wave-room" id="waveRoom" aria-hidden="true"></div>
+  <div class="lab-grain" aria-hidden="true"></div>
+
+  <div class="wave-stage" id="waveStage" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Waving paintings presentation">
+    <svg class="wave-trail" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <g id="waveTrailG" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
+        <path id="waveTrailA" vector-effect="non-scaling-stroke"></path>
+        <path id="waveTrailB" vector-effect="non-scaling-stroke"></path>
+        <path id="waveTrailC" vector-effect="non-scaling-stroke" stroke-width=".8"></path>
+      </g>
+    </svg>
+    <div class="wave-cards" id="waveCards"></div>
+  </div>
+
+  <div class="wave-intro">
+    <span class="lab-kicker">Presentation study 01</span>
+    <h1 class="lab-title">Waving<br><em>paintings.</em></h1>
+    <p class="lab-desc">A sine-wave procession of selected work. The row drifts on its own; drag, scroll or use the arrows to walk it.</p>
+  </div>
+
+  <aside class="wave-meta" aria-live="polite">
+    <span class="wave-num" id="waveNum">01</span>
+    <div>
+      <h2 class="wave-name" id="waveName">Northwind</h2>
+      <p class="wave-cat" id="waveCat">Fleet Logistics Software · 2026</p>
+      <p class="wave-tag" id="waveTag">Fleet operations, one screen.</p>
+    </div>
+  </aside>
+
+  <div class="lab-rail wave-rail">
+    <button type="button" class="lab-round" id="wavePrev" aria-label="Previous painting">←</button>
+    <span class="lab-count" id="waveCount">01 — 05</span>
+    <button type="button" class="lab-round" id="waveNext" aria-label="Next painting">→</button>
+  </div>
+
+  <p class="lab-hint">Drag · arrow keys<br>Hover to pause</p>
+  <p class="sr-only" id="waveLive" aria-live="polite"></p>
+</main>
+
+<script src="../shared/projects.js"></script>
+<script src="wave.js"></script>
+</body>
+</html>

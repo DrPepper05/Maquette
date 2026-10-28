@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Component Showcase &amp; Lab — Maquette</title>
+<meta name="description" content="Showcase of motion studies, WebGL experiments, and modular site components from the Maquette site.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/lab.css">
+<link rel="stylesheet" href="catalog.css">
+<style>
+  .study-storypaper { --tint: #e89e28; }
+  .study-particlestory { --tint: #4fe3d0; }
+  .study-albumhero { --tint: #c084fc; }
+</style>
+</head>
+<body class="catalog">
+<header class="lab-bar">
+  <a class="lab-back" href="../index.html"><span>←</span> Maquette site</a>
+  <div class="lab-brand">Maquette <em>Showcase</em></div>
+  <span class="lab-tech">17 components &amp; studies · 2026</span>
+</header>
+
+<main class="catalog-main">
+  <section class="catalog-hero">
+    <div class="catalog-hero-copy">
+      <span class="lab-kicker">Component showcase &amp; motion lab</span>
+      <h1 class="catalog-title">A living gallery of<br>components &amp; <em>motion.</em></h1>
+      <p class="catalog-lead">Every interactive study, 3D WebGL motion specimen, and modular page component extracted and preserved in isolation. Review, test, and swap components without affecting the main site.</p>
+    </div>
+    <dl class="catalog-spec">
+      <div><dt>Heroes &amp; Stories</dt><dd>04 Flagship</dd></div>
+      <div><dt>Process Stories</dt><dd>03 Map &amp; Folio</dd></div>
+      <div><dt>Motion Studies</dt><dd>04 WebGL</dd></div>
+      <div><dt>Site Sections</dt><dd>06 Modular</dd></div>
+    </dl>
+  </section>
+
+  <section class="catalog-grid" aria-label="Component and motion showcase">
+
+    <!-- ============================================================ -->
+    <!-- CATEGORY 1: FLAGSHIP HERO & STORY EXPERIENCES                -->
+    <!-- ============================================================ -->
+    <div class="catalog-section-heading">
+      <h2>Flagship Hero &amp; Story Variations</h2>
+      <span>04 Interchangeable Core Sections</span>
+    </div>
+
+    <!-- 01: Collection Carousel -->
+    <a class="study-card study-carousel" href="carousel/index.html" aria-label="Open Collection Carousel component">
+      <div class="study-visual preview-carousel">
+        <img src="../assets/projects/northwind.jpg" data-slug="northwind" alt="Northwind artwork preview">
+        <span class="study-index">01</span>
+        <span class="study-tag">Flagship Hero · 3D WebGL</span>
+      </div>
+      <div class="study-body">
+        <div class="study-head">
+          <h2>Collection 3D Carousel (Hero)</h2>
+          <span class="study-arrow">↗</span>
+        </div>
+        <p>The luxury hero gallery featuring 3D crumpled-paper cards on a sine-wave track. Scroll docking, interactive drag, opening un-crumple animation, and project metadata HUD.</p>
+        <span class="study-foot">Hero · 3D Crumple · Metadata HUD · Autoplay</span>
+      </div>
+    </a>
+
+    <!-- 02: The Crumpled Paper Story -->
+    <a class="study-card study-storypaper" href="story-paper/index.html" aria-label="Open The Crumpled Paper Story">
+      <div class="study-visual">
+        <img src="../assets/projects/forge.jpg" data-slug="forge" alt="Crumpled Paper Story preview">
+        <div class="paper-fx" aria-hidden="true"></div>
+        <span class="study-index">02</span>
+        <span class="study-tag">Narrative · 3D Unfold</span>
+      </div>
+      <div class="study-body">
+        <div class="study-head">
+          <h2>The 3D Crumpled Paper Story</h2>
+          <span class="study-arrow">↗</span>
+        </div>
+        <p><em>"Your business runs on crumpled paper."</em> An interactive 3D WebGL simulation where a crumpled paper sheet flattens, becomes a blueprint grid, and builds into 3D UI blocks as you scroll.</p>
+        <span class="study-foot">Story · Real-time Unfold · Blueprint Grid · Clarity Meter</span>
+      </div>
+    </a>
+
+    <!-- 03: Foggy Idea Particle Story -->
+    <a class="study-card study-particlestory" href="../preview/story.html" aria-label="Preview Foggy Idea Particle Story">
+      <div class="study-visual">
+        <img src="../assets/projects/atlas.jpg" data-slug="atlas" alt="Foggy Idea Story preview">
+        <span class="study-index">03</span>
+        <span class="study-tag">Particles · 5-Stage Story</span>
+      </div>
+      <div class="study-body">
+        <div class="study-head">
+          <h2>Foggy Idea to Product (Particles)</h2>
+          <span class="study-arrow">↗</span>
+        </div>
+        <p><em>"From foggy idea to finished product."</em> Real-time particle simulation with thousands of floating points morphing across 5 states: Fog → Scribble → Wireframe → Build → Finished Product.</p>
+        <span class="study-foot">Particles · Fluid dynamics · 5 Morphing States</span>
+      </div>
+    </a>
+
+    <!-- 04: Selected Projects Album -->
+    <a class="study-card study-albumhero" href="../preview/album.html" aria-label="Preview Selected Projects Album">
+      <div class="study-visual">
+        <img src="../assets/projects/lumen.jpg" data-slug="lumen" alt="Selected Projects Album preview">
+        <span class="study-index">04</span>
+        <span class="study-tag">Minimal Hero Alternative</span>
+      </div>
+      <div class="study-body">
+        <div class="study-head">
+          <h2>Selected Projects Album (Hero)</h2>
+          <span class="study-arrow">↗</span>
+        </div>
+        <p>Full-viewport landing hero alternative with a horizontal thumbnail strip, blur-to-focus backdrop transition, and 4-second auto-cycle across featured studio work.</p>
+        <span class="study-foot">Thumbnail strip · Blur reveal · Auto-cycle</span>
+      </div>
+    </a>
+
+    <!-- ============================================================ -->
+    <!-- CATEGORY 2: MOTION & SHADER STUDIES                          -->
+    <!-- ============================================================ -->
+    <div class="catalog-section-heading">
+      <h2>Motion &amp; Shader Lab Studies</h2>
+      <span>04 Extracted Standalone Experiments</span>
+    </div>
+
+    <!-- 05: Wave Paintings -->
+    <a class="study-card study-wave" href="wave-paintings/index.html" aria-label="Open Waving Paintings study">
+      <div class="study-visual preview-wave">
+        <img src="../assets/projects/northwind.jpg" data-slug="northwind" alt="Northwind artwork preview">
+        <div class="wave-fx" aria-hidden="true"></div>
+        <span class="study-index">05</span>
+        <span class="study-tag">Canvas · SVG trail</span>
+      </div>
+      <div class="study-body">
+        <div class="study-head">
+          <h2>Waving Paintings</h2>
+          <span class="study-arrow">↗</span>
+        </div>
+        <p>Sine-wave carousel where five framed artworks drift through a continuous fluid current. Drag, wheel, or arrow navigation with an SVG trail sampled from the wave itself.</p>
+        <span class="study-foot">Sine wave · Drag · Wheel · Keyboard controls</span>
+      </div>
+    </a>
+
+    <!-- 06: Crumpled Paper Shader Specimen -->
+    <a class="study-card study-paper" href="crumpled-paper/index.html" aria-label="Open Crumpled Paper study">
+      <div class="study-visual preview-paper">
+        <img src="../assets/projects/forge.jpg" data-slug="forge" alt="Forge artwork preview">
+        <div class="paper-fx" aria-hidden="true"></div>
+        <span class="study-index">06</span>
+        <span class="study-tag">Three.js · GLSL Specimen</span>
+      </div>
+      <div class="study-body">
+        <div class="study-head">
+          <h2>Crumpled Paper Shader Card</h2>
+          <span class="study-arrow">↗</span>
+        </div>
+        <p>Archival exhibition board specimen with noise-displaced vertices, topographic contour scan lines, and a signal tear controlled by custom GLSL folding shaders.</p>
+        <span class="study-foot">Noise displacement · Contour scanlines · Glitch</span>
+      </div>
+    </a>
+
+    <!-- 07: Glitch Painting -->
+    <a class="study-card study-glitch" href="glitch-painting/index.html" aria-label="Open Glitch Painting study">
+      <div class="study-visual preview-glitch">
+        <img src="../assets/projects/atlas.jpg" data-slug="atlas" alt="Atlas artwork preview">
+        <div class="glitch-fx" aria-hidden="true"></div>
+        <span class="study-index">07</span>
+        <span class="study-tag">Canvas 2D · RGB split</span>
+      </div>
+      <div class="study-body">
+        <div class="study-head">
+          <h2>Glitch Painting</h2>
+          <span class="study-arrow">↗</span>
+        </div>
+        <p>Signal loss applied to a full-bleed artwork: displaced slices, chromatic RGB channel split, corrupted blocks, and scanlines with adjustable live intensity and bursts.</p>
+        <span class="study-foot">RGB split · Slices · Live intensity · Bursts</span>
+      </div>
+    </a>
+
+    <!-- 08: Liquid Cloth -->
+    <a class="study-card study-cloth" href="liquid-cloth/index.html" aria-label="Open Liquid Cloth study">
+      <div class="study-visual preview-cloth">
+        <img src="../assets/projects/lumen.jpg" data-slug="lumen" alt="Lumen artwork preview">
+        <div class="cloth-fx" aria-hidden="true"></div>
+        <span class="study-index">08</span>
+        <span class="study-tag">WebGL · Silk shader</span>
+      </div>
+      <div class="study-body">
+        <div class="study-head">
+          <h2>Liquid Cloth</h2>
+          <span class="study-arrow">↗</span>
+        </div>
+        <p>A silk poster suspended in dynamic current. Fluid spring-mesh simulation with hover-calming, adjustable current speed, and periodic holographic glitch flashes.</p>
+        <span class="study-foot">Spring mesh · Current · Glitch bursts · Hover calm</span>
+      </div>
+    </a>
+
+    <!-- ============================================================ -->
+    <!-- CATEGORY 3: MODULAR SITE SECTIONS                            -->
+    <!-- ============================================================ -->
+    <div class="catalog-section-heading">
+      <h2>Modular Site Sections</h2>
+      <span>06 Standard Production Sections</span>
+    </div>
+
+    <!-- 09: Wings / Services -->
+    <a class="study-card study-section" href="../preview/services.html" aria-label="Preview Services section">
+      <div class="study-visual">
+        <img src="../assets/projects/verdant.jpg" data-slug="verdant" alt="Services preview">
+        <span class="study-index">09</span>
+        <span class="study-tag">Interactive Tabs</span>
+      </div>
+      <div class="study-body">
+        <div class="study-head">
+          <h2>Wings &amp; Services</h2>
+          <span class="study-arrow">↗</span>
+        </div>
+        <p>Interactive service wings showcasing technical offerings (Websites, Automations, Software), deliverables, timelines, and live guarantees for prototypes and builds.</p>
+        <span class="study-foot">Tabbed specs · Deliverables · Pricing</span>
+      </div>
+    </a>
+
+    <!-- 10: Why / Collaboration -->
+    <a class="study-card study-section" href="../preview/why.html" aria-label="Preview Why section">
+      <div class="study-visual">
+        <img src="../assets/projects/northwind.jpg" data-slug="northwind" alt="Why preview">
+        <span class="study-index">10</span>
+        <span class="study-tag">Process · Workflow</span>
+      </div>
+      <div class="study-body">
+        <div class="study-head">
+          <h2>Why &amp; How We Work</h2>
+          <span class="study-arrow">↗</span>
+        </div>
+        <p>Step-by-step breakdown of the prototype-first partnership model: no meetings, weekly ship cycles, and flat fixed-price guarantees.</p>
+        <span class="study-foot">Process · Timeline · Studio principles</span>
+      </div>
+    </a>
+
+    <!-- 11: Visitor FAQ -->
+    <a class="study-card study-section" href="../preview/faq.html" aria-label="Preview FAQ section">
+      <div class="study-visual">
+        <img src="../assets/projects/forge.jpg" data-slug="forge" alt="FAQ preview">
+        <span class="study-index">11</span>
+        <span class="study-tag">Accordions</span>
+      </div>
+      <div class="study-body">
+        <div class="study-head">
+          <h2>Visitor FAQ</h2>
+          <span class="study-arrow">↗</span>
+        </div>
+        <p>Accessible accordion FAQ addressing common inquiries regarding code ownership, delivery speed, maintenance, and scope.</p>
+        <span class="study-foot">Accessible · Smooth expand · Collapsible</span>
+      </div>
+    </a>
+
+    <!-- 12: Contact Form -->
+    <a class="study-card study-section" href="../preview/contact.html" aria-label="Preview Contact section">
+      <div class="study-visual">
+        <img src="../assets/projects/atlas.jpg" data-slug="atlas" alt="Contact preview">
+        <span class="study-index">12</span>
+        <span class="study-tag">Form &amp; Request</span>
+      </div>
+      <div class="study-body">
+        <div class="study-head">
+          <h2>Contact &amp; Prototype Request</h2>
+          <span class="study-arrow">↗</span>
+        </div>
+        <p>High-conversion project intake form with interactive category selectors, brief input, and clear expectation setting.</p>
+        <span class="study-foot">Form validation · Interactive choices · CTA</span>
+      </div>
+    </a>
+
+    <!-- 13: Header Navigation -->
+    <a class="study-card study-section" href="../preview/header.html" aria-label="Preview Header component">
+      <div class="study-visual">
+        <img src="../assets/projects/lumen.jpg" data-slug="lumen" alt="Header preview">
+        <span class="study-index">13</span>
+        <span class="study-tag">Navigation · Glass</span>
+      </div>
+      <div class="study-body">
+        <div class="study-head">
+          <h2>Header Navigation</h2>
+          <span class="study-arrow">↗</span>
+        </div>
+        <p>Sticky glassmorphic navbar with studio brand mark, jump links, active indicator, and mobile menu toggle.</p>
+        <span class="study-foot">Sticky · Glassmorphism · Responsive menu</span>
+      </div>
+    </a>
+
+    <!-- 14: Studio Footer -->
+    <a class="study-card study-section" href="../preview/footer.html" aria-label="Preview Footer component">
+      <div class="study-visual">
+        <img src="../assets/projects/verdant.jpg" data-slug="verdant" alt="Footer preview">
+        <span class="study-index">14</span>
+        <span class="study-tag">Colophon · Endplate</span>
+      </div>
+      <div class="study-body">
+        <div class="study-head">
+          <h2>Studio Footer</h2>
+          <span class="study-arrow">↗</span>
+        </div>
+        <p>Clean ending plate with availability status badge, legal credits, time zone indicators, and back-to-top anchor.</p>
+        <span class="study-foot">Status badge · Colophon · Jump top</span>
+      </div>
+    </a>
+
+    <!-- ============================================================ -->
+    <!-- CATEGORY 4: PROCESS & STEP STORIES (MUSEUM MAP & FOLIO)      -->
+    <!-- ============================================================ -->
+    <div class="catalog-section-heading">
+      <h2>Step Stories: Museum Map &amp; Maquette Book</h2>
+      <span>03 Curatorial Process Directions</span>
+    </div>
+
+    <!-- 15: Direction A - The Curatorial Wayfinding Map -->
+    <a class="study-card study-section" href="wayfinding-map/index.html" aria-label="Open Curatorial Wayfinding Map study">
+      <div class="study-visual">
+        <img src="../assets/projects/atlas.jpg" data-slug="atlas" alt="Curatorial Wayfinding Map preview">
+        <span class="study-index">15</span>
+        <span class="study-tag">Direction A · Museum Map</span>
+      </div>
+      <div class="study-body">
+        <div class="study-head">
+          <h2>DNA Sinus Trail (4 Waving Cards)</h2>
+          <span class="study-arrow">↗</span>
+        </div>
+        <p>A simple 4-station horizontal process trail featuring the studio's waving liquid cloth cards in an alternating subtle stagger (one slightly up, one slightly down) with a single dotted DNA sine wave line weaving tightly between them.</p>
+        <span class="study-foot">DNA Sinus Trail · 4 Staggered Waving Cards · Tight Wave Weave · 1-2-3-4 Progress</span>
+      </div>
+    </a>
+
+    <!-- 16: Direction B - The Architectural Folio / Leporello Book -->
+    <a class="study-card study-section" href="maquette-book/index.html" aria-label="Open Architectural Folio Monograph study">
+      <div class="study-visual">
+        <img src="../assets/projects/forge.jpg" data-slug="forge" alt="Architectural Folio Monograph preview">
+        <span class="study-index">16</span>
+        <span class="study-tag">Direction B · Monograph Book</span>
+      </div>
+      <div class="study-body">
+        <div class="study-head">
+          <h2>Architectural Folio / Leporello Book</h2>
+          <span class="study-arrow">↗</span>
+        </div>
+        <p>Clothbound architectural monograph and model-making handbook. Offers two interactive modes: page-turn monograph spread and unfolded accordion leporello.</p>
+        <span class="study-foot">Cloth binder · Monograph spread · Leporello unfold · Seals</span>
+      </div>
+    </a>
+
+    <!-- 17: Direction C - Single Panoramic Topographic Waving Card -->
+    <a class="study-card study-section" href="topographic-card/index.html" aria-label="Open Single Waving Topographic Card study">
+      <div class="study-visual">
+        <img src="../assets/projects/northwind.jpg" data-slug="northwind" alt="Topographic Process Card preview">
+        <span class="study-index">17</span>
+        <span class="study-tag">Direction C · Single Waving Card</span>
+      </div>
+      <div class="study-body">
+        <div class="study-head">
+          <h2>Topographic Process (Single Waving Card)</h2>
+          <span class="study-arrow">↗</span>
+        </div>
+        <p>The complete 4-station process map from the downloaded concept rendered as a single panoramic WebGL waving liquid cloth card. Architectural drafting grid, dynamic topographic contours in studio palette, sine wave trace, and interactive waypoints.</p>
+        <span class="study-foot">Single Waving Card · Procedural Contours · Sine Trace · 4 Stations</span>
+      </div>
+    </a>
+
+  </section>
+
+  <footer class="catalog-footer">
+    <p>Maquette Component Showcase &amp; Motion Lab. All specimens are modular, isolated, and safe to test or adapt.</p>
+    <a href="../index.html">Return to Live Website <span>↗</span></a>
+  </footer>
+</main>
+
+<div class="lab-grain" aria-hidden="true"></div>
+
+<script src="shared/projects.js"></script>
+<script>
+  // Ensure images always display even on file:// protocol by mapping to embedded data URIs
+  if (window.LAB_PROJECTS) {
+    var map = {};
+    window.LAB_PROJECTS.forEach(function (p) { if (p.dataUri) map[p.slug] = p.dataUri; });
+    document.querySelectorAll('.study-visual img[data-slug]').forEach(function (img) {
+      var s = img.getAttribute('data-slug');
+      if (map[s]) img.src = map[s];
+    });
+  }
+</script>
+</body>
+</html>

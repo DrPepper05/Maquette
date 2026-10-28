@@ -1,0 +1,178 @@
+/* ===== Crumpled Paper: WebGL shader painting ===== */
+
+.paper-shell {
+  position: relative;
+  height: 100svh;
+  min-height: 600px;
+  overflow: hidden;
+  padding-top: 64px;
+  isolation: isolate;
+}
+
+.paper-room {
+  position: absolute;
+  inset: 64px 0 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 55% at 50% 45%, rgba(30, 58, 95, 0.4), transparent 72%),
+    radial-gradient(75% 60% at 76% 32%, rgba(56, 189, 248, 0.15), transparent 70%),
+    radial-gradient(60% 55% at 20% 72%, rgba(232, 158, 40, 0.1), transparent 68%);
+  transition: background 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.paper-canvas {
+  position: absolute;
+  top: 64px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 64px);
+  z-index: 2;
+  display: block;
+  cursor: grab;
+  touch-action: none;
+  outline: none;
+}
+
+.paper-canvas:active {
+  cursor: grabbing;
+}
+
+.paper-canvas:focus-visible {
+  box-shadow: inset 0 0 0 2px rgba(232, 158, 40, 0.55);
+}
+
+.paper-vignette {
+  position: absolute;
+  inset: 64px 0 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    radial-gradient(130% 100% at 50% 45%, transparent 38%, rgba(0, 0, 0, 0.62) 100%),
+    linear-gradient(to bottom, rgba(11, 10, 12, 0.45), transparent 22%, transparent 78%, rgba(11, 10, 12, 0.6));
+}
+
+.paper-intro {
+  position: absolute;
+  top: calc(64px + clamp(22px, 4.2vh, 52px));
+  left: clamp(20px, 4.2vw, 64px);
+  z-index: 12;
+  width: min(400px, 40vw);
+  pointer-events: none;
+}
+
+.paper-meta {
+  position: absolute;
+  left: clamp(20px, 4.2vw, 64px);
+  bottom: clamp(98px, 13vh, 128px);
+  z-index: 12;
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(12px, 1.6vw, 22px);
+  pointer-events: none;
+}
+
+.paper-num {
+  padding-top: 2px;
+  font: 500 0.74rem 'DM Mono', monospace;
+  letter-spacing: 0.12em;
+  color: var(--accent, #38bdf8);
+  font-variant-numeric: tabular-nums;
+  transition: color 0.5s ease;
+}
+
+.paper-name {
+  margin: 0;
+  font: 700 clamp(1.15rem, 1.7vw, 1.5rem) / 1 'Bricolage Grotesque', sans-serif;
+  letter-spacing: -0.025em;
+}
+
+.paper-cat {
+  margin: 7px 0 0;
+  font: 500 0.62rem 'DM Mono', monospace;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(245, 241, 233, 0.55);
+}
+
+.paper-tag {
+  margin: 7px 0 0;
+  font-size: 0.82rem;
+  color: rgba(245, 241, 233, 0.72);
+}
+
+.paper-rail {
+  z-index: 16;
+  gap: 8px;
+}
+
+.paper-rail .lab-btn {
+  padding: 10px 15px;
+  font-size: 0.68rem;
+}
+
+.paper-fallback {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 20;
+  transform: translate(-50%, -50%);
+  max-width: 30ch;
+  text-align: center;
+  font: 400 0.78rem/1.7 'DM Mono', monospace;
+  color: var(--mute);
+}
+
+@media (max-width: 720px) {
+  .paper-shell {
+    padding-top: 56px;
+  }
+  .paper-room,
+  .paper-vignette {
+    inset: 56px 0 0;
+  }
+  .paper-canvas {
+    top: 56px;
+    height: calc(100% - 56px);
+  }
+  .paper-intro {
+    top: calc(56px + 18px);
+    left: 18px;
+    right: 18px;
+    width: auto;
+  }
+  .paper-intro .lab-desc {
+    display: none;
+  }
+  .paper-meta {
+    left: 18px;
+    bottom: 108px;
+  }
+  .paper-tag {
+    display: none;
+  }
+  .paper-rail {
+    bottom: 16px;
+    gap: 6px;
+    padding: 6px;
+  }
+  .paper-rail .lab-btn {
+    padding: 9px 11px;
+    font-size: 0.6rem;
+  }
+  .paper-rail .lab-round {
+    width: 38px;
+    height: 38px;
+  }
+  .paper-rail .lab-count {
+    min-width: 58px;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paper-room {
+    transition: none;
+  }
+}
