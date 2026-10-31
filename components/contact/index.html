@@ -23,14 +23,18 @@
         <span class="eyebrow">Start here</span>
         <h2>Let’s discuss your prototype.</h2>
         <p class="lead">Four short fields. We reply within one working day, usually with a call invitation.</p>
-        <p class="mono" style="margin-top: 24px;">hello@maquette.example</p>
+        <p class="mono" style="margin-top: 24px;"><a href="mailto:contact@maquette.ro">contact@maquette.ro</a></p>
       </div>
-      <form id="f">
+      <form id="f" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="e4fcc064-c39f-4709-b4b2-be2980dcea64">
+        <input type="hidden" name="subject" value="New Prototype Request from Maquette.ro">
+        <input type="hidden" name="from_name" value="Maquette Website">
+        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
         <label>Name
-          <input name="n" required autocomplete="name">
+          <input name="name" required autocomplete="name" placeholder="Your name">
         </label>
         <label>Email
-          <input name="e" type="email" required autocomplete="email">
+          <input name="email" type="email" required autocomplete="email" placeholder="you@domain.com">
         </label>
         <label>What do you need?
           <select name="service">
@@ -41,10 +45,10 @@
           </select>
         </label>
         <label>Tell us a bit about it
-          <textarea name="details"></textarea>
+          <textarea name="message" placeholder="Briefly describe your idea or prototype need..."></textarea>
         </label>
-        <button class="btn" type="submit">Request my free prototype</button>
-        <div id="ok" role="status">Preview only: the form is not connected yet. Please email us instead.</div>
+        <button class="btn" type="submit" id="submitBtn">Request my free prototype</button>
+        <div id="ok" role="status"></div>
       </form>
     </div>
   </div>

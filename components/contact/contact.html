@@ -1,33 +1,38 @@
-<section id="contact" aria-label="Contact and free prototype inquiry">
+<section id="contact" aria-label="Request a free brand demo">
   <div class="room" aria-hidden="true"></div>
   <div class="wrap">
     <div class="box">
       <div>
         <span class="eyebrow">Start here</span>
-        <h2>Let’s discuss your prototype.</h2>
-        <p class="lead">Four short fields. We reply within one working day, usually with a call invitation.</p>
-        <p class="mono" style="margin-top: 24px;">hello@maquette.example</p>
+        <h2>Get your free brand demo.</h2>
+        <p class="lead">We'll design a custom demo tailored to your brand so you can see our approach before committing. No obligation, no catch — we believe the best way to earn your trust is to show you what we can create.</p>
+        <p class="mono" style="margin-top: 24px;"><a href="mailto:contact@maquette.ro">contact@maquette.ro</a></p>
       </div>
-      <form id="f">
+      <form id="f" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="e4fcc064-c39f-4709-b4b2-be2980dcea64">
+        <input type="hidden" name="subject" value="New Brand Demo Request from Maquette.ro">
+        <input type="hidden" name="from_name" value="Maquette Website">
+        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
         <label>Name
-          <input name="n" required autocomplete="name">
+          <input name="name" required autocomplete="name" placeholder="Your name">
         </label>
         <label>Email
-          <input name="e" type="email" required autocomplete="email">
+          <input name="email" type="email" required autocomplete="email" placeholder="you@domain.com">
         </label>
         <label>What do you need?
           <select name="service" id="project">
             <option>A website</option>
+            <option>A website redesign</option>
             <option>An automation</option>
             <option>Custom software</option>
             <option>Not sure yet</option>
           </select>
         </label>
-        <label>Tell us a bit about it
-          <textarea name="details"></textarea>
+        <label>Tell us about your brand
+          <textarea name="message" placeholder="What does your brand stand for, and what would you like to achieve?"></textarea>
         </label>
-        <button class="btn" type="submit">Request my free prototype</button>
-        <div id="ok" role="status">Preview only: the form is not connected yet. Please email us instead.</div>
+        <button class="btn" type="submit" id="submitBtn">Get my free brand demo</button>
+        <div id="ok" role="status"></div>
       </form>
     </div>
   </div>

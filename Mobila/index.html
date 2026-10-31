@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Private WebAR Preview — Maquette</title>
+  <meta name="description" content="Private 1:1 WebAR Spatial Demo prepared by Maquette.">
+
+  <!-- Google Fonts: Maquette Signature Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  
+  <!-- Google Model Viewer (Headless for native WebXR / Scene Viewer fallback) -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+  <style>
+    :root {
+      /* Maquette Design Tokens */
+      --bg: #0d0c0e;
+      --panel: #181614;
+      --surface: #221e1a;
+      --bone: #f5f1e9;
+      --mute: rgba(245, 241, 233, 0.65);
+      --line: rgba(245, 241, 233, 0.13);
+      --gold: #e89e28;
+      --amber: #d99b26;
+      --bronze: #c88a58;
+      --coral: #df7249;
+      color-scheme: dark;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--bone);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Ambient Warmth & Film Grain */
+    .site-ambient {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(75% 55% at 20% 15%, rgba(200, 138, 88, 0.13), transparent 70%),
+        radial-gradient(60% 45% at 85% 25%, rgba(232, 158, 40, 0.09), transparent 75%),
+        radial-gradient(85% 60% at 50% 100%, rgba(30, 58, 95, 0.18), transparent 70%);
+    }
+
+    .site-grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.065;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/><feColorMatrix values='0 0 0 0 .5 0 0 0 0 .48 0 0 0 0 .45 0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    }
+
+    /* Top Bar */
+    .top-bar {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 32px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-mark {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--bone);
+      text-decoration: none;
+    }
+
+    .brand-mark em {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .confidential-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.74rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      background: rgba(232, 158, 40, 0.1);
+      border: 1px solid rgba(232, 158, 40, 0.25);
+      padding: 6px 14px;
+      border-radius: 999px;
+    }
+
+    /* Main Landing Page Layout */
+    .landing-wrap {
+      position: relative;
+      z-index: 5;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 32px 80px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 56px;
+      align-items: center;
+      min-height: calc(100vh - 120px);
+    }
+
+    @media (max-width: 960px) {
+      .landing-wrap {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 20px 20px 60px;
+      }
+    }
+
+    /* Left Column: Story & Narrative */
+    .story-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--bronze);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 8px var(--gold);
+    }
+
+    .headline {
+      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+      font-size: clamp(2.4rem, 4.4vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+      color: var(--bone);
+      margin-bottom: 24px;
+    }
+
+    .headline em {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--gold);
+    }
+
+    .story-p {
+      font-size: 1.12rem;
+      color: var(--mute);
+      line-height: 1.7;
+      margin-bottom: 20px;
+      max-width: 58ch;
+    }
+
+    .story-p strong {
+      color: var(--bone);
+      font-weight: 600;
+    }
+
+    /* Feature Specs on Left */
+    .story-specs {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 14px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+    }
+
+    .spec-item {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: 0.94rem;
+      color: var(--mute);
+    }
+
+    .spec-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.76rem;
+      color: var(--bronze);
+      letter-spacing: 0.12em;
+    }
+
+    .spec-text strong {
+      color: var(--bone);
+    }
+
+    /* Right Column: The "Test it in your room" Component */
+    .ar-component-col {
+      display: flex;
+      justify-content: center;
+    }
+
+    .ar-test-card {
+      width: 100%;
+      max-width: 440px;
+      background: rgba(22, 19, 17, 0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--line);
+      border-radius: 32px;
+      box-shadow: 0 35px 90px rgba(0, 0, 0, 0.75), 0 0 1px rgba(245, 241, 233, 0.2);
+      padding: 38px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+
+    .ar-test-card:hover {
+      border-color: rgba(232, 158, 40, 0.35);
+    }
+
+    .ar-test-card::before {
+      content: "";
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 220px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(232, 158, 40, 0.14), transparent 70%);
+      pointer-events: none;
+    }
+
+    .card-kicker {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--bronze);
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--bone);
+      letter-spacing: -0.025em;
+      margin-bottom: 8px;
+      line-height: 1.15;
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--mute);
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    /* QR Code Display (for Desktop) */
+    .qr-container {
+      margin-bottom: 24px;
+    }
+
+    .qr-frame {
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 20px;
+      display: inline-block;
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(245, 241, 233, 0.2);
+    }
+
+    .qr-frame img {
+      width: 175px;
+      height: 175px;
+      display: block;
+    }
+
+    /* Footprint Spec Tag */
+    .footprint-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(245, 241, 233, 0.05);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--bone);
+      margin-bottom: 20px;
+      letter-spacing: 0.04em;
+    }
+
+    .footprint-badge span {
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    /* Mobile Direct Launch Button */
+    .btn-launch-ar {
+      width: 100%;
+      background: var(--gold);
+      color: #161005;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 16px 24px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 0 28px rgba(232, 158, 40, 0.4);
+      transition: all 0.25s ease;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .btn-launch-ar:hover {
+      background: #f0a934;
+      box-shadow: 0 0 38px rgba(232, 158, 40, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .btn-launch-ar svg {
+      fill: currentColor;
+    }
+
+    /* Micro Steps */
+    .step-hints {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--mute);
+      margin-top: 18px;
+    }
+
+    .step-hints span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .step-hints em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    /* Footer Endplate */
+    .footer-bar {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 32px 40px;
+      border-top: 1px solid rgba(245, 241, 233, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 0.86rem;
+      color: var(--mute);
+    }
+
+    .footer-link {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--gold);
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .footer-link:hover {
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="site-ambient"></div>
+  <div class="site-grain"></div>
+
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <a class="brand-mark" href="https://maquette.ro">
+      Maquette <em>Mobila</em>
+    </a>
+    <span class="confidential-tag">Private Client Prototype</span>
+  </header>
+
+  <!-- Landing Page Split Layout -->
+  <main class="landing-wrap">
+
+    <!-- Left Column: Story -->
+    <section class="story-col">
+      <div class="eyebrow">Bespoke 1:1 Spatial Specimen</div>
+      <h1 class="headline">
+        See it in your room, <br><em>at genuine 1:1 scale.</em>
+      </h1>
+
+      <p class="story-p">
+        The primary obstacle in ordering furniture online isn't style — it's spatial uncertainty: <strong>"Will this fit between the windows? Will it overpower the room? How does the fabric react to our natural daylight?"</strong>
+      </p>
+
+      <p class="story-p">
+        We prepared this private prototype to demonstrate how your clients can experience your collection <strong>directly through their phone camera in their physical living space</strong> — with zero apps, zero downloads, and instant certainty.
+      </p>
+
+      <div class="story-specs">
+        <div class="spec-item">
+          <span class="spec-num">01 //</span>
+          <span class="spec-text"><strong>Zero App Friction:</strong> Opens natively inside Safari (Apple Quick Look) and Chrome (Google WebXR).</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-num">02 //</span>
+          <span class="spec-text"><strong>Millimetric Precision:</strong> Verified 1:1 physical scale eliminates hesitation and return rates.</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-num">03 //</span>
+          <span class="spec-text"><strong>Native Room Lighting:</strong> Ambient daylight estimation and physically accurate floor shadows.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Column: "Test It in Your Room" Component -->
+    <section class="ar-component-col">
+      <div class="ar-test-card">
+        
+        <div class="card-kicker">Instant Spatial AR</div>
+        <h2 class="card-title">Test in Your Room</h2>
+        <p class="card-desc">
+          Scan with your phone camera to place this model at genuine 1:1 scale directly on your floor.
+        </p>
+
+        <!-- Dynamic QR Code Frame -->
+        <div class="qr-container">
+          <div class="qr-frame">
+            <img id="qr-img" src="" alt="Scan QR code with your phone camera" />
+          </div>
+        </div>
+
+        <!-- Footprint Dimensions Badge -->
+        <div class="footprint-badge">
+          Footprint: <span>1.80m W</span> · <span>0.86m D</span> · <span>0.74m H</span>
+        </div>
+
+        <!-- Direct Action (Immediately triggers native AR on mobile) -->
+        <button class="btn-launch-ar" id="btn-launch-ar">
+          <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 6h4v2H4v4H2V8c0-1.1.9-2 2-2zm16 0c1.1 0 2 .9 2 2v4h-2V8h-4V6h4zM4 18h4v2H4c-1.1 0-2-.9-2-2v-4h2v4zm16 0h-4v-2h4v-4h2v4c0 1.1-.9 2-2 2zM12 8.5c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5z"/>
+          </svg>
+          <span id="btn-label">Launch 1:1 Camera AR</span>
+        </button>
+
+        <div class="step-hints">
+          <span><em>1.</em> Scan QR</span>
+          <span><em>2.</em> Point at floor</span>
+          <span><em>3.</em> Step inside</span>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Headless Model Viewer to power AR on all devices -->
+  <model-viewer
+    id="headless-mv"
+    src="https://code4fukui.github.io/vr-kanazawa-it/sofa_r-nakagawa532.glb"
+    ios-src="https://code4fukui.github.io/vr-kanazawa-it/sofa_r-nakagawa532.usdz"
+    ar
+    ar-scale="fixed"
+    ar-modes="webxr scene-viewer quick-look"
+    style="display: none;">
+  </model-viewer>
+
+  <!-- Footer -->
+  <footer class="footer-bar">
+    <div>&copy; 2026 Maquette. Confidential prototype prepared for private review.</div>
+    <a class="footer-link" href="mailto:contact@maquette.ro?subject=Feedback%20on%20Private%20WebAR%20Specimen">
+      Direct Client Inquiries &rarr;
+    </a>
+  </footer>
+
+  <script>
+    (function () {
+      const mv = document.getElementById('headless-mv');
+      const launchBtn = document.getElementById('btn-launch-ar');
+      const btnLabel = document.getElementById('btn-label');
+      const qrImg = document.getElementById('qr-img');
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+      // Populate dynamic high-res QR code
+      const targetUrl = window.location.href;
+      qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&color=161005&margin=10&data=' + encodeURIComponent(targetUrl);
+
+      // On mobile devices, emphasize the direct button
+      if (isMobile) {
+        btnLabel.textContent = 'Place in Your Room (Tap to Launch)';
+        launchBtn.style.animation = 'pulse 2s infinite';
+      }
+
+      // Launch Native AR Action
+      launchBtn.addEventListener('click', function () {
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        if (isIOS) {
+          // Native Apple Quick Look Bridge
+          const anchor = document.createElement('a');
+          anchor.setAttribute('rel', 'ar');
+          anchor.setAttribute('href', 'https://code4fukui.github.io/vr-kanazawa-it/sofa_r-nakagawa532.usdz');
+          const img = document.createElement('img');
+          img.setAttribute('src', 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"/>');
+          anchor.appendChild(img);
+          document.body.appendChild(anchor);
+          anchor.click();
+          setTimeout(() => anchor.remove(), 100);
+        } else if (isMobile) {
+          // Android WebXR / Scene Viewer
+          mv.activateAR();
+        } else {
+          // Desktop: highlight the QR code
+          qrImg.parentElement.style.transform = 'scale(1.06)';
+          qrImg.parentElement.style.transition = 'transform 0.25s ease';
+          setTimeout(() => {
+            qrImg.parentElement.style.transform = 'scale(1)';
+          }, 300);
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>

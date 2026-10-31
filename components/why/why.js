@@ -5,15 +5,15 @@
     {
       num: '01',
       tag: '01',
-      title: 'Tell us what you need',
-      desc: "Tell us what you want to build. We'll figure out the best way to make it happen.",
+      title: 'Tell us about your brand',
+      desc: "Share what your brand stands for and what you'd like to achieve. We'll take it from there.",
       color: '#c88a58'
     },
     {
       num: '02',
       tag: '02',
-      title: 'Try a free demo',
-      desc: 'We build a working demo for you to try. Test it yourself before you commit.',
+      title: 'See your free demo',
+      desc: 'We design a custom demo tailored to your brand. Explore it, evaluate the quality, and decide if our approach is right for you.',
       free: true,
       color: '#e89e28'
     },
@@ -21,7 +21,7 @@
       num: '03',
       tag: '03',
       title: 'Build it together',
-      desc: 'We build your product with you, sharing progress every week. You stay in control of every decision.',
+      desc: 'We build with you, sharing progress every week. You stay in control of every detail and decision.',
       color: '#38bdf8'
     },
     {

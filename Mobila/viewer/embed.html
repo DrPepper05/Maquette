@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobila WebAR Proportional Couch Viewer</title>
+  
+  <!-- Import Model Viewer Library -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+  
+  <!-- Google Fonts: Maquette Design System -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Maquette Design Tokens */
+      --bg: #0d0c0e;
+      --panel: #181614;
+      --surface: #221e1a;
+      --bone: #f5f1e9;
+      --mute: rgba(245, 241, 233, 0.65);
+      --line: rgba(245, 241, 233, 0.13);
+      --gold: #e89e28;
+      --amber: #d99b26;
+      --bronze: #c88a58;
+      --coral: #df7249;
+      color-scheme: dark;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background: transparent;
+      color: var(--bone);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Outer Wrapper with Maquette warm ambient studio backdrop */
+    .viewer-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at 50% 45%, #24201c 0%, #151311 60%, #0d0c0e 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .viewer-wrapper::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.06;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/><feColorMatrix values='0 0 0 0 .5 0 0 0 0 .48 0 0 0 0 .45 0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      z-index: 1;
+    }
+
+    /* Model-Viewer */
+    model-viewer {
+      width: 100%;
+      height: 100%;
+      --poster-color: transparent;
+      z-index: 2;
+      position: relative;
+    }
+
+    /* Loading Spinner */
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(13, 12, 14, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.4s ease-out;
+      z-index: 5;
+    }
+    
+    .loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 44px;
+      height: 44px;
+      border: 3px solid rgba(245, 241, 233, 0.12);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      margin-bottom: 16px;
+    }
+
+    .loading-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--bronze);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Controls Overlay */
+    .controls-overlay {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      width: 100%;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .instructions {
+      background: rgba(24, 22, 20, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--mute);
+      letter-spacing: 0.04em;
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .instructions svg {
+      stroke: var(--bronze);
+    }
+
+    /* Custom AR Button in signature Maquette Gold */
+    .ar-button-custom {
+      background: var(--gold);
+      color: #161005;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      pointer-events: auto;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 0 24px rgba(232, 158, 40, 0.35);
+      transition: box-shadow 0.3s ease, transform 0.2s ease, background 0.2s ease;
+    }
+
+    .ar-button-custom:hover {
+      background: #f0a934;
+      transform: translateY(-2px);
+      box-shadow: 0 0 36px rgba(232, 158, 40, 0.55);
+    }
+
+    .ar-button-custom svg {
+      fill: currentColor;
+    }
+
+    /* Hotspot Bounding Box Nodes */
+    .anchor-node {
+      width: 0px;
+      height: 0px;
+      padding: 0;
+      border: none;
+      background: transparent;
+      pointer-events: none;
+    }
+
+    /* Dimension Badge - shown only in AR camera view */
+    .dim-badge-trigger {
+      display: none;
+      background: rgba(24, 22, 20, 0.9);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 14px;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      font-family: 'DM Mono', monospace;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: all 0.2s ease;
+    }
+
+    .dim-badge-trigger:hover {
+      transform: scale(1.05);
+      border-color: var(--gold);
+      box-shadow: 0 0 20px rgba(232, 158, 40, 0.3);
+    }
+
+    .dim-badge-trigger.active {
+      background: var(--gold);
+      color: #161005;
+      border-color: var(--gold);
+    }
+
+    .dim-badge-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--mute);
+      letter-spacing: 0.1em;
+    }
+    .dim-badge-trigger.active .dim-badge-label {
+      color: rgba(22, 16, 5, 0.75);
+    }
+
+    .dim-badge-val {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--bone);
+    }
+    .dim-badge-trigger.active .dim-badge-val {
+      color: #161005;
+    }
+
+    /* Wall Floor markers */
+    .wall-marker {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--coral);
+      border: 1.5px solid var(--bone);
+      box-shadow: 0 0 12px var(--coral);
+      padding: 0;
+      pointer-events: none;
+      display: none;
+    }
+
+    /* Configurator Panel */
+    .browser-config-panel {
+      display: none;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 320px;
+      background: rgba(24, 22, 20, 0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px 22px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+      z-index: 10;
+      flex-direction: column;
+      gap: 14px;
+      pointer-events: auto;
+      color: var(--bone);
+    }
+
+    .config-title {
+      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--bone);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .config-title svg {
+      stroke: var(--gold);
+    }
+
+    .config-section {
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+
+    .slider-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--mute);
+      margin-bottom: 6px;
+    }
+
+    .slider-val {
+      font-family: 'DM Mono', monospace;
+      font-weight: 600;
+      color: var(--gold);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--gold);
+      height: 6px;
+      background: rgba(245, 241, 233, 0.12);
+      border-radius: 999px;
+      outline: none;
+    }
+
+    .switch-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--mute);
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 22px;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(245, 241, 233, 0.18);
+      transition: .3s;
+      border-radius: 34px;
+    }
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 16px; width: 16px;
+      left: 3px; bottom: 3px;
+      background-color: var(--bone);
+      transition: .3s;
+      border-radius: 50%;
+    }
+    input:checked + .toggle-slider {
+      background-color: var(--gold);
+    }
+    input:checked + .toggle-slider:before {
+      transform: translateX(18px);
+      background-color: #161005;
+    }
+
+    /* Stepper HUD */
+    .ar-stepper-hud {
+      position: absolute;
+      bottom: -160px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 380px;
+      background: rgba(24, 22, 20, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 18px 22px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: bottom 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: auto;
+    }
+
+    .ar-stepper-hud.active {
+      bottom: 24px;
+    }
+
+    .hud-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--bronze);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      text-align: center;
+    }
+
+    .stepper-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .stepper-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: rgba(245, 241, 233, 0.08);
+      color: var(--bone);
+      font-size: 1.5rem;
+      font-weight: 400;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .stepper-btn:hover {
+      background: rgba(232, 158, 40, 0.18);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .stepper-btn:active {
+      transform: scale(0.92);
+    }
+
+    .stepper-value {
+      font-family: 'DM Mono', monospace;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--bone);
+      letter-spacing: -0.02em;
+    }
+
+    .hud-close-btn {
+      background: var(--gold);
+      color: #161005;
+      border: none;
+      border-radius: 999px;
+      padding: 12px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(232, 158, 40, 0.3);
+      transition: all 0.2s;
+    }
+    .hud-close-btn:hover {
+      background: #f0a934;
+      box-shadow: 0 0 28px rgba(232, 158, 40, 0.5);
+    }
+
+    .ratio-warning {
+      font-size: 0.72rem;
+      color: var(--mute);
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* Hide default model-viewer AR trigger */
+    model-viewer::part(default-ar-button) {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="viewer-wrapper">
+    <!-- Loading Screen -->
+    <div class="loading-overlay" id="loading-overlay">
+      <div class="spinner"></div>
+      <div class="loading-text">Loading 3D Couch...</div>
+    </div>
+
+    <!-- The 3D Canvas -->
+    <model-viewer
+      id="mobila-viewer"
+      camera-controls
+      touch-action="pan-y"
+      auto-rotate
+      auto-rotate-delay="3000"
+      interaction-prompt="auto"
+      ar
+      ar-scale="fixed"
+      ar-modes="webxr scene-viewer quick-look"
+      shadow-intensity="1.5"
+      shadow-softness="0.8"
+      exposure="1.1"
+      alt="A 3D couch model at 1:1 scale">
+
+      <!-- Interactive 3D Dimension Badges -->
+      <button slot="hotspot-dim-width" id="badge-width" class="dim-badge-trigger" data-position="0 0.05 0.5" data-normal="0 0 1">
+        <span class="dim-badge-label">Width</span>
+        <span class="dim-badge-val" id="badge-val-width">-</span>
+      </button>
+      <button slot="hotspot-dim-depth" id="badge-depth" class="dim-badge-trigger" data-position="0.5 0.05 0" data-normal="1 0 0">
+        <span class="dim-badge-label">Depth</span>
+        <span class="dim-badge-val" id="badge-val-depth">-</span>
+      </button>
+      <button slot="hotspot-dim-height" id="badge-height" class="dim-badge-trigger" data-position="-0.5 0.4 0.5" data-normal="-1 0 0">
+        <span class="dim-badge-label">Height</span>
+        <span class="dim-badge-val" id="badge-val-height">-</span>
+      </button>
+
+      <!-- Invisible Anchor Nodes for Drawing Bounding Box Lines -->
+      <button slot="hotspot-corner-front-left" id="corner-fl" class="anchor-node" data-position="-0.5 0.05 0.5" data-normal="0 1 0"></button>
+      <button slot="hotspot-corner-front-right" id="corner-fr" class="anchor-node" data-position="0.5 0.05 0.5" data-normal="0 1 0"></button>
+      <button slot="hotspot-corner-back-right" id="corner-br" class="anchor-node" data-position="0.5 0.05 -0.5" data-normal="0 1 0"></button>
+      <button slot="hotspot-corner-height-bottom" id="corner-hb" class="anchor-node" data-position="-0.5 0.05 0.5" data-normal="0 1 0"></button>
+      <button slot="hotspot-corner-height-top" id="corner-ht" class="anchor-node" data-position="-0.5 0.8 0.5" data-normal="0 1 0"></button>
+
+      <!-- Wall Floor Markers -->
+      <button slot="hotspot-wall-start" id="hotspot-wall-start" class="wall-marker" data-position="-1.25 0 -0.6" data-normal="0 1 0"></button>
+      <button slot="hotspot-wall-end" id="hotspot-wall-end" class="wall-marker" data-position="1.25 0 -0.6" data-normal="0 1 0"></button>
+
+      <!-- 
+        CRITICAL: Move the SVG Line Overlay, Configurator Panel, and Stepper HUD 
+        INSIDE the <model-viewer> element. This ensures they are registered as children 
+        of the WebXR DOM Overlay element, making them visible on top of the live camera feed in AR!
+      -->
+      <svg id="svg-overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events: none; z-index: 3; display: none;">
+        <!-- Bounding Box lines (Maquette gold accent) -->
+        <line id="line-width" x1="0" y1="0" x2="0" y2="0" stroke="#e89e28" stroke-width="2.5" />
+        <line id="line-depth" x1="0" y1="0" x2="0" y2="0" stroke="#e89e28" stroke-width="2.5" />
+        <line id="line-height" x1="0" y1="0" x2="0" y2="0" stroke="#e89e28" stroke-width="2.5" />
+
+        <!-- Wall Guide Line (Coral accent) -->
+        <line id="wall-line" x1="0" y1="0" x2="0" y2="0" stroke="#df7249" stroke-width="3" stroke-dasharray="8,6" style="display: none;" />
+        <text id="wall-text" x="0" y="0" fill="#df7249" font-weight="700" font-size="12" style="display: none; text-anchor: middle; font-family: 'DM Mono', monospace; filter: drop-shadow(0 2px 4px rgba(13,12,14,0.6));">Wall Guide: 2.50m</text>
+      </svg>
+
+      <div class="browser-config-panel" id="config-panel">
+        <div class="config-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          AR Settings Panel
+        </div>
+
+        <div class="config-section" style="border:none; padding-top:0;">
+          <div class="slider-row">
+            <span>Target Width</span>
+            <span class="slider-val" id="furniture-width-val">-</span>
+          </div>
+          <input type="range" id="browser-width-slider" min="1.0" max="3.2" step="0.05" value="1.8" />
+          <div style="font-size: 10px; color: #64748b; margin-top: 4px; font-style: italic;">
+            * Scales Width, Depth, and Height proportionally to preserve ratio.
+          </div>
+        </div>
+
+        <div class="config-section">
+          <div class="switch-row">
+            <span>Show Virtual Wall Guide</span>
+            <label class="switch">
+              <input type="checkbox" id="wall-guide-toggle" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <div id="wall-length-config" style="display: none; margin-top: 10px;">
+            <div class="slider-row">
+              <span>Wall Length</span>
+              <span class="slider-val" id="wall-length-val">2.50m</span>
+            </div>
+            <input type="range" id="wall-length-slider" min="1.0" max="5.0" step="0.1" value="2.5" />
+          </div>
+        </div>
+      </div>
+
+      <div class="ar-stepper-hud" id="stepper-hud">
+        <div class="hud-title" id="hud-active-title">Adjust Width</div>
+        <div class="stepper-row">
+          <button class="stepper-btn" id="stepper-dec">−</button>
+          <span class="stepper-value" id="stepper-val">1.80m</span>
+          <button class="stepper-btn" id="stepper-inc">+</button>
+        </div>
+        <div class="ratio-warning">* Scales proportionally to preserve structural ratio</div>
+        <button class="hud-close-btn" id="hud-close">Apply Sizing</button>
+      </div>
+
+    </model-viewer>
+
+    <!-- Bottom Instructions Overlay (Outside, only for 3D Browser view) -->
+    <div class="controls-overlay" id="browser-instructions">
+      <div class="instructions">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
+          <polyline points="21 3 21 8 16 8"/>
+        </svg>
+        Drag to rotate
+      </div>
+
+      <button class="ar-button-custom" id="mobila-ar-button">
+        <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 6h4v2H4v4H2V8c0-1.1.9-2 2-2zm16 0c1.1 0 2 .9 2 2v4h-2V8h-4V6h4zM4 18h4v2H4c-1.1 0-2-.9-2-2v-4h2v4zm16 0h-4v-2h4v-4h2v4c0 1.1-.9 2-2 2zM12 8.5c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5z"/>
+        </svg>
+        View in your space
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Asset Mapping (Fixed to CC-BY Couch Assets from Kanazawa IT)
+    const MODEL_DATABASE = {
+      'chair-01': {
+        glb: 'https://code4fukui.github.io/vr-kanazawa-it/sofa_r-nakagawa532.glb',
+        usdz: 'https://code4fukui.github.io/vr-kanazawa-it/sofa_r-nakagawa532.usdz'
+      },
+      'sofa-02': {
+        glb: 'https://code4fukui.github.io/vr-kanazawa-it/sofa_r-nakagawa532.glb',
+        usdz: 'https://code4fukui.github.io/vr-kanazawa-it/sofa_r-nakagawa532.usdz'
+      }
+    };
+
+    // Parse Query Parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const modelId = urlParams.get('modelId') || 'chair-01';
+    const apiKey = urlParams.get('apiKey');
+    const embedMode = urlParams.get('embedMode') || 'inline';
+
+    console.log(`[Mobila Viewer] Loaded Couch: ${modelId}`);
+
+    const modelViewer = document.getElementById('mobila-viewer');
+    const loadingOverlay = document.getElementById('loading-overlay');
+    const arButton = document.getElementById('mobila-ar-button');
+
+    // UI Configuration Elements
+    const browserWidthSlider = document.getElementById('browser-width-slider');
+    const browserWidthVal = document.getElementById('furniture-width-val');
+    const wallGuideToggle = document.getElementById('wall-guide-toggle');
+    const wallLengthConfig = document.getElementById('wall-length-config');
+    const wallLengthSlider = document.getElementById('wall-length-slider');
+    const wallLengthVal = document.getElementById('wall-length-val');
+    const configPanel = document.getElementById('config-panel');
+    const browserInstructions = document.getElementById('browser-instructions');
+
+    // AR Stepper HUD
+    const stepperHud = document.getElementById('stepper-hud');
+    const hudTitle = document.getElementById('hud-active-title');
+    const stepperDec = document.getElementById('stepper-dec');
+    const stepperInc = document.getElementById('stepper-inc');
+    const stepperVal = document.getElementById('stepper-val');
+    const hudClose = document.getElementById('hud-close');
+
+    // Hotspot bounding anchors
+    const cornerFL = document.getElementById('corner-fl');
+    const cornerFR = document.getElementById('corner-fr');
+    const cornerBR = document.getElementById('corner-br');
+    const cornerHB = document.getElementById('corner-hb');
+    const cornerHT = document.getElementById('corner-ht');
+
+    // Hotspot labels
+    const badgeWidth = document.getElementById('badge-width');
+    const badgeDepth = document.getElementById('badge-depth');
+    const badgeHeight = document.getElementById('badge-height');
+
+    const badgeValWidth = document.getElementById('badge-val-width');
+    const badgeValDepth = document.getElementById('badge-val-depth');
+    const badgeValHeight = document.getElementById('badge-val-height');
+
+    // Wall Guide Hotspots
+    const wallStartHotspot = document.getElementById('hotspot-wall-start');
+    const wallEndHotspot = document.getElementById('hotspot-wall-end');
+    const wallLine = document.getElementById('wall-line');
+    const wallText = document.getElementById('wall-text');
+    const svgOverlay = document.getElementById('svg-overlay');
+
+    // Retrieve asset details from mock database
+    const asset = MODEL_DATABASE[modelId] || MODEL_DATABASE['chair-01'];
+
+    // Set Sources
+    modelViewer.setAttribute('src', asset.glb);
+    modelViewer.setAttribute('ios-src', asset.usdz);
+
+    // Bounding dimensions trackers
+    let baseWidth = 1.8;
+    let baseHeight = 0.8;
+    let baseDepth = 0.95;
+
+    // Scale ratios
+    let currentScale = 1.0;
+    let activeDimension = 'width';
+
+    // Platform Detection
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                  (/Macintosh/.test(navigator.userAgent) && 'ontouchend' in document);
+
+    // Initialize dimensions when the GLB is loaded
+    modelViewer.addEventListener('load', () => {
+      loadingOverlay.classList.add('hidden');
+      
+      if (modelViewer.canActivateAR) {
+        arButton.style.display = 'flex';
+      }
+
+      // Read real-world dimensions in meters
+      const size = modelViewer.getDimensions();
+      baseWidth = size.x;
+      baseHeight = size.y;
+      baseDepth = size.z;
+
+      console.log(`[Mobila Sizing] Sofa Loaded - Base Dimensions: ${baseWidth.toFixed(2)}x${baseHeight.toFixed(2)}x${baseDepth.toFixed(2)}m`);
+
+      // Initialize UI inputs to match loaded sofa file dimensions
+      browserWidthSlider.min = (baseWidth * 0.5).toFixed(2);
+      browserWidthSlider.max = (baseWidth * 2.0).toFixed(2);
+      browserWidthSlider.value = baseWidth.toFixed(2);
+      
+      updateDimensionDisplay();
+    });
+
+    // Update 3D hotspot coordinates and UI labels
+    function updateDimensionDisplay() {
+      const currentWidth = baseWidth * currentScale;
+      const currentDepth = baseDepth * currentScale;
+      const currentHeight = baseHeight * currentScale;
+
+      badgeValWidth.textContent = `${currentWidth.toFixed(2)}m`;
+      badgeValDepth.textContent = `${currentDepth.toFixed(2)}m`;
+      badgeValHeight.textContent = `${currentHeight.toFixed(2)}m`;
+      browserWidthVal.textContent = `${currentWidth.toFixed(2)}m`;
+      browserWidthSlider.value = currentWidth;
+
+      // Positioning anchors relative to scaling matrix to keep lines aligned
+      cornerFL.setAttribute('data-position', `-${currentWidth/2} 0.05 ${currentDepth/2}`);
+      cornerFR.setAttribute('data-position', `${currentWidth/2} 0.05 ${currentDepth/2}`);
+      badgeWidth.setAttribute('data-position', `0 0.05 ${currentDepth/2}`);
+
+      cornerBR.setAttribute('data-position', `${currentWidth/2} 0.05 -${currentDepth/2}`);
+      badgeDepth.setAttribute('data-position', `${currentWidth/2} 0.05 0`);
+
+      cornerHB.setAttribute('data-position', `-${currentWidth/2} 0.05 ${currentDepth/2}`);
+      cornerHT.setAttribute('data-position', `-${currentWidth/2} ${currentHeight} ${currentDepth/2}`);
+      badgeHeight.setAttribute('data-position', `-${currentWidth/2} ${currentHeight/2} ${currentDepth/2}`);
+    }
+
+    // Listen to AR State changes to trigger overlays only inside the camera view
+    modelViewer.addEventListener('ar-status', (event) => {
+      const status = event.detail.status;
+      const isPresenting = status === 'session-started';
+
+      console.log(`[Mobila AR] Session Status: ${status}`);
+
+      // Toggle Configurator Panel in AR
+      configPanel.style.display = isPresenting ? 'flex' : 'none';
+      
+      // Toggle SVG Annotation Lines Overlay in AR
+      svgOverlay.style.display = isPresenting ? 'block' : 'none';
+
+      // Toggle Dimension Badges in AR
+      badgeWidth.style.display = isPresenting ? 'flex' : 'none';
+      badgeDepth.style.display = isPresenting ? 'flex' : 'none';
+      badgeHeight.style.display = isPresenting ? 'flex' : 'none';
+
+      // Hide default browser prompt instruction when in AR
+      browserInstructions.style.pointerEvents = isPresenting ? 'none' : 'auto';
+      if (isPresenting) {
+        document.querySelector('.instructions').style.display = 'none';
+      } else {
+        document.querySelector('.instructions').style.display = 'flex';
+        stepperHud.classList.remove('active');
+        
+        // Hide wall guide elements when leaving AR
+        wallStartHotspot.style.display = 'none';
+        wallEndHotspot.style.display = 'none';
+        wallLine.style.display = 'none';
+        wallText.style.display = 'none';
+        wallGuideToggle.checked = false;
+        wallLengthConfig.style.display = 'none';
+      }
+    });
+
+    // Proportional Sizing (Alters all 3 axes equally to preserve ratio)
+    function setProportionalWidth(newWidth) {
+      currentScale = newWidth / baseWidth;
+      modelViewer.scale = `${currentScale} ${currentScale} ${currentScale}`;
+      updateDimensionDisplay();
+    }
+
+    function setProportionalHeight(newHeight) {
+      currentScale = newHeight / baseHeight;
+      modelViewer.scale = `${currentScale} ${currentScale} ${currentScale}`;
+      updateDimensionDisplay();
+    }
+
+    function setProportionalDepth(newDepth) {
+      currentScale = newDepth / baseDepth;
+      modelViewer.scale = `${currentScale} ${currentScale} ${currentScale}`;
+      updateDimensionDisplay();
+    }
+
+    // Slider inputs in browser
+    browserWidthSlider.addEventListener('input', (e) => {
+      setProportionalWidth(parseFloat(e.target.value));
+    });
+
+    // Hotspot taps to trigger the AR-friendly Stepper HUD
+    badgeWidth.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openStepperHUD('width', baseWidth * currentScale);
+    });
+
+    badgeDepth.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openStepperHUD('depth', baseDepth * currentScale);
+    });
+
+    badgeHeight.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openStepperHUD('height', baseHeight * currentScale);
+    });
+
+    function openStepperHUD(dimension, currentValue) {
+      activeDimension = dimension;
+      hudTitle.textContent = `Adjust ${dimension.toUpperCase()} (Proportional)`;
+      stepperVal.textContent = `${currentValue.toFixed(2)}m`;
+      
+      badgeWidth.classList.remove('active');
+      badgeDepth.classList.remove('active');
+      badgeHeight.classList.remove('active');
+      document.getElementById(`badge-${dimension}`).classList.add('active');
+
+      stepperHud.classList.add('active');
+    }
+
+    hudClose.addEventListener('click', () => {
+      stepperHud.classList.remove('active');
+      badgeWidth.classList.remove('active');
+      badgeDepth.classList.remove('active');
+      badgeHeight.classList.remove('active');
+    });
+
+    // Stepper buttons (proportional sizing in 5cm steps)
+    stepperDec.addEventListener('click', () => {
+      adjustDimensionProportionally(-0.05);
+    });
+
+    stepperInc.addEventListener('click', () => {
+      adjustDimensionProportionally(0.05);
+    });
+
+    function adjustDimensionProportionally(delta) {
+      if (activeDimension === 'width') {
+        const val = Math.max(0.8, Math.min(3.5, (baseWidth * currentScale) + delta));
+        setProportionalWidth(val);
+        stepperVal.textContent = `${val.toFixed(2)}m`;
+      } else if (activeDimension === 'depth') {
+        const val = Math.max(0.4, Math.min(2.0, (baseDepth * currentScale) + delta));
+        setProportionalDepth(val);
+        stepperVal.textContent = `${val.toFixed(2)}m`;
+      } else if (activeDimension === 'height') {
+        const val = Math.max(0.4, Math.min(2.0, (baseHeight * currentScale) + delta));
+        setProportionalHeight(val);
+        stepperVal.textContent = `${val.toFixed(2)}m`;
+      }
+    }
+
+    // Wall Guide configuration
+    wallGuideToggle.addEventListener('change', (e) => {
+      const showGuide = e.target.checked;
+      wallLengthConfig.style.display = showGuide ? 'block' : 'none';
+      wallStartHotspot.style.display = showGuide ? 'block' : 'none';
+      wallEndHotspot.style.display = showGuide ? 'block' : 'none';
+      
+      if (showGuide) {
+        updateWallHotspots(parseFloat(wallLengthSlider.value));
+      } else {
+        wallLine.style.display = 'none';
+        wallText.style.display = 'none';
+      }
+    });
+
+    wallLengthSlider.addEventListener('input', (e) => {
+      const length = parseFloat(e.target.value);
+      wallLengthVal.textContent = `${length.toFixed(2)}m`;
+      updateWallHotspots(length);
+    });
+
+    function updateWallHotspots(length) {
+      const halfLength = length / 2;
+      // Positioned back from center (z = -0.6) to avoid clipping with deeper couch
+      wallStartHotspot.setAttribute('data-position', `-${halfLength} 0 -0.6`);
+      wallEndHotspot.setAttribute('data-position', `${halfLength} 0 -0.6`);
+      drawSvgLines();
+    }
+
+    // Projects the 3D bounding coordinates onto the SVG canvas overlay
+    function drawSvgLines() {
+      // Draw lines only when in active AR session
+      if (modelViewer.arStatus !== 'session-started') {
+        document.getElementById('line-width').style.display = 'none';
+        document.getElementById('line-depth').style.display = 'none';
+        document.getElementById('line-height').style.display = 'none';
+        wallLine.style.display = 'none';
+        wallText.style.display = 'none';
+        return;
+      }
+
+      // 1. Draw Dimension Lines
+      const rectFL = cornerFL.getBoundingClientRect();
+      const rectFR = cornerFR.getBoundingClientRect();
+      const rectBR = cornerBR.getBoundingClientRect();
+      const rectHB = cornerHB.getBoundingClientRect();
+      const rectHT = cornerHT.getBoundingClientRect();
+
+      // Width Line
+      if (rectFL.width > 0 && rectFR.width > 0) {
+        document.getElementById('line-width').setAttribute('x1', rectFL.left + rectFL.width/2);
+        document.getElementById('line-width').setAttribute('y1', rectFL.top + rectFL.height/2);
+        document.getElementById('line-width').setAttribute('x2', rectFR.left + rectFR.width/2);
+        document.getElementById('line-width').setAttribute('y2', rectFR.top + rectFR.height/2);
+        document.getElementById('line-width').style.display = 'block';
+      } else {
+        document.getElementById('line-width').style.display = 'none';
+      }
+
+      // Depth Line
+      if (rectFR.width > 0 && rectBR.width > 0) {
+        document.getElementById('line-depth').setAttribute('x1', rectFR.left + rectFR.width/2);
+        document.getElementById('line-depth').setAttribute('y1', rectFR.top + rectFR.height/2);
+        document.getElementById('line-depth').setAttribute('x2', rectBR.left + rectBR.width/2);
+        document.getElementById('line-depth').setAttribute('y2', rectBR.top + rectBR.height/2);
+        document.getElementById('line-depth').style.display = 'block';
+      } else {
+        document.getElementById('line-depth').style.display = 'none';
+      }
+
+      // Height Line
+      if (rectHB.width > 0 && rectHT.width > 0) {
+        document.getElementById('line-height').setAttribute('x1', rectHB.left + rectHB.width/2);
+        document.getElementById('line-height').setAttribute('y1', rectHB.top + rectHB.height/2);
+        document.getElementById('line-height').setAttribute('x2', rectHT.left + rectHT.width/2);
+        document.getElementById('line-height').setAttribute('y2', rectHT.top + rectHT.height/2);
+        document.getElementById('line-height').style.display = 'block';
+      } else {
+        document.getElementById('line-height').style.display = 'none';
+      }
+
+      // 2. Draw Wall Guide Line (If Enabled)
+      if (wallGuideToggle.checked) {
+        const rectWStart = wallStartHotspot.getBoundingClientRect();
+        const rectWEnd = wallEndHotspot.getBoundingClientRect();
+
+        if (rectWStart.width > 0 && rectWEnd.width > 0) {
+          const wx1 = rectWStart.left + rectWStart.width/2;
+          const wy1 = rectWStart.top + rectWStart.height/2;
+          const wx2 = rectWEnd.left + rectWEnd.width/2;
+          const wy2 = rectWEnd.top + rectWEnd.height/2;
+
+          wallLine.setAttribute('x1', wx1);
+          wallLine.setAttribute('y1', wy1);
+          wallLine.setAttribute('x2', wx2);
+          wallLine.setAttribute('y2', wy2);
+          wallLine.style.display = 'block';
+
+          const midX = (wx1 + wx2) / 2;
+          const midY = (wy1 + wy2) / 2 - 12;
+          wallText.setAttribute('x', midX);
+          wallText.setAttribute('y', midY);
+          wallText.textContent = `Wall Guide: ${parseFloat(wallLengthSlider.value).toFixed(2)}m`;
+          wallText.style.display = 'block';
+        } else {
+          wallLine.style.display = 'none';
+          wallText.style.display = 'none';
+        }
+      }
+    }
+
+    // Trigger SVG line drawing on camera changes
+    modelViewer.addEventListener('camera-change', drawSvgLines);
+
+    // Continuous tick loop
+    function tick() {
+      drawSvgLines();
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    // Custom AR Launcher Click
+    arButton.addEventListener('click', (e) => {
+      if (isIOS) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        console.log('[Mobila Viewer] iOS detected. Constructing parameterized USDZ URL.');
+        
+        // Calculate current dimensions dynamically to display in iOS AR Quick Look
+        const w = baseWidth * currentScale;
+        const d = baseDepth * currentScale;
+        const h = baseHeight * currentScale;
+        
+        // Apple AR Quick Look URL Fragment Parameters
+        const title = encodeURIComponent("Moderna Fabric Couch");
+        const subtitle = encodeURIComponent(`Width: ${w.toFixed(2)}m | Depth: ${d.toFixed(2)}m | Height: ${h.toFixed(2)}m`);
+        
+        // Build URL: locks content scaling to 1:1 and injects the title and custom size subtitle banner
+        const usdzUrlWithParams = `${asset.usdz}#allowsContentScaling=0&title=${title}&subtitle=${subtitle}`;
+        
+        window.parent.postMessage({
+          type: 'MOBILA_LAUNCH_QUICK_LOOK',
+          usdzUrl: usdzUrlWithParams
+        }, '*');
+      } else {
+        console.log('[Mobila Viewer] Android/WebXR detected. Activating AR natively.');
+        modelViewer.activateAR();
+      }
+    });
+  </script>
+</body>
+</html>

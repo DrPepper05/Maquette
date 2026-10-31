@@ -62,11 +62,21 @@ if (existsSync(distDir)) {
 mkdirSync(distDir, { recursive: true });
 writeFileSync(join(distDir, 'index.html'), html + '\n');
 
-for (const dir of ['assets', 'components', 'styles', 'showcase', 'preview']) {
+const cpOptions = {
+  recursive: true,
+  filter: (src) => !src.includes('node_modules') && !src.includes('.DS_Store')
+};
+
+for (const dir of ['assets', 'components', 'styles', 'showcase', 'preview', 'Mobila']) {
   const srcPath = join(root, dir);
   if (existsSync(srcPath)) {
-    cpSync(srcPath, join(distDir, dir), { recursive: true });
+    cpSync(srcPath, join(distDir, dir), cpOptions);
   }
+}
+
+// Also duplicate / alias as lowercase 'mobila' for web path flexibility
+if (existsSync(join(root, 'Mobila'))) {
+  cpSync(join(root, 'Mobila'), join(distDir, 'mobila'), cpOptions);
 }
 
 // Ensure GitHub Pages serves all assets correctly and custom domain is preserved

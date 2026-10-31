@@ -42,6 +42,19 @@
   font-size: clamp(2.4rem, 5vw, 4.2rem);
 }
 
+#contact .mono a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(200, 138, 88, 0.4);
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+#contact .mono a:hover {
+  color: var(--gold);
+  text-decoration-color: var(--gold);
+}
+
 #contact form {
   display: grid;
   gap: 16px;
@@ -82,12 +95,30 @@
 
 #contact #ok {
   display: none;
-  color: var(--gold);
   font-size: 0.92rem;
-  padding: 10px 14px;
-  border-radius: 12px;
-  background: rgba(232, 158, 40, 0.1);
-  border: 1px solid rgba(232, 158, 40, 0.24);
+  padding: 13px 18px;
+  border-radius: 14px;
+  line-height: 1.5;
+  transition: all 0.3s ease;
+}
+
+#contact #ok.status-success {
+  color: #72d99b;
+  background: rgba(114, 217, 155, 0.1);
+  border: 1px solid rgba(114, 217, 155, 0.28);
+}
+
+#contact #ok.status-error {
+  color: #ff8b78;
+  background: rgba(255, 139, 120, 0.1);
+  border: 1px solid rgba(255, 139, 120, 0.28);
+}
+
+#contact button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 @media (max-width: 860px) {

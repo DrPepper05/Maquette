@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Maquette – from foggy idea to finished product</title>
-<meta name="description" content="Maquette turns a foggy idea into a working prototype in about a week, free. Then we build the website, automation or software for real, with a demo every week.">
+<title>Maquette – See what your brand could become</title>
+<meta name="description" content="Maquette designs thoughtful, high-quality digital experiences tailored to your brand. Start with a free, custom-designed demo and see our approach for yourself before committing.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -768,7 +768,14 @@ nav.nav-desktop a:hover {
   gap: 12px;
   flex-wrap: wrap;
   align-items: center;
+  margin-bottom: 14px;
+}
+
+.hero-trust {
+  display: block;
   margin-bottom: 28px;
+  opacity: 0.7;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.8);
 }
 
 .hero-actions .btn {
@@ -2257,6 +2264,19 @@ nav.nav-desktop a:hover {
   font-size: clamp(2.4rem, 5vw, 4.2rem);
 }
 
+#contact .mono a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(200, 138, 88, 0.4);
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+#contact .mono a:hover {
+  color: var(--gold);
+  text-decoration-color: var(--gold);
+}
+
 #contact form {
   display: grid;
   gap: 16px;
@@ -2297,12 +2317,30 @@ nav.nav-desktop a:hover {
 
 #contact #ok {
   display: none;
-  color: var(--gold);
   font-size: 0.92rem;
-  padding: 10px 14px;
-  border-radius: 12px;
-  background: rgba(232, 158, 40, 0.1);
-  border: 1px solid rgba(232, 158, 40, 0.24);
+  padding: 13px 18px;
+  border-radius: 14px;
+  line-height: 1.5;
+  transition: all 0.3s ease;
+}
+
+#contact #ok.status-success {
+  color: #72d99b;
+  background: rgba(114, 217, 155, 0.1);
+  border: 1px solid rgba(114, 217, 155, 0.28);
+}
+
+#contact #ok.status-error {
+  color: #ff8b78;
+  background: rgba(255, 139, 120, 0.1);
+  border: 1px solid rgba(255, 139, 120, 0.28);
+}
+
+#contact button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 @media (max-width: 860px) {
@@ -2389,9 +2427,9 @@ footer .wrap {
         <a href="#services">Services</a>
         <a href="#why">Values</a>
         <a href="#faq">Visitor info</a>
-        <a class="cta" href="#contact">Free prototype</a>
+        <a class="cta" href="#contact">Free brand demo</a>
       </nav>
-      <a class="nav-mobile-cta cta" href="#contact">Free prototype</a>
+      <a class="nav-mobile-cta cta" href="#contact">Free brand demo</a>
       <button type="button" class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
         <span class="nav-toggle-bar"></span>
         <span class="nav-toggle-bar"></span>
@@ -2420,8 +2458,8 @@ footer .wrap {
         </a>
       </nav>
       <div class="mobile-drawer-footer">
-        <a class="btn" href="#contact" id="mobileDrawerCta">Request free prototype</a>
-        <p class="mono mobile-drawer-email">hello@maquette.example</p>
+        <a class="btn" href="#contact" id="mobileDrawerCta">Get my free brand demo</a>
+        <p class="mono mobile-drawer-email"><a href="mailto:contact@maquette.ro">contact@maquette.ro</a></p>
       </div>
     </div>
   </div>
@@ -2434,15 +2472,16 @@ footer .wrap {
       <!-- Atmospheric room lighting: pinned with 3D gallery, scrolls away together when track finishes -->
       <div class="room" id="room" aria-hidden="true"></div>
 
-      <!-- Hero text on the left: original company text, scrolls up on scroll -->
+      <!-- Hero text on the left: quality-first messaging, scrolls up on scroll -->
       <div class="hero-intro" id="heroIntro">
         <span class="mono hero-kicker">Websites · Automations · Software</span>
-        <h1 class="hero-title">From foggy idea<br>to finished product.</h1>
-        <p class="hero-desc">Tell us what is stuck. In about a week we turn it into a working prototype, free. Then we build the real thing, with a demo every week.</p>
+        <h1 class="hero-title">See what your brand<br>could become.</h1>
+        <p class="hero-desc">We design and build thoughtful, high-quality digital experiences tailored to your brand and your customers. Start with a free, custom-designed demo and see our approach for yourself before committing.</p>
         <div class="hero-actions">
-          <a class="btn" href="#contact">Get my free prototype</a>
-          <a class="btn ghost" href="#services">See what we build</a>
+          <a class="btn" href="#contact">Get my free brand demo</a>
+          <a class="btn ghost" href="#work">Explore our work</a>
         </div>
+        <p class="hero-trust mono">Custom-designed for your brand · Completely free · No obligation</p>
         <div class="hero-scroll-cue" id="heroScrollCue" role="button" tabindex="0" aria-label="Scroll to explore gallery">
           <div class="scroll-mouse">
             <div class="scroll-dot"></div>
@@ -2502,7 +2541,7 @@ footer .wrap {
     <div class="intro">
       <span class="eyebrow">What we build</span>
       <h2>Three ways we build.</h2>
-      <p class="lead">Pick one, or combine them. Every project starts with the same free prototype.</p>
+      <p class="lead">Pick one, or combine them. Every project starts with a free, custom-designed demo.</p>
     </div>
 
 
@@ -2522,12 +2561,12 @@ footer .wrap {
   <div class="wrap">
     <div class="intro">
       <span class="eyebrow">How we work</span>
-      <h2>From stuck to <em>handed over.</em></h2>
-      <p class="lead">Four plain steps from the first conversation to 100% client ownership.</p>
+      <h2>From first look to <em>full ownership.</em></h2>
+      <p class="lead">Four clear steps from a free demo to a digital presence that's entirely yours.</p>
     </div>
 
     <!-- The Waving Liquid Cloth Process Map (Directly inside .wrap with no inner scroller) -->
-    <div class="why-map" id="whyMapCloth" role="region" aria-label="Process Map: From stuck to handed over">
+    <div class="why-map" id="whyMapCloth" role="region" aria-label="Process Map: From first look to full ownership">
       <canvas id="whyClothCanvas" aria-hidden="true"></canvas>
 
       <div class="why-map-overlay" id="whyMapOverlay">
@@ -2571,17 +2610,21 @@ footer .wrap {
     <div class="intro">
       <span class="eyebrow">Good to know</span>
       <h2>Questions, answered.</h2>
-      <p class="lead">Everything about how we work, free prototypes, and project delivery.</p>
+      <p class="lead">Everything about our free brand demo, how we work, and what happens next.</p>
     </div>
 
     <div class="faq">
       <details>
-        <summary>What does it cost?</summary>
-        <p>It depends on the scope, so we talk about it after the free prototype, when we both know what is being built.</p>
+        <summary>What do I get in the free demo?</summary>
+        <p>A custom-designed preview tailored to your brand. You can explore the proposed design, see how your offerings would be presented, and decide whether our approach is right for you.</p>
       </details>
       <details>
-        <summary>Is the prototype really free?</summary>
-        <p>Yes. If it is not what you need, you keep the conversation and we part as friends.</p>
+        <summary>Why is the demo free?</summary>
+        <p>We believe the best way to earn your trust is to show you what we can create. If the demo isn't what you need, you keep the conversation and we part as friends.</p>
+      </details>
+      <details>
+        <summary>What does the full project cost?</summary>
+        <p>It depends on the scope, so we talk about it after the free demo, when we both know what is being built.</p>
       </details>
       <details>
         <summary>Do you use AI?</summary>
@@ -2589,47 +2632,52 @@ footer .wrap {
       </details>
       <details>
         <summary>What happens after launch?</summary>
-        <p>Everything is handed over. If you want us to stay on, we agree on support separately.</p>
+        <p>Everything is handed over — code, accounts, and documentation. It's all yours, with no vendor lock-in. If you want us to stay on, we agree on support separately.</p>
       </details>
     </div>
 
     <div class="rfoot">
-      <span class="sc-count">01 — 04</span>
+      <span class="sc-count">01 — 05</span>
     </div>
   </div>
 </section>
 
 <!-- component: contact -->
-<section id="contact" aria-label="Contact and free prototype inquiry">
+<section id="contact" aria-label="Request a free brand demo">
   <div class="room" aria-hidden="true"></div>
   <div class="wrap">
     <div class="box">
       <div>
         <span class="eyebrow">Start here</span>
-        <h2>Let’s discuss your prototype.</h2>
-        <p class="lead">Four short fields. We reply within one working day, usually with a call invitation.</p>
-        <p class="mono" style="margin-top: 24px;">hello@maquette.example</p>
+        <h2>Get your free brand demo.</h2>
+        <p class="lead">We'll design a custom demo tailored to your brand so you can see our approach before committing. No obligation, no catch — we believe the best way to earn your trust is to show you what we can create.</p>
+        <p class="mono" style="margin-top: 24px;"><a href="mailto:contact@maquette.ro">contact@maquette.ro</a></p>
       </div>
-      <form id="f">
+      <form id="f" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="e4fcc064-c39f-4709-b4b2-be2980dcea64">
+        <input type="hidden" name="subject" value="New Brand Demo Request from Maquette.ro">
+        <input type="hidden" name="from_name" value="Maquette Website">
+        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
         <label>Name
-          <input name="n" required autocomplete="name">
+          <input name="name" required autocomplete="name" placeholder="Your name">
         </label>
         <label>Email
-          <input name="e" type="email" required autocomplete="email">
+          <input name="email" type="email" required autocomplete="email" placeholder="you@domain.com">
         </label>
         <label>What do you need?
           <select name="service" id="project">
             <option>A website</option>
+            <option>A website redesign</option>
             <option>An automation</option>
             <option>Custom software</option>
             <option>Not sure yet</option>
           </select>
         </label>
-        <label>Tell us a bit about it
-          <textarea name="details"></textarea>
+        <label>Tell us about your brand
+          <textarea name="message" placeholder="What does your brand stand for, and what would you like to achieve?"></textarea>
         </label>
-        <button class="btn" type="submit">Request my free prototype</button>
-        <div id="ok" role="status">Preview only: the form is not connected yet. Please email us instead.</div>
+        <button class="btn" type="submit" id="submitBtn">Get my free brand demo</button>
+        <div id="ok" role="status"></div>
       </form>
     </div>
   </div>
@@ -2639,7 +2687,7 @@ footer .wrap {
 <footer>
   <div class="wrap">
     <span>© 2026 Maquette</span>
-    <span>From foggy idea to finished product · Free prototypes</span>
+    <span>See what your brand could become · Free brand demo</span>
   </div>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -4666,15 +4714,15 @@ void main(){
     {
       num: '01',
       tag: '01',
-      title: 'Tell us what you need',
-      desc: "Tell us what you want to build. We'll figure out the best way to make it happen.",
+      title: 'Tell us about your brand',
+      desc: "Share what your brand stands for and what you'd like to achieve. We'll take it from there.",
       color: '#c88a58'
     },
     {
       num: '02',
       tag: '02',
-      title: 'Try a free demo',
-      desc: 'We build a working demo for you to try. Test it yourself before you commit.',
+      title: 'See your free demo',
+      desc: 'We design a custom demo tailored to your brand. Explore it, evaluate the quality, and decide if our approach is right for you.',
       free: true,
       color: '#e89e28'
     },
@@ -4682,7 +4730,7 @@ void main(){
       num: '03',
       tag: '03',
       title: 'Build it together',
-      desc: 'We build your product with you, sharing progress every week. You stay in control of every decision.',
+      desc: 'We build with you, sharing progress every week. You stay in control of every detail and decision.',
       color: '#38bdf8'
     },
     {
@@ -5224,10 +5272,60 @@ void main(){
 (function() {
   var form = document.getElementById('f');
   if (!form) return;
+  var btn = document.getElementById('submitBtn') || form.querySelector('button[type="submit"]');
+  var ok = document.getElementById('ok');
+
   form.addEventListener('submit', function(e) {
     e.preventDefault();
-    var ok = document.getElementById('ok');
-    if (ok) ok.style.display = 'block';
+
+    var originalBtnText = btn ? btn.textContent : '';
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Sending request...';
+    }
+    if (ok) {
+      ok.style.display = 'none';
+      ok.className = '';
+    }
+
+    var formData = new FormData(form);
+    var object = Object.fromEntries(formData);
+    var json = JSON.stringify(object);
+
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: json
+    })
+    .then(async function(response) {
+      var result = await response.json();
+      if (response.status === 200 && result.success) {
+        if (ok) {
+          ok.textContent = "Thank you! Your brand demo request has been sent to our team. We'll be in touch within one working day.";
+          ok.className = 'status-success';
+          ok.style.display = 'block';
+        }
+        form.reset();
+      } else {
+        throw new Error(result.message || 'Submission failed');
+      }
+    })
+    .catch(function(error) {
+      if (ok) {
+        ok.innerHTML = 'Something went wrong. Please email us directly at <a href="mailto:contact@maquette.ro" style="color: inherit; text-decoration: underline;">contact@maquette.ro</a>.';
+        ok.className = 'status-error';
+        ok.style.display = 'block';
+      }
+    })
+    .finally(function() {
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = originalBtnText;
+      }
+    });
   });
 })();
 </script>
