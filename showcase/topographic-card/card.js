@@ -8,7 +8,7 @@
       title: 'Tell us what you need',
       desc: "Tell us what you want to build. We'll figure out the best way to make it happen.",
       meta: '01 · Tell us what you need',
-      color: '#c88a58'
+      color: '#d47860'
     },
     {
       num: '02',
@@ -17,7 +17,7 @@
       desc: 'We build a working demo for you to try. Test it yourself before you commit.',
       free: true,
       meta: '02 · Try a free demo (Free)',
-      color: '#e89e28'
+      color: '#f88847'
     },
     {
       num: '03',
@@ -192,8 +192,8 @@
 
   // Contour line colors: Studio accent tones
   const LC = [
-    [200, 138, 88], // 01 Bronze #c88a58
-    [232, 158, 40], // 02 Gold #e89e28
+    [212, 120, 96], // 01 Bronze #d47860
+    [248, 136, 71], // 02 Gold #f88847
     [56, 189, 248], // 03 Cyan #38bdf8
     [52, 211, 153]  // 04 Emerald #34d399
   ];

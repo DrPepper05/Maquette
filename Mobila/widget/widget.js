@@ -94,10 +94,10 @@
           z-index: 10;
         }
         .mobila-modal-close:hover {
-          background: #e89e28;
+          background: #f88847;
           color: #161005;
-          border-color: #e89e28;
-          box-shadow: 0 0 20px rgba(232, 158, 40, 0.4);
+          border-color: #f88847;
+          box-shadow: 0 0 20px rgba(248, 136, 71, 0.4);
           transform: scale(1.06);
         }
         
@@ -132,7 +132,7 @@
         .mobila-qr-kicker {
           font-family: 'DM Mono', monospace;
           font-size: 0.72rem;
-          color: #c88a58;
+          color: #d47860;
           letter-spacing: 0.2em;
           text-transform: uppercase;
           margin-bottom: 8px;
@@ -173,9 +173,9 @@
           display: inline-flex;
           align-items: center;
           gap: 7px;
-          background: rgba(232, 158, 40, 0.12);
-          color: #e89e28;
-          border: 1px solid rgba(232, 158, 40, 0.25);
+          background: rgba(248, 136, 71, 0.12);
+          color: #f88847;
+          border: 1px solid rgba(248, 136, 71, 0.25);
           padding: 8px 16px;
           border-radius: 999px;
           font-family: 'DM Mono', monospace;

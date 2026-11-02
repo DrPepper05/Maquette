@@ -17,8 +17,8 @@
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 180px, #000 calc(100% - 180px), transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, #000 180px, #000 calc(100% - 180px), transparent 100%);
   background:
-    radial-gradient(ellipse 70% 40% at 35% 10%, rgba(200, 138, 88, 0.22), transparent 70%),
-    radial-gradient(ellipse 65% 50% at 75% 50%, rgba(232, 158, 40, 0.20), transparent 70%),
+    radial-gradient(ellipse 70% 40% at 35% 10%, rgba(212, 120, 96, 0.22), transparent 70%),
+    radial-gradient(ellipse 65% 50% at 75% 50%, rgba(248, 136, 71, 0.20), transparent 70%),
     radial-gradient(ellipse 70% 45% at 30% 85%, rgba(45, 94, 62, 0.25), transparent 70%);
 }
 
@@ -53,8 +53,8 @@
 
 .why-map:hover,
 .why-map:focus-within {
-  border-color: rgba(232, 158, 40, 0.45);
-  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.9), 0 0 28px rgba(232, 158, 40, 0.22);
+  border-color: rgba(248, 136, 71, 0.45);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.9), 0 0 28px rgba(248, 136, 71, 0.22);
 }
 
 .why-map canvas {
@@ -120,7 +120,7 @@
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
   transition: stroke-dashoffset 0.7s cubic-bezier(0.6, 0, 0.2, 1);
-  filter: drop-shadow(0 0 10px rgba(232, 158, 40, 0.9));
+  filter: drop-shadow(0 0 10px rgba(248, 136, 71, 0.9));
 }
 
 /* Architectural Drafting Decors */
@@ -265,7 +265,7 @@
   border-radius: 999px;
   padding: 3px 12px;
   transform: translateY(-50%);
-  box-shadow: 0 0 16px rgba(232, 158, 40, 0.65);
+  box-shadow: 0 0 16px rgba(248, 136, 71, 0.65);
   opacity: 1;
 }
 
@@ -313,7 +313,7 @@
 .why-st:hover h3,
 .why-st.on h3 {
   color: #ffffff;
-  text-shadow: 0 0 24px var(--st-color, rgba(232, 158, 40, 0.7)), 0 2px 12px #000;
+  text-shadow: 0 0 24px var(--st-color, rgba(248, 136, 71, 0.7)), 0 2px 12px #000;
 }
 
 .why-st:hover p,
@@ -519,8 +519,8 @@
   .why-st.why-st-v:hover .why-st-body,
   .why-st.why-st-v.on .why-st-body {
     background: rgba(22, 19, 28, 0.68);
-    border-color: var(--st-color, rgba(232, 158, 40, 0.35));
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5), 0 0 16px var(--st-color, rgba(232, 158, 40, 0.15));
+    border-color: var(--st-color, rgba(248, 136, 71, 0.35));
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5), 0 0 16px var(--st-color, rgba(248, 136, 71, 0.15));
   }
 
   .why-st-head {
@@ -539,7 +539,7 @@
     border-radius: 999px;
     padding: 2px 7px;
     line-height: 1.2;
-    box-shadow: 0 0 10px rgba(232, 158, 40, 0.5);
+    box-shadow: 0 0 10px rgba(248, 136, 71, 0.5);
   }
 
   .why-st.why-st-v .why-tag {
@@ -569,7 +569,7 @@
   .why-st.why-st-v:hover h3,
   .why-st.why-st-v.on h3 {
     color: #ffffff;
-    text-shadow: 0 0 20px var(--st-color, rgba(232, 158, 40, 0.8)), 0 2px 10px #000;
+    text-shadow: 0 0 20px var(--st-color, rgba(248, 136, 71, 0.8)), 0 2px 10px #000;
   }
 
   .why-st.why-st-v:hover p,

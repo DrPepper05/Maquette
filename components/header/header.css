@@ -69,7 +69,7 @@ nav.nav-desktop a:hover {
 }
 
 .cta:hover {
-  box-shadow: 0 0 24px rgba(232, 158, 40, 0.45);
+  box-shadow: 0 0 24px rgba(248, 136, 71, 0.45);
 }
 
 .nav-mobile-cta {
@@ -131,7 +131,7 @@ nav.nav-desktop a:hover {
 
   /* Hamburger transform when menu is open */
   header.menu-open .nav-toggle {
-    border-color: rgba(232, 158, 40, 0.5);
+    border-color: rgba(248, 136, 71, 0.5);
     background: rgba(24, 22, 20, 0.95);
   }
 
@@ -181,9 +181,8 @@ nav.nav-desktop a:hover {
   }
 
   .mobile-drawer-kicker {
-    font: 700 0.72rem 'DM Mono', monospace;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
+    font: 700 0.84rem 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    letter-spacing: 0.01em;
     color: var(--bronze);
     margin-bottom: 24px;
   }

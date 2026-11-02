@@ -17,8 +17,8 @@
   mask-image: linear-gradient(to bottom, transparent 0%, #000 160px, #000 calc(100% - 100px), transparent 100%);
   background:
     radial-gradient(ellipse 75% 65% at 65% 50%, rgba(120, 40, 48, 0.42), transparent 72%),
-    radial-gradient(ellipse 65% 55% at 70% 45%, rgba(223, 114, 73, 0.25), transparent 70%),
-    radial-gradient(ellipse 55% 50% at 22% 55%, rgba(232, 158, 40, 0.18), transparent 66%);
+    radial-gradient(ellipse 65% 55% at 70% 45%, rgba(237, 88, 85, 0.25), transparent 70%),
+    radial-gradient(ellipse 55% 50% at 22% 55%, rgba(248, 136, 71, 0.18), transparent 66%);
 }
 
 #contact .wrap {
@@ -46,7 +46,7 @@
   color: inherit;
   text-decoration: underline;
   text-underline-offset: 4px;
-  text-decoration-color: rgba(200, 138, 88, 0.4);
+  text-decoration-color: rgba(212, 120, 96, 0.4);
   transition: color 0.2s ease, text-decoration-color 0.2s ease;
 }
 
@@ -90,7 +90,7 @@
 #contact textarea:focus {
   outline: none;
   border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(232, 158, 40, 0.2);
+  box-shadow: 0 0 0 3px rgba(248, 136, 71, 0.2);
 }
 
 #contact #ok {

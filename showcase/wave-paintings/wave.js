@@ -102,7 +102,7 @@
   function roomFor(p) {
     return 'radial-gradient(60% 55% at 50% 45%, ' + p.palette[1] + '80, transparent 72%),' +
       'radial-gradient(75% 60% at 78% 30%, ' + p.palette[2] + '26, transparent 70%),' +
-      'radial-gradient(60% 55% at 20% 70%, rgba(232,158,40,.10), transparent 68%)';
+      'radial-gradient(60% 55% at 20% 70%, rgba(248, 136, 71,.10), transparent 68%)';
   }
 
   function setActive(i, announce) {

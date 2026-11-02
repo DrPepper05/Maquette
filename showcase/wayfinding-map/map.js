@@ -4,45 +4,45 @@
   const STEP_CARDS = [
     {
       num: '01',
-      spec: 'DIAGNOSE · 20 MIN',
-      taglineBadge: 'THE INTAKE',
+      spec: 'Diagnose · 20 min',
+      taglineBadge: 'The Intake',
       title: 'The Brief',
       headline: 'Tell us what is stuck.',
       desc: 'A short call and four plain fields. No 50-page RFPs, no sales decks. We read the raw operational friction together and isolate what done looks like.',
-      tags: '✦ 20 MIN INTAKE · ZERO JARGON',
-      palette: ['#110f13', '#1f1814', '#332219', '#c88a58'],
-      accentColor: '#c88a58'
+      tags: '✦ 20 min intake · Zero jargon',
+      palette: ['#110f13', '#1f1814', '#332219', '#d47860'],
+      accentColor: '#d47860'
     },
     {
       num: '02',
-      spec: 'SCALE 1:1 · FREE',
-      taglineBadge: 'THE PROTOTYPE',
+      spec: 'Scale 1:1 · Free',
+      taglineBadge: 'The Prototype',
       title: 'The Maquette',
       headline: 'A working prototype in about a week.',
       desc: 'A tangible, clickable scale model with live screens and functioning button paths. You click through it with your team before signing anything.',
-      tags: '✦ 100% FREE · ZERO OBLIGATION',
-      palette: ['#12100d', '#241c12', '#3d2e18', '#e89e28'],
-      accentColor: '#e89e28'
+      tags: '✦ 100% free · Zero obligation',
+      palette: ['#12100d', '#241c12', '#3d2e18', '#f88847'],
+      accentColor: '#f88847'
     },
     {
       num: '03',
-      spec: 'CADENCE · 7 DAYS',
-      taglineBadge: 'THE BUILD',
+      spec: 'Cadence · 7 days',
+      taglineBadge: 'The Build',
       title: 'The Sprints',
       headline: 'Weekly live demos, zero fog.',
       desc: 'Every Friday at 16:00 CET, you receive a working build to click and test. Autonomous agents do routine work; senior engineers craft every key decision.',
-      tags: '✦ WEEKLY FRIDAY DEMOS · TRANSPARENT CODE',
+      tags: '✦ Weekly Friday demos · Transparent code',
       palette: ['#0c1420', '#142236', '#1c3654', '#38bdf8'],
       accentColor: '#38bdf8'
     },
     {
       num: '04',
-      spec: 'DEED · 100% OWNED',
-      taglineBadge: 'THE HANDOVER',
+      spec: 'Deed · 100% owned',
+      taglineBadge: 'The Handover',
       title: 'The Model',
       headline: 'You own the finished product.',
       desc: 'Source code, Figma design tokens, database credentials, and serverless pipelines. Standard documented stacks with 100% client copyright and zero lock-in.',
-      tags: '✦ 100% DEED OF OWNERSHIP · NO LOCK-IN',
+      tags: '✦ 100% deed of ownership · No lock-in',
       palette: ['#0d1411', '#15241b', '#1f3b2c', '#34d399'],
       accentColor: '#34d399'
     }
@@ -343,7 +343,7 @@
     g.stroke();
 
     roundRect(g, 2, 2, w - 4, h - 4, rad - 2);
-    g.strokeStyle = (d.accentColor || "#c88a58") + "18";
+    g.strokeStyle = (d.accentColor || "#d47860") + "18";
     g.lineWidth = 1;
     g.stroke();
 
@@ -354,15 +354,15 @@
 
     // Header: Number + Kicker + Spec
     g.font = "700 12px 'DM Mono', monospace";
-    g.fillStyle = d.accentColor || "#c88a58";
+    g.fillStyle = d.accentColor || "#d47860";
     g.fillText(d.num, padX, y);
 
-    g.font = "600 10px 'DM Mono', monospace";
+    g.font = "600 11px 'Plus Jakarta Sans', sans-serif";
     g.fillStyle = "rgba(245, 241, 233, 0.65)";
     g.fillText("·  " + d.taglineBadge, padX + 32, y);
 
     g.textAlign = "right";
-    g.font = "600 9.5px 'DM Mono', monospace";
+    g.font = "600 10.5px 'Plus Jakarta Sans', sans-serif";
     g.fillStyle = "rgba(245, 241, 233, 0.52)";
     g.fillText(d.spec, w - padX, y);
     g.textAlign = "left";
@@ -413,9 +413,9 @@
     g.lineWidth = 1;
     g.stroke();
 
-    g.font = "600 9.5px 'DM Mono', monospace";
-    g.fillStyle = "#e89e28";
-    g.fillText(d.tags.toUpperCase(), padX, footY);
+    g.font = "600 10.5px 'Plus Jakarta Sans', sans-serif";
+    g.fillStyle = "#f88847";
+    g.fillText(d.tags, padX, footY);
 
     g.textAlign = "right";
     g.font = "700 11px 'DM Mono', monospace";

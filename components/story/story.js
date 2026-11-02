@@ -67,7 +67,6 @@ void main(){vec2 c=gl_PointCoord*2.-1.;float r=length(c);
 float m=mix(1.-smoothstep(.55,1.,r),exp(-r*r*4.),vSoft);m=mix(m,1.,vSq);
 gl_FragColor=vec4(vC.rgb,vC.a*m);}`;
 
-  /* The finished product: drawn with Instrument Serif cursive and Instrument Sans */
   function rr(g, x, y, w, h, r) {
     g.beginPath();
     g.moveTo(x + r, y);
@@ -86,7 +85,7 @@ gl_FragColor=vec4(vC.rgb,vC.a*m);}`;
   }
 
   function drawUI(g) {
-    var F = "'Plus Jakarta Sans',-apple-system,system-ui,sans-serif", S = "'Bricolage Grotesque',sans-serif", ink = '#17151a', card = '#faf7f2', gold = '#e89e28', bronze = '#c88a58', copper = '#c47a46', grey = '#6f6a62';
+    var F = "'Plus Jakarta Sans',-apple-system,system-ui,sans-serif", S = "'Bricolage Grotesque',sans-serif", ink = '#17151a', card = '#faf7f2', gold = '#f88847', bronze = '#d47860', copper = '#d3654e', grey = '#6f6a62';
     g.setTransform(SC, 0, 0, SC, 0, 0);
     g.clearRect(0, 0, CW, CH);
     g.save();

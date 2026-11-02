@@ -7,8 +7,8 @@
     {
       size: "big",
       num: "01",
-      taglineBadge: "DIGITAL FLAGSHIPS",
-      spec: "HAND-BUILT · SUB-SECOND",
+      taglineBadge: "Digital Flagships",
+      spec: "Hand-built · Sub-second",
       title: "Websites",
       headline: "Sites that explain what you sell and bring people to your door.",
       desc: "We design and engineer bespoke digital flagships with sub-second performance, bespoke animations, and headless CMS integrations. Built by hand, free from bloated templates.",
@@ -17,7 +17,7 @@
         "Headless shops, product catalogs & Stripe checkout",
         "Automated booking, triage & multilingual pages"
       ],
-      tags: "100% OWNERSHIP · ZERO FOG · WEEKLY SPRINTS",
+      tags: "100% ownership · Zero fog · Weekly sprints",
       palette: ["#0c1422", "#13233a", "#1e3a5f", "#38bdf8"],
       accentColor: "#38bdf8",
       service: "A website"
@@ -25,8 +25,8 @@
     {
       size: "small",
       num: "01.A",
-      taglineBadge: "EDITORIAL & STORY",
-      spec: "BRAND PRESENCE",
+      taglineBadge: "Editorial & Story",
+      spec: "Brand presence",
       title: "Company Sites",
       desc: "Distinctive digital presence that explains what you do with clarity and poise. Sub-second page loads with zero framework bloat.",
       tags: "Custom typography · Headless CMS · Sub-second",
@@ -37,8 +37,8 @@
     {
       size: "small",
       num: "01.B",
-      taglineBadge: "HEADLESS COMMERCE",
-      spec: "STRIPE INTEGRATED",
+      taglineBadge: "Headless Commerce",
+      spec: "Stripe integrated",
       title: "Shops & Checkouts",
       desc: "Frictionless product catalogs, custom slide-out carts, and instant checkout flows that turn browsers into buyers.",
       tags: "Instant checkout · Inventory sync · Headless",
@@ -51,8 +51,8 @@
     {
       size: "small",
       num: "02.A",
-      taglineBadge: "LLM WORKERS",
-      spec: "AUTONOMOUS TRIAGE",
+      taglineBadge: "LLM Workers",
+      spec: "Autonomous triage",
       title: "AI Agents",
       desc: "Autonomous workers that ingest supplier PDFs, cross-reference invoices in your ERP, and prepare bank payouts with zero human paperwork.",
       tags: "Document extraction · Invoice audit · Smart triage",
@@ -63,8 +63,8 @@
     {
       size: "small",
       num: "02.B",
-      taglineBadge: "SYSTEM INTEGRATION",
-      spec: "REAL-TIME SYNC",
+      taglineBadge: "System Integration",
+      spec: "Real-time sync",
       title: "Data Pipelines",
       desc: "Custom serverless background workers that replace fragile Zapier zaps. Bi-directional sync between your CRM, billing, and database.",
       tags: "Zero Zapier limits · Webhooks · Bank-grade security",
@@ -75,8 +75,8 @@
     {
       size: "big",
       num: "02",
-      taglineBadge: "AUTONOMOUS ENGINES",
-      spec: "AGENTS + SCRIPTS",
+      taglineBadge: "Autonomous Engines",
+      spec: "Agents + scripts",
       title: "Automations",
       headline: "The repetitive work between your tools, eliminated.",
       desc: "End-to-end background workers that ingest documents, route customer leads, sync databases, and trigger actions. A human always approves the decisions that matter.",
@@ -85,7 +85,7 @@
         "Lead routing, customer qualification & calendar booking",
         "Custom serverless scripts replacing expensive Zapier plans"
       ],
-      tags: "14 HOURS OF WEEKLY SPREADSHEETS · ZERO",
+      tags: "14 hours of weekly spreadsheets · Zero",
       palette: ["#1a0e15", "#321320", "#551b2e", "#ff6b35"],
       accentColor: "#ff6b35",
       service: "An automation"
@@ -95,8 +95,8 @@
     {
       size: "big",
       num: "03",
-      taglineBadge: "TAILORED PLATFORMS",
-      spec: "BUILT AROUND YOU",
+      taglineBadge: "Tailored Platforms",
+      spec: "Built around you",
       title: "Software",
       headline: "Internal tools and portals built around how your team already works.",
       desc: "Custom web applications, client portals, and operational dashboards that replace fractured spreadsheets and off-the-shelf software sprawl. Built for speed and longevity.",
@@ -105,33 +105,33 @@
         "Operational dashboards & unified company control rooms",
         "Custom workflow web apps tailored to your business rules"
       ],
-      tags: "ZERO MONTHLY SEAT LICENSES · 100% CODE HANDOVER",
-      palette: ["#151310", "#281e17", "#443123", "#c88a58"],
-      accentColor: "#c88a58",
+      tags: "Zero monthly seat licenses · 100% code handover",
+      palette: ["#151310", "#281e17", "#443123", "#d47860"],
+      accentColor: "#d47860",
       service: "Custom software"
     },
     {
       size: "small",
       num: "03.A",
-      taglineBadge: "CUSTOMER HUBS",
-      spec: "SELF-SERVICE",
+      taglineBadge: "Customer Hubs",
+      spec: "Self-service",
       title: "Client Portals",
       desc: "Secure customer workspaces for project deliverables, contract approvals, invoice downloads, and status tracking in real time.",
       tags: "Role permissions · Secure auth · Custom domain",
-      palette: ["#14110f", "#241b14", "#3d2a1d", "#c88a58"],
-      accentColor: "#c88a58",
+      palette: ["#14110f", "#241b14", "#3d2a1d", "#d47860"],
+      accentColor: "#d47860",
       service: "Custom software"
     },
     {
       size: "small",
       num: "03.B",
-      taglineBadge: "OPERATIONS",
-      spec: "SPREADSHEET KILLER",
+      taglineBadge: "Operations",
+      spec: "Spreadsheet killer",
       title: "Internal Tools",
       desc: "Bespoke control rooms that turn five different spreadsheets into single-click workflows with audit logs and role management.",
       tags: "Custom dashboards · Fast search · Database views",
-      palette: ["#13100e", "#221912", "#382619", "#c88a58"],
-      accentColor: "#c88a58",
+      palette: ["#13100e", "#221912", "#382619", "#d47860"],
+      accentColor: "#d47860",
       service: "Custom software"
     }
   ];
@@ -349,18 +349,18 @@
 
     // Header Row: Specimen Catalog & Kicker
     g.font = "700 13px 'DM Mono', monospace";
-    g.fillStyle = d.accentColor || "#c88a58";
+    g.fillStyle = d.accentColor || "#d47860";
     g.fillText(d.num, padX, y);
 
-    g.font = isNarrow ? "600 10.5px 'DM Mono', monospace" : "600 11px 'DM Mono', monospace";
+    g.font = isNarrow ? "600 11.5px 'Plus Jakarta Sans', sans-serif" : "600 12px 'Plus Jakarta Sans', sans-serif";
     g.fillStyle = "rgba(245, 241, 233, 0.70)";
-    g.fillText("·  " + (d.taglineBadge || d.category || "").toUpperCase(), padX + 36, y);
+    g.fillText("·  " + (d.taglineBadge || d.category || ""), padX + 36, y);
 
     if (!isNarrow) {
       g.textAlign = "right";
-      g.font = "600 11px 'DM Mono', monospace";
+      g.font = "600 12px 'Plus Jakarta Sans', sans-serif";
       g.fillStyle = "rgba(245, 241, 233, 0.55)";
-      g.fillText(d.spec.toUpperCase(), w - padX, y);
+      g.fillText(d.spec, w - padX, y);
       g.textAlign = "left";
     }
 
@@ -423,7 +423,7 @@
 
         if (y + blockH < footDividerY - 10) {
           g.font = "600 11px 'Plus Jakarta Sans', sans-serif";
-          g.fillStyle = d.accentColor || "#c88a58";
+          g.fillStyle = d.accentColor || "#d47860";
           g.fillText("✦", padX, y);
 
           g.font = pFont;
@@ -446,9 +446,9 @@
     g.stroke();
 
     if (isNarrow) {
-      g.font = "600 10px 'DM Mono', monospace";
-      g.fillStyle = "#e89e28";
-      let tagText = d.tags.toUpperCase();
+      g.font = "600 11px 'Plus Jakarta Sans', sans-serif";
+      g.fillStyle = "#f88847";
+      let tagText = d.tags;
       const maxTagW = w - padX * 2;
       if (g.measureText(tagText).width > maxTagW) {
         while (tagText.length > 8 && g.measureText(tagText + "…").width > maxTagW) {
@@ -458,18 +458,18 @@
       }
       g.fillText(tagText, padX, footY - 12);
 
-      g.font = "700 11.5px 'DM Mono', monospace";
+      g.font = "700 12px 'Plus Jakarta Sans', sans-serif";
       g.fillStyle = "#f5f1e9";
-      g.fillText("REQUEST PROTOTYPE ↗", padX, footY + 8);
+      g.fillText("Request prototype ↗", padX, footY + 8);
     } else {
-      g.font = "600 10.5px 'DM Mono', monospace";
-      g.fillStyle = "#e89e28";
-      g.fillText(d.tags.toUpperCase(), padX, footY);
+      g.font = "600 11.5px 'Plus Jakarta Sans', sans-serif";
+      g.fillStyle = "#f88847";
+      g.fillText(d.tags, padX, footY);
 
       g.textAlign = "right";
-      g.font = "700 11.5px 'DM Mono', monospace";
+      g.font = "700 12px 'Plus Jakarta Sans', sans-serif";
       g.fillStyle = "#f5f1e9";
-      g.fillText("REQUEST PROTOTYPE ↗", w - padX, footY);
+      g.fillText("Request prototype ↗", w - padX, footY);
       g.textAlign = "left";
     }
   }
@@ -482,14 +482,14 @@
 
     // Header Row: Specimen Catalog & Kicker
     g.font = "700 12px 'DM Mono', monospace";
-    g.fillStyle = d.accentColor || "#c88a58";
+    g.fillStyle = d.accentColor || "#d47860";
     g.fillText(d.num, padX, y);
 
     if (w >= 340) {
       g.textAlign = "right";
-      g.font = "600 10px 'DM Mono', monospace";
+      g.font = "600 11px 'Plus Jakarta Sans', sans-serif";
       g.fillStyle = "rgba(245, 241, 233, 0.62)";
-      g.fillText(d.taglineBadge.toUpperCase(), w - padX, y);
+      g.fillText(d.taglineBadge, w - padX, y);
       g.textAlign = "left";
     }
 
@@ -523,9 +523,9 @@
 
     // Footer Row
     const footY = h - padY + 4;
-    g.font = "600 9.5px 'DM Mono', monospace";
-    g.fillStyle = "#e89e28";
-    const tagText = (w < 340) ? d.tags.split(' · ')[0].toUpperCase() : d.tags.toUpperCase();
+    g.font = "600 10.5px 'Plus Jakarta Sans', sans-serif";
+    g.fillStyle = "#f88847";
+    const tagText = (w < 340) ? d.tags.split(' · ')[0] : d.tags;
     g.fillText(tagText, padX, footY);
 
     g.textAlign = "right";
@@ -587,7 +587,7 @@
     g.stroke();
 
     roundRect(g, 2, 2, w - 4, h - 4, rad - 2);
-    g.strokeStyle = (d.accentColor || "#c88a58") + "1a";
+    g.strokeStyle = (d.accentColor || "#d47860") + "1a";
     g.lineWidth = 1;
     g.stroke();
 

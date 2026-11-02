@@ -22,10 +22,10 @@
       --bone: #f5f1e9;
       --mute: rgba(245, 241, 233, 0.65);
       --line: rgba(245, 241, 233, 0.13);
-      --gold: #e89e28;
-      --amber: #d99b26;
-      --bronze: #c88a58;
-      --coral: #df7249;
+      --gold: #f88847;
+      --amber: #eb8642;
+      --bronze: #d47860;
+      --coral: #ed5855;
       color-scheme: dark;
     }
 
@@ -173,14 +173,14 @@
       display: none;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 0 24px rgba(232, 158, 40, 0.35);
+      box-shadow: 0 0 24px rgba(248, 136, 71, 0.35);
       transition: box-shadow 0.3s ease, transform 0.2s ease, background 0.2s ease;
     }
 
     .ar-button-custom:hover {
-      background: #f0a934;
+      background: #fa833c;
       transform: translateY(-2px);
-      box-shadow: 0 0 36px rgba(232, 158, 40, 0.55);
+      box-shadow: 0 0 36px rgba(248, 136, 71, 0.55);
     }
 
     .ar-button-custom svg {
@@ -218,7 +218,7 @@
     .dim-badge-trigger:hover {
       transform: scale(1.05);
       border-color: var(--gold);
-      box-shadow: 0 0 20px rgba(232, 158, 40, 0.3);
+      box-shadow: 0 0 20px rgba(248, 136, 71, 0.3);
     }
 
     .dim-badge-trigger.active {
@@ -426,7 +426,7 @@
       transition: all 0.2s;
     }
     .stepper-btn:hover {
-      background: rgba(232, 158, 40, 0.18);
+      background: rgba(248, 136, 71, 0.18);
       border-color: var(--gold);
       color: var(--gold);
     }
@@ -453,12 +453,12 @@
       font-weight: 600;
       cursor: pointer;
       text-align: center;
-      box-shadow: 0 0 20px rgba(232, 158, 40, 0.3);
+      box-shadow: 0 0 20px rgba(248, 136, 71, 0.3);
       transition: all 0.2s;
     }
     .hud-close-btn:hover {
-      background: #f0a934;
-      box-shadow: 0 0 28px rgba(232, 158, 40, 0.5);
+      background: #fa833c;
+      box-shadow: 0 0 28px rgba(248, 136, 71, 0.5);
     }
 
     .ratio-warning {
@@ -531,13 +531,13 @@
       -->
       <svg id="svg-overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events: none; z-index: 3; display: none;">
         <!-- Bounding Box lines (Maquette gold accent) -->
-        <line id="line-width" x1="0" y1="0" x2="0" y2="0" stroke="#e89e28" stroke-width="2.5" />
-        <line id="line-depth" x1="0" y1="0" x2="0" y2="0" stroke="#e89e28" stroke-width="2.5" />
-        <line id="line-height" x1="0" y1="0" x2="0" y2="0" stroke="#e89e28" stroke-width="2.5" />
+        <line id="line-width" x1="0" y1="0" x2="0" y2="0" stroke="#f88847" stroke-width="2.5" />
+        <line id="line-depth" x1="0" y1="0" x2="0" y2="0" stroke="#f88847" stroke-width="2.5" />
+        <line id="line-height" x1="0" y1="0" x2="0" y2="0" stroke="#f88847" stroke-width="2.5" />
 
         <!-- Wall Guide Line (Coral accent) -->
-        <line id="wall-line" x1="0" y1="0" x2="0" y2="0" stroke="#df7249" stroke-width="3" stroke-dasharray="8,6" style="display: none;" />
-        <text id="wall-text" x="0" y="0" fill="#df7249" font-weight="700" font-size="12" style="display: none; text-anchor: middle; font-family: 'DM Mono', monospace; filter: drop-shadow(0 2px 4px rgba(13,12,14,0.6));">Wall Guide: 2.50m</text>
+        <line id="wall-line" x1="0" y1="0" x2="0" y2="0" stroke="#ed5855" stroke-width="3" stroke-dasharray="8,6" style="display: none;" />
+        <text id="wall-text" x="0" y="0" fill="#ed5855" font-weight="700" font-size="12" style="display: none; text-anchor: middle; font-family: 'DM Mono', monospace; filter: drop-shadow(0 2px 4px rgba(13,12,14,0.6));">Wall Guide: 2.50m</text>
       </svg>
 
       <div class="browser-config-panel" id="config-panel">

@@ -293,7 +293,7 @@
 
     var footY = h - padX;
     g.font = '700 8px "DM Mono", monospace';
-    g.fillStyle = '#e89e28';
+    g.fillStyle = '#f88847';
     g.fillText('ARCHIVAL POSTER · 2026', padX, footY);
     g.textAlign = 'right';
     g.fillStyle = 'rgba(245,241,233,0.82)';
@@ -545,10 +545,10 @@
     roomEl.style.background =
       'radial-gradient(52% 55% at 58% 48%, ' + current.palette[1] + '8c, transparent 74%),' +
       'radial-gradient(70% 60% at 82% 24%, ' + current.palette[2] + '26, transparent 70%),' +
-      'radial-gradient(55% 50% at 20% 78%, rgba(232,158,40,.10), transparent 68%)';
+      'radial-gradient(55% 50% at 20% 78%, rgba(248, 136, 71,.10), transparent 68%)';
     glowEl.style.background =
       'radial-gradient(closest-side, ' + current.palette[2] + '4d, ' + current.palette[2] + '14 52%, transparent 74%),' +
-      'radial-gradient(closest-side at 62% 68%, rgba(232,158,40,.18), transparent 70%)';
+      'radial-gradient(closest-side at 62% 68%, rgba(248, 136, 71,.18), transparent 70%)';
     frame.setAttribute('aria-label', current.title + ' — liquid cloth poster, ' + current.category);
     liveEl.textContent = (active + 1) + ' of ' + N + ': ' + current.title + ', ' + current.category + ', ' + current.year + '.';
 

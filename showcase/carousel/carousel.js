@@ -550,13 +550,13 @@ void main(){
     active = i;
     var p = PROJECTS[i];
     var lineCol = p.lineColor || p.palette[2];
-    metaKick.textContent = (p.category || p.badge).toUpperCase() + ' · ' + p.year;
+    metaKick.textContent = (p.category || p.badge) + ' · ' + p.year;
     metaDesc.textContent = p.headline || (p.client + ' — ' + p.tagline);
     metaTitle.textContent = p.title;
     metaDesc.textContent = p.client + ' — ' + p.tagline;
     if (countEl) countEl.textContent = pad(i + 1) + ' — ' + pad(N);
     if (stackEl) stackEl.textContent = p.label || p.category;
-    currentProjectBg = 'radial-gradient(65% 58% at 50% 42%, ' + p.palette[1] + '77, transparent 72%), radial-gradient(80% 65% at 75% 35%, rgba(200, 138, 88, 0.32), transparent 72%), radial-gradient(70% 60% at 20% 70%, rgba(232, 158, 40, 0.22), transparent 68%)';
+    currentProjectBg = 'radial-gradient(65% 58% at 50% 42%, ' + p.palette[1] + '77, transparent 72%), radial-gradient(80% 65% at 75% 35%, rgba(212, 120, 96, 0.32), transparent 72%), radial-gradient(70% 60% at 20% 70%, rgba(248, 136, 71, 0.22), transparent 68%)';
     if (roomEl) {
       roomEl.style.background = currentProjectBg;
     }

@@ -6,9 +6,9 @@
   --bone: #f5f1e9;
   --mute: rgba(245, 241, 233, 0.62);
   --line: rgba(245, 241, 233, 0.13);
-  --gold: #e89e28;
-  --bronze: #c88a58;
-  --coral: #df7249;
+  --gold: #f88847;
+  --bronze: #d47860;
+  --coral: #ed5855;
   color-scheme: dark;
 }
 
@@ -41,8 +41,8 @@ body::before {
   pointer-events: none;
   background:
     radial-gradient(60% 50% at 18% 8%, rgba(30, 58, 95, 0.22), transparent 70%),
-    radial-gradient(55% 45% at 88% 18%, rgba(200, 138, 88, 0.16), transparent 72%),
-    radial-gradient(70% 55% at 50% 110%, rgba(232, 158, 40, 0.09), transparent 70%);
+    radial-gradient(55% 45% at 88% 18%, rgba(212, 120, 96, 0.16), transparent 72%),
+    radial-gradient(70% 55% at 50% 110%, rgba(248, 136, 71, 0.09), transparent 70%);
 }
 
 .lab-grain {
@@ -179,7 +179,7 @@ body::before {
 .lab-btn:hover,
 .lab-round:hover {
   border-color: var(--bronze);
-  background: rgba(232, 158, 40, 0.11);
+  background: rgba(248, 136, 71, 0.11);
   color: #fff8eb;
 }
 
@@ -191,7 +191,7 @@ body::before {
 .lab-btn[aria-pressed="true"] {
   border-color: var(--gold);
   color: var(--gold);
-  background: rgba(232, 158, 40, 0.12);
+  background: rgba(248, 136, 71, 0.12);
 }
 
 .lab-btn:focus-visible,

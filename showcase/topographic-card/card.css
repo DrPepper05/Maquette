@@ -8,10 +8,10 @@
   --dim: rgba(245, 241, 233, 0.38);
   --line: rgba(245, 241, 233, 0.12);
   --line-strong: rgba(245, 241, 233, 0.22);
-  --gold: #e89e28;
-  --gold-glow: rgba(232, 158, 40, 0.4);
-  --amber: #d99b26;
-  --bronze: #c88a58;
+  --gold: #f88847;
+  --gold-glow: rgba(248, 136, 71, 0.4);
+  --amber: #eb8642;
+  --bronze: #d47860;
   --cyan: #38bdf8;
   --emerald: #34d399;
 }
@@ -50,8 +50,8 @@ body.map-body {
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 65% 45% at 20% 15%, rgba(200, 138, 88, 0.14), transparent 70%),
-    radial-gradient(ellipse 70% 50% at 80% 85%, rgba(232, 158, 40, 0.12), transparent 70%),
+    radial-gradient(ellipse 65% 45% at 20% 15%, rgba(212, 120, 96, 0.14), transparent 70%),
+    radial-gradient(ellipse 70% 50% at 80% 85%, rgba(248, 136, 71, 0.12), transparent 70%),
     radial-gradient(ellipse 60% 45% at 50% 50%, rgba(56, 189, 248, 0.08), transparent 70%);
 }
 
@@ -128,10 +128,10 @@ body.map-body {
 }
 
 .station-pill.active {
-  background: rgba(232, 158, 40, 0.15);
+  background: rgba(248, 136, 71, 0.15);
   color: var(--gold);
   border-color: var(--gold);
-  box-shadow: 0 0 16px rgba(232, 158, 40, 0.25);
+  box-shadow: 0 0 16px rgba(248, 136, 71, 0.25);
 }
 
 .pill-dot {
@@ -229,7 +229,7 @@ body.map-body {
 }
 
 .map-title em {
-  font-family: 'Instrument Serif', Georgia, serif;
+  font-family: 'Bricolage Grotesque', sans-serif;
   font-style: italic;
   font-weight: 400;
   color: var(--bronze);
@@ -268,8 +268,8 @@ body.map-body {
 
 .card-cloth:hover,
 .card-cloth:focus-within {
-  border-color: rgba(232, 158, 40, 0.4);
-  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.8), 0 0 24px rgba(232, 158, 40, 0.18);
+  border-color: rgba(248, 136, 71, 0.4);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.8), 0 0 24px rgba(248, 136, 71, 0.18);
 }
 
 .card-cloth canvas {
@@ -335,7 +335,7 @@ body.map-body {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
   transition: stroke-dashoffset 0.7s cubic-bezier(0.6, 0, 0.2, 1);
-  filter: drop-shadow(0 0 8px rgba(232, 158, 40, 0.85));
+  filter: drop-shadow(0 0 8px rgba(248, 136, 71, 0.85));
 }
 
 /* Architectural Drafting Decors */
@@ -475,7 +475,7 @@ body.map-body {
   border-radius: 999px;
   padding: 3px 10px;
   transform: translateY(-50%);
-  box-shadow: 0 0 14px rgba(232, 158, 40, 0.65);
+  box-shadow: 0 0 14px rgba(248, 136, 71, 0.65);
   opacity: 1;
 }
 
@@ -532,7 +532,7 @@ body.map-body {
 .st:hover h3,
 .st.on h3 {
   color: #ffffff;
-  text-shadow: 0 0 24px var(--st-color, rgba(232, 158, 40, 0.7)), 0 2px 12px #000;
+  text-shadow: 0 0 24px var(--st-color, rgba(248, 136, 71, 0.7)), 0 2px 12px #000;
 }
 
 .st:hover p,
@@ -585,7 +585,7 @@ body.map-body {
 
 .btn-strip-cta:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 24px rgba(232, 158, 40, 0.45);
+  box-shadow: 0 0 24px rgba(248, 136, 71, 0.45);
 }
 
 @media (prefers-reduced-motion: reduce) {

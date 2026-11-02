@@ -7,7 +7,7 @@
       tag: '01',
       title: 'Tell us about your brand',
       desc: "Share what your brand stands for and what you'd like to achieve. We'll take it from there.",
-      color: '#c88a58'
+      color: '#d47860'
     },
     {
       num: '02',
@@ -15,7 +15,7 @@
       title: 'See your free demo',
       desc: 'We design a custom demo tailored to your brand. Explore it, evaluate the quality, and decide if our approach is right for you.',
       free: true,
-      color: '#e89e28'
+      color: '#f88847'
     },
     {
       num: '03',
@@ -218,8 +218,8 @@
   ];
 
   const LC = [
-    [200, 138, 88], // 01 Bronze #c88a58
-    [232, 158, 40], // 02 Gold #e89e28
+    [212, 120, 96], // 01 Bronze #d47860
+    [248, 136, 71], // 02 Gold #f88847
     [56, 189, 248], // 03 Cyan #38bdf8
     [52, 211, 153]  // 04 Emerald #34d399
   ];

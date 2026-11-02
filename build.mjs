@@ -67,7 +67,7 @@ const cpOptions = {
   filter: (src) => !src.includes('node_modules') && !src.includes('.DS_Store')
 };
 
-for (const dir of ['assets', 'components', 'styles', 'showcase', 'preview', 'Mobila']) {
+for (const dir of ['assets', 'components', 'styles', 'showcase', 'preview', 'Mobila', 'furniture']) {
   const srcPath = join(root, dir);
   if (existsSync(srcPath)) {
     cpSync(srcPath, join(distDir, dir), cpOptions);

@@ -148,7 +148,7 @@
       g.fillRect(padX, padTop, artW, 20);
     } else {
       var fb = g.createRadialGradient(padX + artW * 0.4, padTop + artH * 0.35, 40, padX + artW * 0.5, padTop + artH * 0.5, artW * 0.7);
-      fb.addColorStop(0, (p.palette[2] || '#e89e28') + 'dd');
+      fb.addColorStop(0, (p.palette[2] || '#f88847') + 'dd');
       fb.addColorStop(0.35, p.palette[1] || '#1e3a5f');
       fb.addColorStop(0.75, p.palette[0] || '#0c1424');
       fb.addColorStop(1, p.palette[3] || '#070b14');
@@ -237,7 +237,7 @@
   function roomFor(p) {
     return 'radial-gradient(60% 55% at 50% 45%, ' + p.palette[1] + '74, transparent 72%),' +
       'radial-gradient(75% 60% at 76% 32%, ' + p.palette[2] + '26, transparent 70%),' +
-      'radial-gradient(60% 55% at 20% 72%, rgba(232,158,40,.10), transparent 68%)';
+      'radial-gradient(60% 55% at 20% 72%, rgba(248, 136, 71,.10), transparent 68%)';
   }
 
   function setProject(i) {

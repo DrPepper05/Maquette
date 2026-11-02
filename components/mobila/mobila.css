@@ -1,0 +1,474 @@
+:root {
+  /* Maquette Design Tokens */
+  --bg: #0d0c0e;
+  --panel: #181614;
+  --surface: #221e1a;
+  --bone: #f5f1e9;
+  --mute: rgba(245, 241, 233, 0.65);
+  --line: rgba(245, 241, 233, 0.13);
+  --gold: #f88847;
+  --amber: #eb8642;
+  --bronze: #d47860;
+  --coral: #ed5855;
+  color-scheme: dark;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--bone);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Ambient Warmth & Film Grain */
+.site-ambient {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(75% 55% at 20% 15%, rgba(212, 120, 96, 0.13), transparent 70%),
+    radial-gradient(60% 45% at 85% 25%, rgba(248, 136, 71, 0.09), transparent 75%),
+    radial-gradient(85% 60% at 50% 100%, rgba(30, 58, 95, 0.18), transparent 70%);
+}
+
+.site-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.065;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/><feColorMatrix values='0 0 0 0 .5 0 0 0 0 .48 0 0 0 0 .45 0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Top Bar */
+.top-bar {
+  position: relative;
+  z-index: 10;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 32px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand-mark {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--bone);
+  text-decoration: none;
+}
+
+.brand-mark span {
+  color: var(--bronze);
+  font-weight: 500;
+}
+
+.confidential-tag {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  font-size: 0.86rem;
+  letter-spacing: 0.01em;
+  color: var(--amber);
+  background: rgba(248, 136, 71, 0.1);
+  border: 1px solid rgba(248, 136, 71, 0.25);
+  padding: 6px 14px;
+  border-radius: 999px;
+}
+
+/* Main Landing Page Layout */
+.landing-wrap {
+  position: relative;
+  z-index: 5;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 56px;
+  align-items: center;
+  min-height: calc(100vh - 120px);
+}
+
+@media (max-width: 960px) {
+  .landing-wrap {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 20px 20px 60px;
+  }
+
+  .ar-component-col {
+    order: -1;
+  }
+
+  .ar-artwork {
+    gap: 12px;
+  }
+
+  .ar-label {
+    order: -1;
+  }
+
+  .qr-container {
+    display: none;
+  }
+}
+
+/* Left Column: Story & Narrative */
+.story-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.eyebrow {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  font-size: 0.94rem;
+  letter-spacing: 0.01em;
+  color: var(--bronze);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+}
+
+.headline {
+  font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+  font-size: clamp(2.4rem, 4.4vw, 3.8rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: var(--bone);
+  margin-bottom: 24px;
+}
+
+.story-p {
+  font-size: 1.12rem;
+  color: var(--mute);
+  line-height: 1.7;
+  margin-bottom: 20px;
+  max-width: 58ch;
+}
+
+.story-p strong {
+  color: var(--bone);
+  font-weight: 600;
+}
+
+/* Feature Specs on Left */
+.story-specs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.spec-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 0.94rem;
+  color: var(--mute);
+}
+
+.spec-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.76rem;
+  color: var(--bronze);
+  letter-spacing: 0.12em;
+}
+
+.spec-text strong {
+  color: var(--bone);
+}
+
+/* Right Column: Framed Waving Painting + Museum Label */
+.ar-component-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ar-artwork {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+}
+
+/* The painting hangs in a slim dark frame */
+.ar-painting {
+  position: relative;
+  padding: 10px;
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, #3a2a1b 0%, #17110c 22%, #0d0a08 55%, #22180f 100%);
+  box-shadow:
+    0 42px 90px rgba(0, 0, 0, 0.8),
+    0 2px 0 rgba(245, 241, 233, 0.06) inset,
+    0 0 0 1px rgba(248, 136, 71, 0.22);
+  transition: box-shadow 0.4s ease;
+}
+
+.ar-painting:hover,
+.ar-painting:focus-within {
+  box-shadow:
+    0 48px 100px rgba(0, 0, 0, 0.9),
+    0 2px 0 rgba(245, 241, 233, 0.08) inset,
+    0 0 0 1px rgba(248, 136, 71, 0.45),
+    0 0 42px rgba(248, 136, 71, 0.16);
+}
+
+.ar-painting-surface {
+  position: relative;
+  aspect-ratio: 6 / 5;
+  overflow: hidden;
+  border-radius: 2px;
+  background: #16100b;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.75),
+    inset 0 0 30px rgba(0, 0, 0, 0.55);
+}
+
+.ar-painting-surface canvas {
+  position: absolute;
+  left: -40px;
+  top: -40px;
+  pointer-events: none;
+  filter: drop-shadow(0 16px 30px rgba(0, 0, 0, 0.75));
+}
+
+/* Museum-style wall label */
+.ar-label {
+  position: relative;
+  margin: 0;
+  padding: 18px 20px 16px;
+  background: #e9e2d4;
+  color: #1a140d;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow:
+    0 24px 54px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(90, 64, 39, 0.08);
+}
+
+.ar-label::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+.ar-label-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+}
+
+.card-kicker {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  font-size: 0.76rem;
+  letter-spacing: 0.01em;
+  color: #9a6a2e;
+  margin-bottom: 7px;
+}
+
+.card-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1.62rem;
+  font-weight: 700;
+  color: #1a140d;
+  letter-spacing: -0.035em;
+  margin-bottom: 6px;
+  line-height: 1.02;
+}
+
+.card-desc {
+  font-size: 0.76rem;
+  color: #5b5043;
+  line-height: 1.48;
+  margin: 0;
+  max-width: 27ch;
+}
+
+.qr-container {
+  flex: none;
+}
+
+.qr-frame {
+  background: #ffffff;
+  padding: 8px;
+  border-radius: 3px;
+  display: inline-block;
+  box-shadow: 0 8px 22px rgba(52, 37, 22, 0.22);
+  border: 1px solid rgba(26, 20, 13, 0.12);
+}
+
+.qr-frame img {
+  width: 88px;
+  height: 88px;
+  display: block;
+}
+
+.ar-label-foot {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(26, 20, 13, 0.16);
+}
+
+.footprint-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(26, 20, 13, 0.04);
+  border: 1px solid rgba(26, 20, 13, 0.14);
+  border-radius: 999px;
+  padding: 5px 11px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.64rem;
+  color: #3e3428;
+  margin-bottom: 10px;
+  letter-spacing: 0.03em;
+}
+
+.footprint-badge span {
+  color: #a94519;
+  font-weight: 500;
+}
+
+.btn-launch-ar {
+  width: 100%;
+  background: var(--gold);
+  color: #161005;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 13px 20px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  box-shadow: 0 8px 22px rgba(169, 69, 25, 0.22);
+  transition: all 0.25s ease;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+
+.btn-launch-ar:hover {
+  background: #fa833c;
+  box-shadow: 0 10px 28px rgba(169, 69, 25, 0.32);
+  transform: translateY(-2px);
+}
+
+.btn-launch-ar svg {
+  fill: currentColor;
+}
+
+.step-hints {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  color: #6b5f50;
+  margin-top: 11px;
+}
+
+.step-hints span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.step-hints em {
+  color: #9a6a2e;
+  font-style: normal;
+}
+
+@media (max-width: 480px) {
+  .ar-label {
+    padding: 16px 16px 15px;
+  }
+
+  .ar-label-head {
+    gap: 12px;
+  }
+
+  .card-title {
+    font-size: 1.45rem;
+  }
+
+  .qr-frame img {
+    width: 82px;
+    height: 82px;
+  }
+
+  .card-desc {
+    font-size: 0.74rem;
+  }
+}
+
+/* Footer Endplate */
+.footer-bar {
+  position: relative;
+  z-index: 10;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 32px 40px;
+  border-top: 1px solid rgba(245, 241, 233, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 0.86rem;
+  color: var(--mute);
+}
+
+.footer-link {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--gold);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.footer-link:hover {
+  opacity: 0.85;
+}

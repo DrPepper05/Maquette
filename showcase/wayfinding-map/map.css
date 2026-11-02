@@ -8,10 +8,10 @@
   --dim: rgba(245, 241, 233, 0.38);
   --line: rgba(245, 241, 233, 0.12);
   --line-strong: rgba(245, 241, 233, 0.22);
-  --gold: #e89e28;
-  --gold-glow: rgba(232, 158, 40, 0.35);
-  --amber: #d99b26;
-  --bronze: #c88a58;
+  --gold: #f88847;
+  --gold-glow: rgba(248, 136, 71, 0.35);
+  --amber: #eb8642;
+  --bronze: #d47860;
   --cyan: #38bdf8;
   --emerald: #34d399;
 }
@@ -50,8 +50,8 @@ body.map-body {
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 65% 45% at 20% 15%, rgba(200, 138, 88, 0.12), transparent 70%),
-    radial-gradient(ellipse 70% 50% at 80% 85%, rgba(232, 158, 40, 0.10), transparent 70%),
+    radial-gradient(ellipse 65% 45% at 20% 15%, rgba(212, 120, 96, 0.12), transparent 70%),
+    radial-gradient(ellipse 70% 50% at 80% 85%, rgba(248, 136, 71, 0.10), transparent 70%),
     radial-gradient(ellipse 60% 45% at 50% 50%, rgba(56, 189, 248, 0.06), transparent 70%);
 }
 
@@ -128,10 +128,10 @@ body.map-body {
 }
 
 .station-pill.active {
-  background: rgba(232, 158, 40, 0.15);
+  background: rgba(248, 136, 71, 0.15);
   color: var(--gold);
   border-color: var(--gold);
-  box-shadow: 0 0 16px rgba(232, 158, 40, 0.25);
+  box-shadow: 0 0 16px rgba(248, 136, 71, 0.25);
 }
 
 .pill-dot {
@@ -228,7 +228,7 @@ body.map-body {
 }
 
 .map-title em {
-  font-family: 'Instrument Serif', Georgia, serif;
+  font-family: 'Bricolage Grotesque', sans-serif;
   font-style: italic;
   font-weight: 400;
   color: var(--bronze);
@@ -269,7 +269,7 @@ body.map-body {
   stroke-dasharray: 5 7;
   stroke-linecap: round;
   animation: dnaDrift 28s linear infinite;
-  filter: drop-shadow(0 0 10px rgba(232, 158, 40, 0.55));
+  filter: drop-shadow(0 0 10px rgba(248, 136, 71, 0.55));
 }
 
 @keyframes dnaDrift {
@@ -289,7 +289,7 @@ body.map-body {
 
 .dna-node-ring {
   fill: none;
-  stroke: rgba(232, 158, 40, 0.4);
+  stroke: rgba(248, 136, 71, 0.4);
   stroke-width: 1.5px;
   stroke-dasharray: 3 3;
   animation: ringSpin 16s linear infinite;
@@ -305,7 +305,7 @@ body.map-body {
   stroke: var(--gold);
   stroke-width: 2px;
   transition: all 0.3s ease;
-  filter: drop-shadow(0 0 8px rgba(232, 158, 40, 0.4));
+  filter: drop-shadow(0 0 8px rgba(248, 136, 71, 0.4));
 }
 
 .dna-station-node:hover .dna-node-circle,
@@ -448,7 +448,7 @@ body.map-body {
 
 .btn-strip-cta:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 24px rgba(232, 158, 40, 0.45);
+  box-shadow: 0 0 24px rgba(248, 136, 71, 0.45);
 }
 
 /* Responsive */

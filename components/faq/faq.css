@@ -17,8 +17,8 @@
   mask-image: linear-gradient(to bottom, transparent 0%, #000 160px, #000 calc(100% - 160px), transparent 100%);
   background:
     radial-gradient(ellipse 75% 60% at 50% 50%, rgba(84, 65, 122, 0.38), transparent 72%),
-    radial-gradient(ellipse 60% 50% at 82% 45%, rgba(196, 122, 70, 0.22), transparent 68%),
-    radial-gradient(ellipse 55% 45% at 18% 55%, rgba(200, 138, 88, 0.20), transparent 66%);
+    radial-gradient(ellipse 60% 50% at 82% 45%, rgba(211, 101, 78, 0.22), transparent 68%),
+    radial-gradient(ellipse 55% 45% at 18% 55%, rgba(212, 120, 96, 0.20), transparent 66%);
 }
 
 #faq .wrap {

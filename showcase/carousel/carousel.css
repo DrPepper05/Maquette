@@ -17,8 +17,8 @@
   mask-image: linear-gradient(to bottom, #000 calc(100% - 180px), transparent 100%);
   background:
     radial-gradient(65% 58% at 50% 42%, rgba(30, 58, 95, 0.45), transparent 72%),
-    radial-gradient(80% 65% at 75% 35%, rgba(200, 138, 88, 0.32), transparent 72%),
-    radial-gradient(70% 60% at 20% 70%, rgba(232, 158, 40, 0.22), transparent 68%);
+    radial-gradient(80% 65% at 75% 35%, rgba(212, 120, 96, 0.32), transparent 72%),
+    radial-gradient(70% 60% at 20% 70%, rgba(248, 136, 71, 0.22), transparent 68%);
 }
 
 .gallery-track {
@@ -55,13 +55,12 @@
 
 .hero-kicker {
   display: block;
-  font: 0.76rem 'DM Mono', monospace;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
+  font: 600 0.92rem 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.01em;
   color: var(--bronze);
   opacity: 0.95;
   margin-bottom: 16px;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(200, 138, 88, 0.25);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(212, 120, 96, 0.25);
 }
 
 .hero-title {
@@ -333,9 +332,8 @@
 }
 
 .sc-kicker {
-  font: 0.72rem 'DM Mono', monospace;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
+  font: 600 0.88rem 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.01em;
   color: var(--mute);
   white-space: nowrap;
 }
@@ -352,9 +350,8 @@
 }
 
 .sc-kick {
-  font: 700 0.82rem 'DM Mono', monospace;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  font: 700 0.9rem 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.01em;
   color: var(--mute);
   margin: 0 0 8px;
 }
@@ -410,8 +407,8 @@
 
 .sc-count {
   margin-left: 8px;
-  font: 0.82rem 'DM Mono', monospace;
-  letter-spacing: 0.22em;
+  font: 600 0.86rem 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.01em;
   color: var(--mute);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -424,9 +421,8 @@
   bottom: calc(28px + env(safe-area-inset-bottom, 0px));
   max-width: 30%;
   text-align: right;
-  font: 0.68rem 'DM Mono', monospace;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
+  font: 600 0.8rem 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.01em;
   color: var(--mute);
   pointer-events: none;
   line-height: 1.7;
@@ -494,7 +490,7 @@
     font-size: 1.9rem;
   }
   .sc-kicker {
-    font-size: 0.62rem;
-    letter-spacing: 0.22em;
+    font-size: 0.76rem;
+    letter-spacing: 0.01em;
   }
 }

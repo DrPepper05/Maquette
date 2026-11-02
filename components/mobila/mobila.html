@@ -1,0 +1,116 @@
+<div class="site-ambient"></div>
+<div class="site-grain"></div>
+
+<!-- Top Bar -->
+<header class="top-bar">
+  <a class="brand-mark" href="https://maquette.ro">
+    Maquette <span>Mobilă</span>
+  </a>
+  <span class="confidential-tag">Prototip privat pentru client</span>
+</header>
+
+<!-- Landing Page Split Layout -->
+<main class="landing-wrap">
+
+  <!-- Left Column: Story -->
+  <section class="story-col">
+    <div class="eyebrow">Specimen spațial 1:1 personalizat</div>
+    <h1 class="headline">
+      Vezi-l în camera ta, <br>la scară reală 1:1.
+    </h1>
+
+    <p class="story-p">
+      Principalul obstacol în comanda mobilierului online nu este stilul — ci incertitudinea spațială: <strong>„Va încăpea între ferestre? Va domina camera? Cum reacționează materialul la lumina noastră naturală?”</strong>
+    </p>
+
+    <p class="story-p">
+      Am pregătit acest prototip privat pentru a demonstra cum clienții tăi pot experimenta colecția <strong>direct prin camera telefonului, în spațiul lor de locuit real</strong> — fără aplicații, fără descărcări și cu certitudine instantanee.
+    </p>
+
+    <div class="story-specs">
+      <div class="spec-item">
+        <span class="spec-num">01 //</span>
+        <span class="spec-text"><strong>Fără aplicații:</strong> Se deschide nativ în Safari (Apple Quick Look) și Chrome (Google WebXR).</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-num">02 //</span>
+        <span class="spec-text"><strong>Precizie milimetrică:</strong> Scara fizică 1:1 verificată elimină ezitările și retururile.</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-num">03 //</span>
+        <span class="spec-text"><strong>Iluminare naturală:</strong> Estimarea luminii ambientale și umbre pe podea precise din punct de vedere fizic.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Right Column: Waving Painting + AR Wall Label -->
+  <section class="ar-component-col">
+    <figure class="ar-artwork">
+      <div class="ar-painting" id="arPainting" role="img" aria-label="Interior pictat cu o canapea în lumină caldă de după-amiază">
+        <div class="ar-painting-surface" id="arPaintingSurface">
+          <canvas id="arClothCanvas" aria-hidden="true"></canvas>
+        </div>
+      </div>
+
+      <figcaption class="ar-label">
+        <div class="ar-label-head">
+          <div>
+            <div class="card-kicker">AR spațial instant</div>
+            <h2 class="card-title">Testează în camera ta</h2>
+            <p class="card-desc">
+              Scanează cu camera telefonului pentru a plasa acest model la scară reală 1:1, direct pe podeaua ta.
+            </p>
+          </div>
+
+          <!-- Dynamic QR Code Frame -->
+          <div class="qr-container">
+            <div class="qr-frame">
+              <img id="qr-img" src="" alt="Scanează codul QR cu camera telefonului" />
+            </div>
+          </div>
+        </div>
+
+        <div class="ar-label-foot">
+          <!-- Footprint Dimensions Badge -->
+          <div class="footprint-badge">
+            Amprentă: <span>1,80 m L</span> · <span>0,86 m A</span> · <span>0,74 m Î</span>
+          </div>
+
+          <!-- Direct Action (Immediately triggers native AR on mobile) -->
+          <button class="btn-launch-ar" id="btn-launch-ar">
+            <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 6h4v2H4v4H2V8c0-1.1.9-2 2-2zm16 0c1.1 0 2 .9 2 2v4h-2V8h-4V6h4zM4 18h4v2H4c-1.1 0-2-.9-2-2v-4h2v4zm16 0h-4v-2h4v-4h2v4c0 1.1-.9 2-2 2zM12 8.5c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5z"/>
+            </svg>
+            <span id="btn-label">Lansează camera AR 1:1</span>
+          </button>
+
+          <div class="step-hints">
+            <span><em>1.</em> Scanează QR</span>
+            <span><em>2.</em> Îndreaptă spre podea</span>
+            <span><em>3.</em> Pășește în cameră</span>
+          </div>
+        </div>
+      </figcaption>
+    </figure>
+  </section>
+
+</main>
+
+<!-- Headless Model Viewer to power AR on all devices -->
+<model-viewer
+  id="headless-mv"
+  src="https://code4fukui.github.io/vr-kanazawa-it/sofa_r-nakagawa532.glb"
+  ios-src="https://code4fukui.github.io/vr-kanazawa-it/sofa_r-nakagawa532.usdz"
+  ar
+  ar-scale="fixed"
+  ar-modes="webxr scene-viewer quick-look"
+  style="display: none;">
+</model-viewer>
+
+<!-- Footer -->
+<footer class="footer-bar">
+  <div>&copy; 2026 Maquette. Prototip confidențial pregătit pentru evaluare privată.</div>
+  <a class="footer-link" href="mailto:contact@maquette.ro?subject=Feedback%20prototip%20WebAR%20privat">
+    Solicitări directe de la clienți &rarr;
+  </a>
+</footer>

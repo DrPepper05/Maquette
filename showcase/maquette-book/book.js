@@ -19,17 +19,17 @@
       ],
       svgContent: `
         <svg viewBox="0 0 280 180" fill="none">
-          <circle cx="50" cy="50" r="3.5" fill="#c88a58" opacity="0.7"/>
-          <circle cx="95" cy="35" r="4.5" fill="#c88a58"/>
-          <circle cx="45" cy="115" r="3" fill="#c88a58" opacity="0.6"/>
-          <circle cx="130" cy="70" r="5" fill="#e89e28"/>
-          <circle cx="85" cy="135" r="3.5" fill="#c88a58"/>
-          <circle cx="145" cy="125" r="4" fill="#c88a58" opacity="0.7"/>
-          <path d="M45,115 L50,50 L95,35 L145,70 L145,125 L85,135 Z" stroke="#c88a58" stroke-width="1.2" stroke-dasharray="4 4"/>
-          <line x1="145" y1="85" x2="225" y2="85" stroke="#e89e28" stroke-width="1.5" stroke-dasharray="3 3"/>
-          <polygon points="225,85 215,80 215,90" fill="#e89e28"/>
-          <circle cx="240" cy="85" r="16" stroke="#e89e28" stroke-width="1.2"/>
-          <text x="240" y="89" fill="#e89e28" font-family="'DM Mono'" font-size="9" text-anchor="middle">BRIEF</text>
+          <circle cx="50" cy="50" r="3.5" fill="#d47860" opacity="0.7"/>
+          <circle cx="95" cy="35" r="4.5" fill="#d47860"/>
+          <circle cx="45" cy="115" r="3" fill="#d47860" opacity="0.6"/>
+          <circle cx="130" cy="70" r="5" fill="#f88847"/>
+          <circle cx="85" cy="135" r="3.5" fill="#d47860"/>
+          <circle cx="145" cy="125" r="4" fill="#d47860" opacity="0.7"/>
+          <path d="M45,115 L50,50 L95,35 L145,70 L145,125 L85,135 Z" stroke="#d47860" stroke-width="1.2" stroke-dasharray="4 4"/>
+          <line x1="145" y1="85" x2="225" y2="85" stroke="#f88847" stroke-width="1.5" stroke-dasharray="3 3"/>
+          <polygon points="225,85 215,80 215,90" fill="#f88847"/>
+          <circle cx="240" cy="85" r="16" stroke="#f88847" stroke-width="1.2"/>
+          <text x="240" y="89" fill="#f88847" font-family="'DM Mono'" font-size="9" text-anchor="middle">BRIEF</text>
         </svg>
       `
     },
@@ -50,17 +50,17 @@
       ],
       svgContent: `
         <svg viewBox="0 0 280 180" fill="none">
-          <rect x="25" y="20" width="230" height="135" rx="8" stroke="#e89e28" stroke-width="1.2" fill="#141217"/>
+          <rect x="25" y="20" width="230" height="135" rx="8" stroke="#f88847" stroke-width="1.2" fill="#141217"/>
           <line x1="25" y1="42" x2="255" y2="42" stroke="rgba(245,241,233,0.15)" stroke-width="1"/>
-          <circle cx="40" cy="31" r="3" fill="#e89e28"/>
+          <circle cx="40" cy="31" r="3" fill="#f88847"/>
           <circle cx="52" cy="31" r="3" fill="rgba(245,241,233,0.3)"/>
           <circle cx="64" cy="31" r="3" fill="rgba(245,241,233,0.3)"/>
-          <rect x="40" y="56" width="60" height="28" rx="4" fill="rgba(232,158,40,0.15)" stroke="#e89e28" stroke-width="0.8"/>
+          <rect x="40" y="56" width="60" height="28" rx="4" fill="rgba(248, 136, 71,0.15)" stroke="#f88847" stroke-width="0.8"/>
           <rect x="40" y="94" width="90" height="10" rx="3" fill="rgba(245,241,233,0.2)"/>
           <rect x="40" y="112" width="120" height="8" rx="2" fill="rgba(245,241,233,0.1)"/>
           <rect x="40" y="126" width="70" height="8" rx="2" fill="rgba(245,241,233,0.1)"/>
-          <polygon points="180,95 195,115 186,117 192,130 185,133 179,120 172,126" fill="#e89e28"/>
-          <circle cx="180" cy="95" r="10" stroke="#e89e28" stroke-width="1" stroke-dasharray="2 2"/>
+          <polygon points="180,95 195,115 186,117 192,130 185,133 179,120 172,126" fill="#f88847"/>
+          <circle cx="180" cy="95" r="10" stroke="#f88847" stroke-width="1" stroke-dasharray="2 2"/>
         </svg>
       `
     },
@@ -89,8 +89,8 @@
             <rect x="180" y="50" width="65" height="95" rx="4" fill="rgba(56,189,248,0.22)"/>
             <text x="212" y="100" fill="#38bdf8" font-family="'DM Mono'" font-size="8.5" text-anchor="middle">WK 03</text>
           </g>
-          <path d="M62,115 L105,85 L180,50 L212,35" stroke="#e89e28" stroke-width="1.5" stroke-dasharray="3 3"/>
-          <circle cx="212" cy="35" r="4" fill="#e89e28"/>
+          <path d="M62,115 L105,85 L180,50 L212,35" stroke="#f88847" stroke-width="1.5" stroke-dasharray="3 3"/>
+          <circle cx="212" cy="35" r="4" fill="#f88847"/>
         </svg>
       `
     },
@@ -113,11 +113,11 @@
         <svg viewBox="0 0 280 180" fill="none">
           <rect x="40" y="25" width="200" height="130" rx="10" stroke="#34d399" stroke-width="1.2" fill="#131614"/>
           <rect x="52" y="37" width="176" height="106" rx="6" stroke="rgba(52,211,153,0.3)" stroke-width="1" stroke-dasharray="4 4"/>
-          <circle cx="140" cy="72" r="14" stroke="#e89e28" stroke-width="1.5"/>
-          <circle cx="140" cy="72" r="6" stroke="#e89e28" stroke-width="1"/>
-          <line x1="140" y1="86" x2="140" y2="114" stroke="#e89e28" stroke-width="2"/>
-          <line x1="140" y1="102" x2="149" y2="102" stroke="#e89e28" stroke-width="2"/>
-          <line x1="140" y1="110" x2="147" y2="110" stroke="#e89e28" stroke-width="2"/>
+          <circle cx="140" cy="72" r="14" stroke="#f88847" stroke-width="1.5"/>
+          <circle cx="140" cy="72" r="6" stroke="#f88847" stroke-width="1"/>
+          <line x1="140" y1="86" x2="140" y2="114" stroke="#f88847" stroke-width="2"/>
+          <line x1="140" y1="102" x2="149" y2="102" stroke="#f88847" stroke-width="2"/>
+          <line x1="140" y1="110" x2="147" y2="110" stroke="#f88847" stroke-width="2"/>
           <text x="140" y="132" fill="#34d399" font-family="'DM Mono'" font-size="8" letter-spacing="2" text-anchor="middle">100% YOUR PROPERTY</text>
         </svg>
       `

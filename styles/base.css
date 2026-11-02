@@ -11,11 +11,11 @@
   --line: rgba(245, 241, 233, 0.13);
 
   /* Warm Metallic & Editorial Accents */
-  --gold: #e89e28;
-  --amber: #d99b26;
-  --bronze: #c88a58;
-  --copper: #c47a46;
-  --coral: #df7249;
+  --gold: #f88847;
+  --amber: #eb8642;
+  --bronze: #d47860;
+  --copper: #d3654e;
+  --coral: #ed5855;
 
   color-scheme: dark;
 }
@@ -191,7 +191,7 @@ section .room {
 }
 
 .btn:hover {
-  box-shadow: 0 0 34px rgba(232, 158, 40, 0.48);
+  box-shadow: 0 0 34px rgba(248, 136, 71, 0.48);
   transform: translateY(-2px);
 }
 
@@ -204,7 +204,7 @@ section .room {
 .btn.ghost:hover {
   border-color: var(--bronze);
   color: var(--bone);
-  box-shadow: 0 0 24px rgba(200, 138, 88, 0.16);
+  box-shadow: 0 0 24px rgba(212, 120, 96, 0.16);
 }
 
 @media (max-width: 480px) {
@@ -235,10 +235,10 @@ section .room {
 .eyebrow {
   display: block;
   margin-bottom: 14px;
-  text-transform: uppercase;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.76rem;
-  letter-spacing: 0.25em;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  font-size: 0.92rem;
+  letter-spacing: 0.01em;
   color: var(--bronze);
 }
 
@@ -270,7 +270,7 @@ section .room {
   position: absolute;
   inset: 0;
   z-index: -2;
-  background: radial-gradient(90% 70% at 18% 12%, var(--tint, rgba(200, 138, 88, 0.06)), transparent 64%),
+  background: radial-gradient(90% 70% at 18% 12%, var(--tint, rgba(212, 120, 96, 0.06)), transparent 64%),
               radial-gradient(130% 100% at 50% 45%, transparent 42%, rgba(0, 0, 0, 0.65)),
               var(--bg);
 }
@@ -301,25 +301,23 @@ section .room {
 }
 
 .sc-kicker {
-  font: 0.72rem 'DM Mono', monospace;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
+  font: 600 0.88rem 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.01em;
   color: var(--mute);
   white-space: nowrap;
 }
 
 .sc-kick {
-  font: 0.68rem 'DM Mono', monospace;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
+  font: 600 0.84rem 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.01em;
   color: var(--mute);
   margin: 0 0 6px;
   display: block;
 }
 
 .sc-count {
-  font: 0.82rem 'DM Mono', monospace;
-  letter-spacing: 0.22em;
+  font: 600 0.86rem 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.01em;
   color: var(--mute);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
