@@ -67,17 +67,44 @@ const cpOptions = {
   filter: (src) => !src.includes('node_modules') && !src.includes('.DS_Store')
 };
 
-for (const dir of ['assets', 'components', 'styles', 'showcase', 'preview', 'Mobila', 'furniture']) {
+for (const dir of ['assets', 'components', 'styles', 'showcase', 'preview', 'furniture']) {
   const srcPath = join(root, dir);
   if (existsSync(srcPath)) {
     cpSync(srcPath, join(distDir, dir), cpOptions);
   }
 }
 
-// Also duplicate / alias as lowercase 'mobila' for web path flexibility
+// Publish Mobila/ under lowercase /mobila only. GitHub Pages can't hold two
+// folders that differ just by case (Mobila + mobila) — one of them gets dropped.
 if (existsSync(join(root, 'Mobila'))) {
   cpSync(join(root, 'Mobila'), join(distDir, 'mobila'), cpOptions);
 }
+
+// 404 page: old mixed-case links (e.g. /Mobila/) redirect to the lowercase path.
+writeFileSync(join(distDir, '404.html'), `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found – Maquette</title>
+<script>
+  var p = location.pathname, l = p.toLowerCase();
+  if (p !== l) location.replace(l + location.search + location.hash);
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; text-align: center; padding: 0 16px; font-family: 'Plus Jakarta Sans', sans-serif; }
+  h1 { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Page not found</h1>
+  <p><a href="/">Back to Maquette</a></p>
+</main>
+</body>
+</html>
+`);
 
 // Ensure GitHub Pages serves all assets correctly and custom domain is preserved
 writeFileSync(join(distDir, '.nojekyll'), '');
