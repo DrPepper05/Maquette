@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "maquette",
+  "compatibility_date": "2026-11-04",
+  "observability": {
+    "enabled": true
+  },
+  // Only publish the built site (npm run build -> dist/), never the repo root.
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}

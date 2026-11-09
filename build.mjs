@@ -106,6 +106,9 @@ writeFileSync(join(distDir, '404.html'), `<!doctype html>
 </html>
 `);
 
+// Cloudflare: send old capitalized /Mobila links to /mobila
+writeFileSync(join(distDir, '_redirects'), '/Mobila /mobila/ 301\n/Mobila/* /mobila/:splat 301\n');
+
 // Ensure GitHub Pages serves all assets correctly and custom domain is preserved
 writeFileSync(join(distDir, '.nojekyll'), '');
 writeFileSync(join(distDir, 'CNAME'), 'maquette.ro\n');
