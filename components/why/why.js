@@ -46,7 +46,7 @@
   const PAD = 40;
   const A = 3.6, OM = 0.62;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const dpr = () => Math.min(window.devicePixelRatio || 1, 1.5);
+  const dpr = () => Math.min(window.devicePixelRatio || 1, 2);
 
   let sts = [];
   const pts = [];

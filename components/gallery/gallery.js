@@ -353,7 +353,9 @@ void main(){
 
   function createCardTexture(project) {
     var cv = document.createElement('canvas');
-    var hiRes = window.innerWidth > 820;
+    // Hi-res whenever the card will cover many device pixels: large screens
+    // OR any retina/phone screen (a ~500px card at 3x DPR is ~1500 device px).
+    var hiRes = window.innerWidth > 820 || (window.devicePixelRatio || 1) >= 2;
     cv.width = hiRes ? 1536 : 1024;          // same 0.78 aspect as the card plane (2.6 x 3.328)
     cv.height = hiRes ? 1968 : 1312;
     var ctx = cv.getContext('2d');
@@ -362,7 +364,7 @@ void main(){
     var tex = new THREE.CanvasTexture(cv);
     if (THREE.sRGBEncoding) tex.encoding = THREE.sRGBEncoding;
     var isMobile = (window.innerWidth <= 820);
-    tex.anisotropy = isMobile ? 1 : 8;
+    tex.anisotropy = isMobile ? 4 : 8;
 
     function renderCard(img) {
       ctx.save();
@@ -612,7 +614,9 @@ void main(){
 
     try {
       var isMobile = (window.innerWidth <= 820);
-      renderer.setPixelRatio(isMobile ? Math.min(devicePixelRatio || 1, 1.0) : Math.min(devicePixelRatio || 1, 2));
+      // Render at native resolution (capped at 2x) on every device; a 1x cap on
+      // phones upscaled the whole carousel 2-3x and made it look blurred.
+      renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
       renderer.setClearColor(0x000000, 0);
       scene = new THREE.Scene();
       camera = new THREE.PerspectiveCamera(38, 1, 0.1, 50);
