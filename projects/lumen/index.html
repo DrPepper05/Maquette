@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lumen Clinics — Care that books itself.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--cream:#f6ecdc;--plum:#2a1015;--gold:#e0a850;--mute:#d9bfae}
+  *{box-sizing:border-box;margin:0}
+  html,body{background:#1a0a0e;color:var(--cream);font-family:'Jost',sans-serif;-webkit-font-smoothing:antialiased}
+  .page{max-width:1280px;margin:0 auto;position:relative}
+  /* photographic hero: static pre-rendered still */
+  .hero{position:relative;height:970px;background:#1a0a0e url(bg.jpg) center bottom/cover no-repeat;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,6,10,.7) 0,rgba(20,6,10,.15) 34%,rgba(20,6,10,0) 55%,rgba(20,6,10,.55) 100%)}
+  nav{position:absolute;z-index:4;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:26px 44px}
+  .logo{font-family:'Cormorant Garamond';font-weight:600;font-size:21px;letter-spacing:.3em;line-height:1}
+  .logo small{display:block;font:500 9px 'DM Mono';letter-spacing:.3em;color:var(--mute);margin-top:5px}
+  nav ul{display:flex;gap:30px;list-style:none;padding:0;font-size:14px;color:#ecd8c4}
+  .book{background:var(--cream);color:var(--plum);padding:11px 20px;border-radius:99px;font-size:13px;font-weight:700}
+  .head{position:absolute;z-index:3;top:128px;left:0;right:0;text-align:center}
+  h1{font-family:'Cormorant Garamond';font-weight:500;font-size:clamp(44px,6.6vw,80px);line-height:1.02;letter-spacing:-.045em;color:#fbf1e1;text-shadow:0 2px 40px rgba(20,4,8,.5)}
+  h1 em{font-style:normal;color:var(--gold)}
+  .head p{margin:20px auto 0;max-width:430px;font-size:16px;line-height:1.55;color:#ecd8c4}
+  /* glass booking bar */
+  .bar{position:absolute;z-index:4;left:44px;right:44px;bottom:36px;background:rgba(36,12,18,.52);backdrop-filter:blur(18px) saturate(1.2);border:1px solid rgba(255,230,200,.22);border-radius:26px;padding:22px 24px;display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+  .bar h2{font-family:'Cormorant Garamond';font-weight:600;font-size:19px;letter-spacing:-.02em;line-height:1.15;max-width:150px}
+  .bar small{display:block;font-size:12px;color:var(--mute);font-weight:400;margin-top:6px;font-family:'Cormorant Garamond'}
+  .opts{display:flex;flex-direction:column;gap:10px}
+  .row{display:flex;gap:8px;flex-wrap:wrap}
+  .ch{padding:8px 13px;border-radius:12px;border:1px solid rgba(255,230,200,.25);font-size:12.5px;font-weight:500;background:rgba(255,255,255,.05)}
+  .ch.s{background:var(--cream);color:var(--plum);border-color:var(--cream);font-weight:700}
+  .ch.g{background:var(--gold);color:#2a1015;border-color:var(--gold);font-weight:700}
+  .ch i{font-style:normal;font:500 10.5px 'DM Mono';opacity:.7;margin-left:5px}
+  .confirm{background:var(--gold);color:#2a1015;font-weight:700;font-size:14px;padding:16px 22px;border-radius:16px;white-space:nowrap}
+  /* below the fold: treatments */
+  .tx{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:26px 44px 44px;background:#1a0a0e}
+  .t{border:1px solid rgba(255,230,200,.14);border-radius:20px;padding:20px;background:linear-gradient(160deg,rgba(255,230,200,.07),rgba(255,230,200,.02))}
+  .t b{font:500 11px 'DM Mono';color:var(--gold)}
+  .t h3{font-family:'Cormorant Garamond';font-weight:600;font-size:18px;margin:10px 0 6px;letter-spacing:-.015em}
+  .t p{font-size:12.5px;line-height:1.5;color:var(--mute)}
+  /* brand typography (projects/ mockups are exempt from the site font rule) */
+  h1{font-size:clamp(58px,9vw,112px);font-weight:500;letter-spacing:-.01em;line-height:.9}h1 em{font-style:italic;font-weight:500}.head p{font-weight:300;font-size:17px}.logo{font-weight:600;font-size:24px;letter-spacing:.28em}.bar h2{font-size:25px;font-weight:600;letter-spacing:0;line-height:1}.t h3{font-size:24px;font-weight:600;letter-spacing:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <section class="hero">
+    <nav>
+      <div class="logo">LUMEN<small>CLINICS</small></div>
+      <ul><li>Treatments</li><li>Wellness</li><li>Team</li><li>Locations</li></ul>
+      <span class="book">Book now</span>
+    </nav>
+    <div class="head">
+      <h1>Care that<br><em>books itself.</em></h1>
+      <p>Aesthetic dermatology and wellness. Consent, triage and scheduling are handled before you walk in.</p>
+    </div>
+    <div class="bar">
+      <h2>Reserve your consultation<small>Thursday 20 October</small></h2>
+      <div class="opts">
+        <div class="row"><span class="ch">Mon 17</span><span class="ch">Tue 18</span><span class="ch">Wed 19</span><span class="ch s">Thu 20</span><span class="ch">Fri 21</span></div>
+        <div class="row"><span class="ch">09:00</span><span class="ch g">11:00</span><span class="ch">13:30</span><span class="ch">15:30</span><span class="ch">17:00</span></div>
+      </div>
+      <span class="confirm">Confirm booking</span>
+    </div>
+  </section>
+  <section class="tx">
+    <div class="t"><b>45 min</b><h3>Aesthetic dermatology</h3><p>Injectables, laser therapy and skin solutions.</p></div>
+    <div class="t"><b>60 min</b><h3>Wellness therapies</h3><p>IV nutrition, longevity and health optimisation.</p></div>
+    <div class="t"><b>75 min</b><h3>Body sculpting</h3><p>Advanced non-invasive procedures and technologies.</p></div>
+  </section>
+</div>
+</body>
+</html>

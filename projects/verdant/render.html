@@ -1,0 +1,62 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Verdant — renders</title>
+<style>html,body{margin:0;background:#e9e2d4;overflow:hidden}canvas{display:block;width:100vw;height:100vh}</style></head>
+<body><canvas id="gl"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
+<script src="../_render/still.js"></script>
+<script>
+/* Verdant renders: real CC0 Poly Haven scans (food_apple_01, food_avocado_01, lemon,
+ * food_pears_asian_01, food_pomegranate_01),
+ * studio HDRI for lighting. #<name> = single product shot on a seamless cream backdrop.  Output is screenshotted to project assets. */
+(function(){
+  var A='../../assets/projects/verdant/';
+  var MODE=(location.hash||'#food_apple_01').slice(1);
+  var cv=document.getElementById('gl'),W=innerWidth,H=innerHeight;
+  var R=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true});
+  R.setPixelRatio(1);R.setSize(W,H,false);
+  R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+  R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.0;R.outputEncoding=THREE.sRGBEncoding;
+  var S=new THREE.Scene();S.background=new THREE.Color(0xe9e2d4);
+  var C=new THREE.PerspectiveCamera(26,W/H,.02,50);
+  function cast(m){m.castShadow=true;m.receiveShadow=true;return m}
+  var TL=new THREE.TextureLoader();
+  function tex(u,srgb,rep){var t=TL.load(A+u);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=8;if(srgb)t.encoding=THREE.sRGBEncoding;if(rep)t.repeat.set(rep,rep);return t}
+
+  var sun=new THREE.DirectionalLight(0xfff0d8,2.4);sun.position.set(-1.4,1.8,1.0);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);
+  var sc=sun.shadow.camera;sc.left=-1;sc.right=1;sc.top=1;sc.bottom=-1;sc.near=.1;sc.far=6;sun.shadow.radius=6;sun.shadow.bias=-.0004;S.add(sun);
+  S.add(new THREE.HemisphereLight(0xfff6e8,0xd8c8ae,.5));
+
+  var loader=new THREE.GLTFLoader(),pending=0,ready=false;
+  /* place a scan: scaled so its largest dimension = size (m); cloned once per entry in list */
+  function loadScan(name,size,list){pending++;loader.load(A+'models/'+name+'/'+name+'_1k.gltf',function(g){
+      var base=g.scene;var b=new THREE.Box3().setFromObject(base),sz=b.getSize(new THREE.Vector3()),s=size/Math.max(sz.x,sz.y,sz.z);
+      list.forEach(function(p){var o=base.clone(true);o.scale.setScalar(s*(p.s||1));o.rotation.set(p.rx||0,p.ry||0,p.rz||0);o.updateMatrixWorld(true);
+        var bb=new THREE.Box3().setFromObject(o),c=bb.getCenter(new THREE.Vector3());
+        o.position.set(p.x-c.x,(p.y||0)-bb.min.y,p.z-c.z);
+        o.traverse(function(m){if(m.isMesh){m.castShadow=true;m.receiveShadow=true;if(m.material)m.material.envMapIntensity=.8}});S.add(o)});
+      if(--pending===0&&ready)go()},undefined,function(e){console.error('fail',name,e);if(--pending===0&&ready)go()})}
+
+  var focus=new THREE.Vector3(0,.06,0),ap=.012;
+  {
+    var floor=new THREE.Mesh(new THREE.PlaneGeometry(6,6),new THREE.MeshStandardMaterial({color:0xeee7da,roughness:.95,envMapIntensity:.4}));floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;S.add(floor);
+    var cfg={
+      food_apple_01:{size:.085,list:[{x:-.05,z:0,ry:.3},{x:.05,z:.01,ry:1.4},{x:0,z:-.065,ry:2.4},{x:.004,z:.016,y:.067,ry:.8}]},
+      food_avocado_01:{size:.125,list:[{x:-.065,z:0,ry:.4},{x:.065,z:.02,ry:2.3},{x:0,z:-.1,ry:1.2}]},
+      lemon:{size:.075,list:[{x:-.05,z:0,ry:.6},{x:.05,z:.01,ry:1.8},{x:-.005,z:-.07,ry:2.6},{x:.0,z:-.005,y:.034,ry:1}]},
+      food_pears_asian_01:{size:.2,list:[{x:0,z:0,ry:.6}]},
+      food_pomegranate_01:{size:.095,list:[{x:-.05,z:0,ry:.5},{x:.055,z:.015,ry:2.1}]}
+    }[MODE];
+    loadScan(MODE,cfg.size,cfg.list);
+    focus=new THREE.Vector3(0,.05,0);ap=.006;
+    C.position.set(-.22,.32,.52);C.lookAt(0,.04,0);
+  }
+
+  function finalize(){var seen={};S.traverse(function(o){var m=o.material;if(m&&!seen[m.uuid]){seen[m.uuid]=1;if(m.color&&!m.map&&!m.isMeshBasicMaterial&&!m.__lin){m.color.convertSRGBToLinear();m.__lin=1}}});S.background.convertSRGBToLinear()}
+  function go(){finalize();PhotoStill.render({renderer:R,scene:S,camera:C,focus:focus,aperture:ap,light:sun,lightJitter:.35,samples:60,grain:0.012,vignette:0.05,bloom:{amount:.12,radius:22}})}
+  new THREE.RGBELoader().setDataType(THREE.UnsignedByteType).load(A+'studio.hdr',function(t){
+    var pm=new THREE.PMREMGenerator(R);S.environment=pm.fromEquirectangular(t).texture;t.dispose();pm.dispose();
+    ready=true;if(pending===0)go()},undefined,function(e){ready=true;if(pending===0)go()});
+})();
+</script></body></html>

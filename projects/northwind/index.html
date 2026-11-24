@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Northwind Logistics — Fleet operations, one screen.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#eef4ff;--mute:#a9b9d3;--cy:#38bdf8;--am:#ffb347;--line:rgba(190,215,255,.22)}
+  *{box-sizing:border-box;margin:0}
+  html,body{background:#060a14;color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+  .stage{position:relative;width:100vw;height:100vh;min-height:560px}
+  #gl{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .shade{position:absolute;inset:0;z-index:2;pointer-events:none;background:
+    linear-gradient(180deg,rgba(4,8,18,.88) 0,rgba(4,8,18,.5) 22%,rgba(4,8,18,0) 44%,rgba(4,8,18,0) 70%,rgba(4,8,18,.7) 100%),
+    radial-gradient(120% 90% at 50% 55%,rgba(4,8,18,0) 55%,rgba(4,8,18,.6) 100%)}
+  nav{position:absolute;z-index:6;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:24px 44px}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk';font-weight:800;letter-spacing:.02em;font-size:18px}
+  .logo svg{width:26px;height:26px}
+  .logo small{display:block;font:500 9px 'DM Mono';color:var(--mute);margin-top:1px}
+  nav ul{display:flex;gap:30px;list-style:none;padding:0;font-size:14px;color:#dbe6f7}
+  .pill{border:1px solid rgba(56,189,248,.55);color:var(--cy);padding:10px 18px;border-radius:99px;font-size:13px;font-weight:600;background:rgba(6,12,24,.5);backdrop-filter:blur(8px)}
+  .head{position:absolute;z-index:5;top:clamp(84px,12vh,120px);left:44px;max-width:620px}
+  h1{font-family:'Space Grotesk';font-weight:700;font-size:clamp(40px,min(7vw,9vh),88px);line-height:.94;letter-spacing:-.04em}
+  h1 em{font-style:normal;color:var(--cy)}
+  .head p{margin-top:16px;max-width:400px;font-size:16px;line-height:1.5;color:#cfdcf0}
+  .cta{display:flex;gap:12px;margin-top:22px}
+  .btn{background:var(--cy);color:#04111c;font-weight:700;font-size:14px;padding:14px 22px;border-radius:12px;box-shadow:0 8px 34px rgba(56,189,248,.4)}
+  .btn.g{background:rgba(6,12,24,.5);color:var(--ink);border:1px solid var(--line);box-shadow:none;backdrop-filter:blur(8px)}
+  .tag{position:absolute;z-index:4;transform:translate(-50%,-100%);pointer-events:none;white-space:nowrap}
+  .tag .c{background:rgba(8,16,32,.7);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:12px;padding:8px 12px;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+  .tag b{font-family:'Space Grotesk';font-size:13.5px;display:block}
+  .tag span{font:400 10.5px 'DM Mono';color:var(--mute)}
+  .tag .ln{display:block;width:1px;height:20px;background:linear-gradient(var(--cy),transparent);margin:0 auto}
+  .tag.am .ln{background:linear-gradient(var(--am),transparent)}
+  .tag .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#4ade80;margin-right:6px;box-shadow:0 0 8px #4ade80}
+  .glass{position:absolute;z-index:6;left:44px;right:44px;bottom:34px;background:rgba(8,18,36,.55);backdrop-filter:blur(22px) saturate(1.3);border:1px solid var(--line);border-radius:26px;padding:18px 26px;display:grid;grid-template-columns:auto 1fr 1fr 1fr auto;gap:26px;align-items:center;box-shadow:0 30px 70px rgba(0,0,0,.5)}
+  .g svg{width:80px;display:block}
+  .m b{font-family:'Space Grotesk';font-size:28px;letter-spacing:-.02em;display:block;line-height:1}
+  .m b u{text-decoration:none;font-size:14px;color:var(--mute);font-weight:500;margin-left:3px}
+  .m span{font-size:12px;color:var(--mute);display:block;margin-top:5px}
+  .who{font-size:12.5px;line-height:1.5;color:var(--mute);border-left:1px solid var(--line);padding-left:20px}
+  .who b{color:var(--ink);font-family:'Space Grotesk';font-size:16px;display:block}
+  .who i{font-style:normal;color:#4ade80;font-family:'DM Mono';font-size:11px}
+  .credit{position:absolute;z-index:3;right:12px;bottom:8px;font:400 9px 'DM Mono';color:rgba(255,255,255,.5)}
+  @media (max-width:760px){.glass{grid-template-columns:auto 1fr 1fr;gap:14px;padding:14px 18px}.glass .m:nth-of-type(3),.who{display:none}nav ul{display:none}.head{left:24px;right:24px}}
+  @media (max-height:700px){.head p{display:none}.glass{padding:12px 20px}.g svg{width:56px}.m b{font-size:22px}}
+  /* brand typography (projects/ mockups are exempt from the site font rule) */
+  h1{letter-spacing:-.035em;font-weight:700}.logo{letter-spacing:.06em}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <canvas id="gl"></canvas><div class="shade"></div>
+  <nav>
+    <div class="logo"><svg viewBox="0 0 28 28"><path d="M3 5l9 9-9 9V5zm11 0l9 9-9 9V5z" fill="#38bdf8"/></svg><div>NORTHWIND<small>LOGISTICS</small></div></div>
+    <ul><li>Platform</li><li>Fleet</li><li>Cold chain</li><li>Pricing</li></ul>
+    <span class="pill">Book a live demo</span>
+  </nav>
+  <div class="head">
+    <h1>Every truck.<br><em>One screen.</em></h1>
+    <p>Five spreadsheets and a radio became one control room that routes, monitors and reroutes your fleet.</p>
+    <div class="cta"><span class="btn">See the control room</span><span class="btn g">Watch 90s tour</span></div>
+  </div>
+  <div class="tag" id="t1"><div class="c"><b>N-14 · Route 572</b><span><i class="dot"></i>54 mph · ETA 1h 12m</span></div><i class="ln"></i></div>
+  <div class="tag am" id="t2"><div class="c"><b>N-41 · rerouted</b><span>Congestion avoided, +0 min</span></div><i class="ln"></i></div>
+  <div class="tag" id="t3"><div class="c"><b>N-22 · cold chain</b><span>−18.2 °C · stable</span></div><i class="ln"></i></div>
+
+  <div class="glass">
+    <div class="g"><svg viewBox="0 0 120 80"><defs><linearGradient id="gg" x1="0" x2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#38bdf8"/></linearGradient></defs>
+      <path d="M14 70A46 46 0 0 1 106 70" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="10" stroke-linecap="round"/>
+      <path d="M14 70A46 46 0 0 1 106 70" fill="none" stroke="url(#gg)" stroke-width="10" stroke-linecap="round" stroke-dasharray="144" stroke-dashoffset="26"/>
+      <text x="60" y="64" text-anchor="middle" fill="#eef4ff" font-family="Space Grotesk" font-weight="700" font-size="26">82%</text></svg></div>
+    <div class="m"><b>54<u>mph</u></b><span>N-14 · Route 572</span></div>
+    <div class="m"><b>1h 12<u>m</u></b><span>ETA, 74 miles to go</span></div>
+    <div class="m"><b>98<u>%</u></b><span>On-time this month</span></div>
+    <div class="who"><b>David K.</b><i>● On duty</i><br>14 trucks live</div>
+  </div>
+  <div class="credit">Map data © OpenStreetMap contributors · routing OSRM</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  var cv=document.getElementById('gl'),stage=document.getElementById('stage');
+  var R=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true});
+  R.setPixelRatio(Math.min(devicePixelRatio,2));R.outputEncoding=THREE.sRGBEncoding;
+  R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+  var S=new THREE.Scene();S.background=new THREE.Color(0x060a14);
+  var C=new THREE.PerspectiveCamera(34,1,1,400);
+  var T0=9639,TY0=12317,N=6,SZ=10; // tile origin, tiles per side, world units per tile
+  function W(tx,ty){return new THREE.Vector3(tx*SZ-N*SZ/2,0,ty*SZ-N*SZ/2)}
+
+  // ---- map: stitch tiles then grade with a shader ----
+  var big=document.createElement('canvas');big.width=big.height=N*256;var g2=big.getContext('2d');
+  var mapTex=new THREE.CanvasTexture(big);mapTex.anisotropy=8;mapTex.minFilter=THREE.LinearMipmapLinearFilter;
+  var left=N*N;
+  var mapMat=new THREE.ShaderMaterial({uniforms:{map:{value:mapTex},t:{value:0}},
+    vertexShader:'varying vec2 vUv;varying vec3 vW;void main(){vUv=uv;vec4 w=modelMatrix*vec4(position,1.);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}',
+    fragmentShader:[
+      'uniform sampler2D map;varying vec2 vUv;varying vec3 vW;',
+      'void main(){',
+      ' vec3 c=texture2D(map,vUv).rgb;float L=dot(c,vec3(.299,.587,.114));',
+      ' vec3 base=vec3(.030,.050,.095);',                       // ground
+      ' vec3 bld=vec3(.050,.075,.135);',                        // buildings / blocks
+      ' vec3 road=vec3(.215,.290,.420);',                       // minor roads
+      ' vec3 major=vec3(.95,.62,.28);',                         // arterials
+      ' vec3 water=vec3(.012,.025,.055);vec3 park=vec3(.030,.080,.085);',
+      ' float isRoad=smoothstep(.93,.995,L);',
+      ' float isMajor=smoothstep(.10,.30,c.r-c.b)*smoothstep(.55,.85,L);',
+      ' float isWater=smoothstep(.02,.08,c.b-c.r)*smoothstep(.55,.8,c.b);',
+      ' float isPark=smoothstep(.02,.07,c.g-c.r)*smoothstep(.02,.07,c.g-c.b);',
+      ' float blk=smoothstep(.93,.80,L)*smoothstep(.50,.72,L);',
+      ' vec3 col=mix(base,bld,blk);',
+      ' col=mix(col,park,isPark*.8);col=mix(col,water,isWater);',
+      ' col=mix(col,road,isRoad*(1.-isMajor));col=mix(col,major*.55,isMajor);',
+      ' float d=length(vW.xz)/36.;col*=1.-smoothstep(.55,1.,d)*.85;',  // vignette into the dark
+      ' gl_FragColor=vec4(col,1.);}'].join('\n')});
+  var plane=new THREE.Mesh(new THREE.PlaneGeometry(N*SZ,N*SZ),mapMat);plane.rotation.x=-Math.PI/2;S.add(plane);
+  // ground plane that receives shadows (transparent)
+  var sh=new THREE.Mesh(new THREE.PlaneGeometry(N*SZ,N*SZ),new THREE.ShadowMaterial({opacity:.55}));sh.rotation.x=-Math.PI/2;sh.position.y=.02;sh.receiveShadow=true;S.add(sh);
+  var tilesLoaded=false;
+  for(var i=0;i<N;i++)for(var j=0;j<N;j++)(function(i,j){var im=new Image();im.onload=function(){g2.drawImage(im,i*256,j*256);if(--left===0){mapTex.needsUpdate=true;tilesLoaded=true}};
+    im.src='../../assets/projects/northwind/map/z15_'+(T0+i)+'_'+(TY0+j)+'.png'})(i,j);
+
+  S.add(new THREE.HemisphereLight(0x9ab8ff,0x101830,.9));
+  var key=new THREE.DirectionalLight(0xffe2c0,1.3);key.position.set(-14,26,10);key.castShadow=true;key.shadow.mapSize.set(2048,2048);
+  var sc=key.shadow.camera;sc.left=-26;sc.right=26;sc.top=26;sc.bottom=-26;key.shadow.radius=3;key.shadow.bias=-.0005;S.add(key);
+
+  // ---- routes (real OSRM geometry, tile coordinates) ----
+  var routes=[],loadedRoutes=false;
+  function mkRoute(pts,col,w){
+    var v=pts.map(function(p){var q=W(p[0],p[1]);q.y=.06;return q});
+    var curve=new THREE.CatmullRomCurve3(v,false,'centripetal');
+    var n=Math.min(1400,pts.length*5),pos=[],a=[],idx=[],len=curve.getLength();
+    for(var i=0;i<=n;i++){var t=i/n,p=curve.getPoint(t),tg=curve.getTangent(t),sd=new THREE.Vector3(-tg.z,0,tg.x).normalize();
+      var A=p.clone().addScaledVector(sd,-w),B=p.clone().addScaledVector(sd,w);pos.push(A.x,A.y,A.z,B.x,B.y,B.z);a.push(t,t);if(i<n){var k=i*2;idx.push(k,k+1,k+2,k+1,k+3,k+2)}}
+    var gm=new THREE.BufferGeometry();gm.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));gm.setAttribute('a',new THREE.Float32BufferAttribute(a,1));gm.setIndex(idx);
+    var mat=new THREE.ShaderMaterial({uniforms:{c:{value:new THREE.Color(col)},ph:{value:0}},transparent:true,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,
+      vertexShader:'attribute float a;varying float va;void main(){va=a;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+      fragmentShader:'uniform vec3 c;uniform float ph;varying float va;void main(){float f=smoothstep(0.,.05,va)*smoothstep(1.,.93,va);float d=mod(va-ph+1.,1.);float comet=pow(max(0.,1.-d*7.),2.);gl_FragColor=vec4(c*(.55+1.6*comet)*f,1.);}'});
+    var m=new THREE.Mesh(gm,mat);S.add(m);
+    // soft halo
+    var gh=gm.clone();var hm=new THREE.ShaderMaterial({uniforms:{c:{value:new THREE.Color(col)}},transparent:true,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,
+      vertexShader:'void main(){gl_Position=projectionMatrix*modelViewMatrix*vec4(position+vec3(0.,-.02,0.),1.);}',fragmentShader:'uniform vec3 c;void main(){gl_FragColor=vec4(c*.12,1.);}'});
+    // widen halo
+    var hp=[];for(var i=0;i<=n;i++){var t=i/n,p=curve.getPoint(t),tg=curve.getTangent(t),sd=new THREE.Vector3(-tg.z,0,tg.x).normalize();var A=p.clone().addScaledVector(sd,-w*4),B=p.clone().addScaledVector(sd,w*4);hp.push(A.x,A.y-.01,A.z,B.x,B.y-.01,B.z)}
+    gh.setAttribute('position',new THREE.Float32BufferAttribute(hp,3));S.add(new THREE.Mesh(gh,hm));
+    return {curve:curve,len:len,mat:mat}}
+
+  // ---- truck: top-down hero. logo on trailer roof ----
+  function logoRoof(){var c=document.createElement('canvas');c.width=512;c.height=160;var g=c.getContext('2d');
+    g.fillStyle='#eaf1fb';g.fillRect(0,0,512,160);g.fillStyle='#38bdf8';g.fillRect(0,0,512,10);g.fillRect(0,150,512,10);
+    g.fillStyle='#1d4ed8';g.beginPath();g.moveTo(26,40);g.lineTo(66,80);g.lineTo(26,120);g.closePath();g.fill();g.beginPath();g.moveTo(70,40);g.lineTo(110,80);g.lineTo(70,120);g.closePath();g.fill();
+    g.fillStyle='#0f1f3f';g.font='700 50px "Space Grotesk",sans-serif';g.textBaseline='middle';g.fillText('NORTHWIND',130,70);
+    g.fillStyle='#51607a';g.font='500 17px "DM Mono",monospace';g.fillText('LOGISTICS',134,118);
+    var t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=8;return t}
+  var roofTex=logoRoof();
+  function truck(accent){
+    var g=new THREE.Group();
+    var body=new THREE.MeshStandardMaterial({color:0xf2f6fc,roughness:.4,metalness:.15});
+    var dark=new THREE.MeshStandardMaterial({color:0x0b1220,roughness:.6});
+    var blue=new THREE.MeshStandardMaterial({color:0x1d4ed8,roughness:.3,metalness:.4});
+    function box(w,h,d,m,x,y,z){var b=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);b.position.set(x,y,z);b.castShadow=true;b.receiveShadow=true;g.add(b);return b}
+    box(.78,.34,.32,body,-.18,.34,0);                                           // trailer
+    var roof=new THREE.Mesh(new THREE.PlaneGeometry(.76,.30),new THREE.MeshStandardMaterial({map:roofTex,roughness:.5}));roof.rotation.x=-Math.PI/2;roof.rotation.z=0;roof.position.set(-.18,.515,0);g.add(roof);
+    box(.28,.30,.30,blue,.44,.30,0);                                           // cab
+    box(.04,.14,.24,dark,.585,.38,0);                                          // windscreen
+    box(1.1,.08,.24,dark,.05,.14,0);                                           // chassis
+    [[-.42,-.14],[-.42,.14],[-.24,-.14],[-.24,.14],[.40,-.14],[.40,.14]].forEach(function(p){var w=new THREE.Mesh(new THREE.CylinderGeometry(.075,.075,.06,14),dark);w.rotation.x=Math.PI/2;w.position.set(p[0],.075,p[1]*1.15);w.castShadow=true;g.add(w)});
+    // accent beacon on cab roof
+    var bc=new THREE.Mesh(new THREE.SphereGeometry(.035,10,8),new THREE.MeshBasicMaterial({color:accent}));bc.position.set(.44,.5,0);g.add(bc);
+    // headlight pool on ground
+    var cn=new THREE.Mesh(new THREE.ConeGeometry(.28,1.0,18,1,true),new THREE.MeshBasicMaterial({color:0xcfe8ff,transparent:true,opacity:.16,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide}));
+    cn.rotation.z=-Math.PI/2;cn.position.set(1.1,.18,0);g.add(cn);
+    var gl=new THREE.Mesh(new THREE.CircleGeometry(.45,24),new THREE.MeshBasicMaterial({color:accent,transparent:true,opacity:.22,depthWrite:false,blending:THREE.AdditiveBlending}));gl.rotation.x=-Math.PI/2;gl.position.y=.05;g.add(gl);
+    g.scale.setScalar(2.3);return g}
+
+  var fleet=[];
+  function addTruck(ri,u,sp,col){var t=truck(col);S.add(t);fleet.push({m:t,ri:ri,u:u,sp:sp})}
+  function setup(data){
+    var A=mkRoute(data.A,0x38bdf8,.06),B=mkRoute(data.B,0xffb347,.06),Cc=mkRoute(data.C,0x38bdf8,.06);
+    routes=[A,B,Cc];
+    addTruck(0,.46,.012,0x38bdf8);addTruck(0,.78,.014,0x38bdf8);
+    addTruck(1,.34,.011,0xffb347);addTruck(1,.70,.013,0xffb347);
+    addTruck(2,.52,.012,0x38bdf8);addTruck(2,.16,.010,0x38bdf8);
+    // hubs (origin/destination rings)
+    routes.forEach(function(r,i){[0,1].forEach(function(e){var p=r.curve.getPoint(e);var col=i===1?0xffb347:0x38bdf8;
+      var ring=new THREE.Mesh(new THREE.RingGeometry(.5,.62,40),new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:.9,side:THREE.DoubleSide,depthWrite:false}));ring.rotation.x=-Math.PI/2;ring.position.set(p.x,.08,p.z);S.add(ring);
+      var dot=new THREE.Mesh(new THREE.CircleGeometry(.22,20),new THREE.MeshBasicMaterial({color:col}));dot.rotation.x=-Math.PI/2;dot.position.set(p.x,.09,p.z);S.add(dot)})});
+    loadedRoutes=true}
+  var xhr=new XMLHttpRequest();xhr.open('GET','../../assets/projects/northwind/map/routes.json');xhr.onload=function(){setup(JSON.parse(xhr.responseText))};xhr.send();
+
+  var anchors=[{el:document.getElementById('t1'),f:0,dy:2.6},{el:document.getElementById('t2'),f:2,dy:2.6},{el:document.getElementById('t3'),f:5,dy:2.6}];
+  var v=new THREE.Vector3();
+  function place(){if(!loadedRoutes)return;anchors.forEach(function(a){var f=fleet[a.f];v.copy(f.m.position);v.y+=a.dy;v.project(C);a.el.style.left=((v.x*.5+.5)*stage.clientWidth)+'px';a.el.style.top=((-v.y*.5+.5)*stage.clientHeight)+'px'})}
+
+  function rs(){var w=stage.clientWidth,h=stage.clientHeight;R.setSize(w,h,false);C.aspect=w/h;C.fov=w/h<1?46:34;C.updateProjectionMatrix()}
+  var mx=0,my=0;addEventListener('pointermove',function(e){mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
+  var FIXED=location.hash==='#still';
+  var T=0;
+  function frame(tm){
+    if(FIXED)tm=0;
+    mapMat.uniforms.t.value=tm*.001;
+    if(loadedRoutes){
+      routes.forEach(function(r,i){r.mat.uniforms.ph.value=(tm*.00008+i*.3)%1});
+      fleet.forEach(function(f){var r=routes[f.ri];var u=FIXED?f.u:((f.u+tm*.00001*f.sp*60)%1);
+        var p=r.curve.getPointAt(Math.min(.999,Math.max(.001,u))),q=r.curve.getPointAt(Math.min(.9995,Math.max(.002,u+.003)));
+        f.m.position.set(p.x,0.03,p.z);f.m.rotation.y=Math.atan2(-(q.z-p.z),q.x-p.x)})}
+    // camera: tilted top-down, gentle parallax
+    var px=mx*3,pz=my*2;
+    C.position.set(-1+px,60,30+pz);C.lookAt(0,0,-3);
+    R.render(S,C);place();requestAnimationFrame(frame)}
+  addEventListener('resize',rs);rs();requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

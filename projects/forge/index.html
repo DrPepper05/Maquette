@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forge Industrial — Invoices that pay themselves.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#121214;--panel:#1b1b1f;--panel2:#222227;--ink:#f5f1ec;--mute:#a59d95;--line:rgba(255,255,255,.1);--or:#ff6b35;--ok:#6fdc8c;--warn:#ffb25a}
+  *{box-sizing:border-box;margin:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:'Archivo',sans-serif;-webkit-font-smoothing:antialiased}
+  .page{max-width:1120px;margin:0 auto;padding:0 44px 56px}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:28px 0}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Archivo';font-weight:800;font-size:19px;letter-spacing:.08em}
+  .logo i{width:22px;height:22px;background:var(--or);clip-path:polygon(0 0,100% 0,100% 30%,40% 30%,40% 46%,80% 46%,80% 70%,40% 70%,40% 100%,0 100%)}
+  nav ul{display:flex;gap:30px;list-style:none;padding:0;font-size:14px;color:#cfc7bf}
+  .login{font-size:14px;font-weight:600;color:var(--ink)}
+  .btn{display:inline-block;background:var(--or);color:#1a0b04;font-weight:700;font-size:15px;padding:15px 26px;border-radius:12px}
+  .btn.g{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  /* hero */
+  .hero{padding:56px 0 40px}
+  h1{font-family:'Archivo';font-weight:800;font-size:clamp(40px,6.2vw,74px);line-height:1.02;letter-spacing:-.05em;max-width:760px}
+  h1 em{font-style:normal;color:var(--or)}
+  .sub{margin-top:22px;max-width:520px;font-size:18px;line-height:1.55;color:#cfc7bf}
+  .cta{display:flex;gap:12px;margin-top:30px;align-items:center;flex-wrap:wrap}
+  .note{margin-top:14px;font-size:13px;color:var(--mute)}
+  /* product preview */
+  .app{margin-top:44px;background:var(--panel);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 40px 80px -30px rgba(0,0,0,.7)}
+  .bar{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--line)}
+  .bar b{font-family:'Archivo';font-size:18px}
+  .tabs{display:flex;gap:6px;font-size:12.5px}
+  .tabs span{padding:7px 12px;border-radius:99px;color:var(--mute)}
+  .tabs span.on{background:var(--panel2);color:var(--ink);font-weight:600}
+  .row{display:grid;grid-template-columns:120px 1.3fr 120px 170px;gap:14px;align-items:center;padding:15px 22px;border-bottom:1px solid var(--line);font-size:14px}
+  .row:last-child{border:none}
+  .row.h{font-size:12px;color:var(--mute);padding-top:12px;padding-bottom:12px;background:rgba(255,255,255,.02)}
+  .id{font:500 12.5px 'DM Mono';color:#d8cfc6}
+  .sup small{display:block;color:var(--mute);font-size:12px;margin-top:2px}
+  .amt{font-weight:600;text-align:right}
+  .st{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;padding:6px 11px;border-radius:99px;justify-self:start}
+  .st::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+  .st.ok{background:rgba(111,220,140,.12);color:var(--ok)}
+  .st.wa{background:rgba(255,178,90,.14);color:var(--warn)}
+  /* steps */
+  h2{font-family:'Archivo';font-weight:800;font-size:32px;letter-spacing:-.04em;margin:64px 0 8px}
+  .lead{color:var(--mute);font-size:16px;max-width:520px;line-height:1.5}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
+  .step{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:24px}
+  .ic{width:46px;height:46px;border-radius:13px;background:rgba(255,107,53,.12);display:grid;place-items:center;margin-bottom:18px}
+  .ic svg{width:24px;height:24px;stroke:var(--or);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .step h3{font-family:'Archivo';font-size:21px;letter-spacing:-.01em;margin-bottom:6px}
+  .step p{font-size:14px;line-height:1.55;color:var(--mute)}
+  /* numbers */
+  .nums{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:40px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .nums div{padding:26px 24px;border-right:1px solid var(--line)}
+  .nums div:first-child{padding-left:0}.nums div:last-child{border:none}
+  .nums strong{font-family:'Archivo';font-size:46px;letter-spacing:-.03em;display:block;line-height:1}
+  .nums strong u{text-decoration:none;color:var(--or)}
+  .nums span{font-size:14px;color:var(--mute);display:block;margin-top:8px}
+  .end{margin-top:44px;background:var(--or);color:#1a0b04;border-radius:24px;padding:34px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+  .end h3{font-family:'Archivo';font-size:30px;letter-spacing:-.03em;max-width:420px;line-height:1.05}
+  .end .btn{background:#1a0b04;color:#fff}
+  @media (max-width:760px){nav ul{display:none}.row{grid-template-columns:90px 1fr 90px}.row>:nth-child(4){display:none}.steps{grid-template-columns:1fr}.nums{grid-template-columns:1fr}.nums div{border-right:none;border-bottom:1px solid var(--line);padding-left:0}}
+  /* brand typography (projects/ mockups are exempt from the site font rule) */
+  h1,h2,.end h3{font-stretch:72%;font-weight:800;text-transform:uppercase;letter-spacing:-.01em}h1{font-size:clamp(52px,8.6vw,104px);line-height:.9}h2{font-size:40px}.step h3,.bar b{font-stretch:85%;font-weight:700;letter-spacing:0}.logo{font-stretch:80%;font-weight:900;letter-spacing:.12em}.nums strong{font-stretch:75%;font-weight:800}
+</style>
+</head>
+<body>
+<div class="page">
+  <nav>
+    <div class="logo"><i></i>FORGE</div>
+    <ul><li>Product</li><li>Integrations</li><li>Security</li><li>Pricing</li></ul>
+    <span class="login">Log in</span>
+  </nav>
+
+  <section class="hero">
+    <h1>Invoices that<br><em>pay themselves.</em></h1>
+    <p class="sub">Forge reads every supplier invoice, checks it against your SAP purchase orders, and pays it on time. Your team only sees the exceptions.</p>
+    <div class="cta"><span class="btn">Book a 20-minute demo</span><span class="btn g">See how it works</span></div>
+    <p class="note">Works with SAP, Oracle and most banks. Set up in about two weeks.</p>
+
+    <div class="app">
+      <div class="bar"><b>Invoices</b><div class="tabs"><span class="on">All</span><span>Needs review</span><span>Paid</span></div></div>
+      <div class="row h"><span>Invoice</span><span>Supplier</span><span style="text-align:right">Amount</span><span>Status</span></div>
+      <div class="row"><span class="id">INV-4471</span><span class="sup">Steelworks GmbH<small>12 lines matched to PO-88213</small></span><span class="amt">€18,240</span><span class="st ok">Paid</span></div>
+      <div class="row"><span class="id">INV-4472</span><span class="sup">Nordic Fasteners<small>8 lines matched to PO-88240</small></span><span class="amt">€4,915</span><span class="st ok">Paid</span></div>
+      <div class="row"><span class="id">INV-4473</span><span class="sup">Rhein Castings<small>Quantity differs on line 3</small></span><span class="amt">€27,380</span><span class="st wa">Needs review</span></div>
+      <div class="row"><span class="id">INV-4474</span><span class="sup">Alpine Tooling<small>5 lines matched to PO-88251</small></span><span class="amt">€2,760</span><span class="st ok">Paid</span></div>
+    </div>
+  </section>
+
+  <h2>How it works</h2>
+  <p class="lead">Three steps, no manual entry.</p>
+  <div class="steps">
+    <div class="step"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 7l8-4 8 4v10l-8 4-8-4z"/><path d="M4 7l8 4 8-4M12 11v10"/></svg></div><h3>Send invoices in</h3><p>Email, EDI or upload. Any supplier format, any language.</p></div>
+    <div class="step"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4M8.5 11.2l2 2 3.5-4"/></svg></div><h3>We check every line</h3><p>Prices, quantities and receipts are matched to your SAP purchase orders.</p></div>
+    <div class="step"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 9v.01M18 15v.01"/></svg></div><h3>Payment goes out</h3><p>Matched invoices are paid on the due date. Problems come to you.</p></div>
+  </div>
+
+  <div class="nums">
+    <div><strong>14<u>h</u> → 0</strong><span>Weekly paperwork per plant</span></div>
+    <div><strong>99.2<u>%</u></strong><span>Invoices matched automatically</span></div>
+    <div><strong>1.4<u>s</u></strong><span>From arrival to approval</span></div>
+  </div>
+
+  <div class="end">
+    <h3>See it run on your own invoices.</h3>
+    <span class="btn">Book a demo</span>
+  </div>
+</div>
+</body>
+</html>

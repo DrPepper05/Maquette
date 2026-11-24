@@ -1,0 +1,171 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Lumen — still render</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>html,body{margin:0;background:#1a0a0e;overflow:hidden}canvas{display:block;width:100vw;height:100vh}</style></head>
+<body><canvas id="gl"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/lights/RectAreaLightUniformsLib.js"></script>
+<script src="../_render/still.js"></script>
+<script>
+/* Lumen hero still (v3). Procedural, properly modelled skincare products (amber dropper bottle,
+ * printed pump bottle, frosted jar) + real CC0 Poly Haven scans (vases, aloe, limestone floor,
+ * plaster) lit by a real studio HDRI and softbox strip lights. Rendered offline with jittered-aperture
+ * accumulation (bokeh DOF) and bloom into projects/lumen/bg.jpg */
+(function(){
+  var A='../../assets/projects/lumen/';
+  var cv=document.getElementById('gl'),W=innerWidth,H=innerHeight;
+  var R=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true});
+  R.setPixelRatio(1);R.setSize(W,H,false);
+  R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+  R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=.78;R.outputEncoding=THREE.sRGBEncoding;
+  THREE.RectAreaLightUniformsLib.init();
+  var S=new THREE.Scene();S.background=new THREE.Color(0x0e0307);S.fog=new THREE.Fog(0x0e0307,22,46);
+  var C=new THREE.PerspectiveCamera(22,W/H,.1,100);C.setViewOffset(W,H,0,-H*.15,W,H);
+
+  /* ---------- lights ---------- */
+  var sun=new THREE.DirectionalLight(0xffd9a8,1.5);sun.position.set(-7,8,6);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);
+  var sc=sun.shadow.camera;sc.left=-9;sc.right=9;sc.top=9;sc.bottom=-9;sun.shadow.radius=4;sun.shadow.bias=-.0004;S.add(sun);
+  // softbox strips: long vertical highlights on glass/gold, the signature of product photography
+  var sbL=new THREE.RectAreaLight(0xffe2c0,9,1.6,6);sbL.position.set(-6.5,3.6,3.5);sbL.lookAt(0,2,-.4);S.add(sbL);
+  var sbR=new THREE.RectAreaLight(0xffc98a,7,.9,6);sbR.position.set(6.5,3.4,2.5);sbR.lookAt(0,2,-.4);S.add(sbR);
+  var sbT=new THREE.RectAreaLight(0xfff0dc,5,5,1.2);sbT.position.set(0,7.5,2);sbT.lookAt(0,1.5,-.4);S.add(sbT);
+  S.add(new THREE.HemisphereLight(0xffd9b0,0x2a0c12,.2));
+  var wash=new THREE.SpotLight(0xffb070,2.6,30,.5,1,1.2);wash.position.set(-6,7,7);wash.target.position.set(.4,3.2,-4);S.add(wash);S.add(wash.target);
+
+  function cast(m){m.castShadow=true;m.receiveShadow=true;return m}
+  var TL=new THREE.TextureLoader();
+  function tex(u,srgb,rep){var t=TL.load(A+u);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=8;if(srgb)t.encoding=THREE.sRGBEncoding;if(rep)t.repeat.set(rep,rep);return t}
+
+  /* ---------- real-texture surfaces ---------- */
+  var floorM=new THREE.MeshStandardMaterial({map:tex('marble_diff.jpg',true,3),roughnessMap:tex('marble_rough.jpg',false,3),normalMap:tex('marble_nor.jpg',false,3),roughness:.75,metalness:0,envMapIntensity:.7,color:new THREE.Color(.75,.69,.65)});
+  var floor=new THREE.Mesh(new THREE.PlaneGeometry(60,60),floorM);floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;S.add(floor);
+  var plasterP=new THREE.MeshStandardMaterial({map:tex('plaster_diff.jpg',true),roughnessMap:tex('plaster_rough.jpg'),normalMap:tex('plaster_nor.jpg'),roughness:1,envMapIntensity:.6});
+  // wall: the same real plaster, tinted deep plum
+  var wallM=new THREE.MeshStandardMaterial({map:tex('plaster_diff.jpg',true,5),roughnessMap:tex('plaster_rough.jpg',false,5),normalMap:tex('plaster_nor.jpg',false,5),roughness:1,color:new THREE.Color(.20,.055,.095),envMapIntensity:.3});
+  var wall=new THREE.Mesh(new THREE.BoxGeometry(60,16,.4),wallM);wall.position.set(0,8,-4);wall.receiveShadow=true;S.add(wall);
+  var gold=new THREE.MeshStandardMaterial({color:0xe3b05a,roughness:.2,metalness:1,envMapIntensity:1.5});
+  var goldSatin=new THREE.MeshStandardMaterial({color:0xd7a24d,roughness:.38,metalness:1,envMapIntensity:1.3});
+  var niche=new THREE.Group();niche.position.set(0,0,-3.75);
+  var nm=new THREE.MeshStandardMaterial({map:tex('plaster_diff.jpg',true,3),normalMap:tex('plaster_nor.jpg',false,3),roughness:1,color:new THREE.Color(.1,.03,.05),envMapIntensity:.2});
+  var sh=new THREE.Shape();sh.moveTo(-3,0);sh.lineTo(-3,3.6);sh.absarc(0,3.6,3,Math.PI,0,true);sh.lineTo(3,0);sh.lineTo(-3,0);
+  var arch=new THREE.Mesh(new THREE.ShapeGeometry(sh,64),nm);arch.position.z=.01;niche.add(arch);
+  var ring=new THREE.Mesh(new THREE.TorusGeometry(3.08,.05,16,128,Math.PI),gold);ring.position.set(0,3.6,.08);niche.add(ring);S.add(niche);
+
+  function ped(x,z,h,r){var m=cast(new THREE.Mesh(new THREE.CylinderGeometry(r,r*1.04,h,96),plasterP));m.position.set(x,h/2,z);S.add(m);
+    var cp=cast(new THREE.Mesh(new THREE.CylinderGeometry(r*1.06,r*1.06,.07,96),plasterP));cp.position.set(x,h+.035,z);S.add(cp);
+    var gl=new THREE.Mesh(new THREE.TorusGeometry(r*1.065,.012,8,96),gold);gl.rotation.x=Math.PI/2;gl.position.set(x,h+.07,z);S.add(gl);return h+.07}
+  var yA=ped(-2.1,.5,.85,.8), yB=ped(.15,-.7,1.45,.88), yC=ped(2.2,-.05,.55,.78);
+
+  /* ---------- geometry helpers ---------- */
+  function lathe(pts,mat,seg){var g=new THREE.LatheGeometry(pts.map(function(p){return new THREE.Vector2(p[0],p[1])}),seg||96);return cast(new THREE.Mesh(g,mat))}
+  function arc(cx,cy,r,a0,a1,n){var o=[];for(var i=0;i<=n;i++){var a=a0+(a1-a0)*i/n;o.push([cx+Math.cos(a)*r,cy+Math.sin(a)*r])}return o}
+  function knurl(mesh,y0,y1,count,amp){ // vertical ribs on the side band of a lathe
+    var p=mesh.geometry.attributes.position;for(var i=0;i<p.count;i++){var y=p.getY(i);if(y>y0&&y<y1){var x=p.getX(i),z=p.getZ(i),a=Math.atan2(z,x),k=1+amp*Math.sign(Math.sin(a*count))*.5;p.setX(i,x*k);p.setZ(i,z*k)}}
+    mesh.geometry.computeVertexNormals();return mesh}
+  function labelTex(w,h,draw){var c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);var t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=8;return t}
+
+  /* ---------- materials ---------- */
+  var glassClear=new THREE.MeshPhysicalMaterial({color:0xfff8ee,roughness:.02,transmission:1,thickness:.6,ior:1.5,transparent:true,envMapIntensity:1.6,clearcoat:1,clearcoatRoughness:.02});
+  var glassAmber=new THREE.MeshPhysicalMaterial({color:0xc9741c,roughness:.03,transmission:.9,thickness:1.4,ior:1.5,transparent:true,envMapIntensity:1.5,clearcoat:1,clearcoatRoughness:.02});
+  var glassFrost=new THREE.MeshPhysicalMaterial({color:0xfff3e4,roughness:.32,transmission:.82,thickness:1.2,ior:1.5,transparent:true,envMapIntensity:1.1,clearcoat:.5,clearcoatRoughness:.3});
+  var serumLiquid=new THREE.MeshStandardMaterial({color:0xb4600f,roughness:.15,emissive:0x4a1c02,emissiveIntensity:.55});
+  var creamFill=new THREE.MeshStandardMaterial({color:0xf3e8d6,roughness:.55});
+  var rubber=new THREE.MeshStandardMaterial({color:0x4a1020,roughness:.45,envMapIntensity:.8});
+  var ceramic=new THREE.MeshPhysicalMaterial({color:0xefe4d2,roughness:.3,clearcoat:.7,clearcoatRoughness:.18,envMapIntensity:1.1});
+
+  /* ---------- PRODUCT 1: amber serum dropper (left pedestal) ---------- */
+  function serumBottle(){
+    var g=new THREE.Group();
+    var prof=[[0,0]].concat(arc(.36,.09,.09,-Math.PI/2,0,6)).concat([[.45,.09],[.45,.95]]).concat(arc(.33,.95,.12,0,Math.PI/2,6).map(function(p){return [p[0]*1.0,p[1]]})).concat(arc(.2,1.07,.13,Math.PI/2,Math.PI*.95,2)).concat([[.17,1.22],[.17,1.36],[0,1.36]]);
+    g.add(lathe(prof,glassAmber));
+    // liquid inside
+    g.add(lathe([[0,.1],[.405,.1],[.405,.86],[.37,.95],[.2,.99],[0,.99]],serumLiquid));
+    // glass pipette tube
+    var tube=cast(new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,1.35,24),glassClear));tube.position.set(.02,.78,0);g.add(tube);
+    // gold ribbed collar
+    var col=lathe([[0,1.3],[.235,1.3],[.235,1.74],[.205,1.74],[0,1.74]],goldSatin,160);knurl(col,1.34,1.7,48,.05);g.add(col);
+    var ring=lathe([[0,1.28],[.255,1.28],[.255,1.34],[0,1.34]],gold);g.add(ring);
+    // rubber bulb: smooth taper
+    var bulb=[[0,1.74],[.15,1.74],[.17,1.9],[.2,2.15],[.19,2.4],[.15,2.62],[.08,2.74],[0,2.77]];
+    g.add(lathe(bulb,rubber));
+    // paper label
+    var lab=labelTex(512,384,function(c,w,h){c.fillStyle='#f3e9d8';c.fillRect(0,0,w,h);c.strokeStyle='#b8893a';c.lineWidth=3;c.strokeRect(14,14,w-28,h-28);
+      c.fillStyle='#2a1015';c.textAlign='center';c.font='700 58px "Bricolage Grotesque"';c.fillText('LUMEN',w/2,112);
+      c.fillStyle='#b8893a';c.fillRect(w/2-40,138,80,2);
+      c.fillStyle='#2a1015';c.font='500 34px "Plus Jakarta Sans"';c.fillText('Radiance',w/2,202);c.fillText('Serum',w/2,246);
+      c.fillStyle='#7a6358';c.font='500 22px "DM Mono"';c.fillText('30 ml · 1.0 fl oz',w/2,320)});
+    var lm=new THREE.Mesh(new THREE.CylinderGeometry(.462,.462,.58,64,1,true,-Math.PI*.42,Math.PI*.84),new THREE.MeshStandardMaterial({map:lab,roughness:.6,side:THREE.DoubleSide}));lm.position.y=.55;g.add(lm);
+    return g}
+  var serum=serumBottle();serum.position.set(-2.1,yA,.5);serum.rotation.y=.62;S.add(serum);
+
+  /* ---------- PRODUCT 2: hero airless pump bottle (centre pedestal) ---------- */
+  function pumpBottle(){
+    var g=new THREE.Group();
+    var prof=[[0,0]].concat(arc(.47,.07,.07,-Math.PI/2,0,6)).concat([[.54,.07],[.54,2.0]]).concat(arc(.3,2.0,.24,0,Math.PI/2,10).map(function(p){return [p[0]+.0,p[1]]}).map(function(p,i,a){var t=i/(a.length-1);return [.54-(.54-.21)*Math.sin(t*Math.PI/2)*1.0,2.0+.36*(1-Math.cos(t*Math.PI/2))*1.0]})).concat([[.21,2.38],[.21,2.52],[0,2.52]]);
+    var bodyMat=new THREE.MeshPhysicalMaterial({color:0xf1e6d3,roughness:.34,clearcoat:.85,clearcoatRoughness:.12,envMapIntensity:1.2});
+    var lab=labelTex(1536,768,function(c,w,h){c.clearRect(0,0,w,h);
+      c.save();c.translate(w*.47,0);c.textAlign='center';
+      c.fillStyle='#4a1424';c.font='700 106px "Bricolage Grotesque"';c.fillText('LUMEN',0,h*.33);
+      c.fillStyle='#8a5a2a';c.font='500 34px "DM Mono"';c.fillText('C L I N I C S',0,h*.41);
+      c.fillStyle='#b8893a';c.fillRect(-60,h*.47,120,3);
+      c.fillStyle='#4a1424';c.font='600 50px "Plus Jakarta Sans"';c.fillText('Barrier Repair',0,h*.60);c.fillText('Cream',0,h*.70);
+      c.fillStyle='#7a6358';c.font='500 30px "DM Mono"';c.fillText('50 ml  ·  1.7 fl oz',0,h*.88);c.restore()});
+    g.add(lathe(prof,bodyMat,128));
+    var lm2=new THREE.Mesh(new THREE.CylinderGeometry(.548,.548,1.62,128,1,true),new THREE.MeshPhysicalMaterial({map:lab,transparent:true,roughness:.4,clearcoat:.8,clearcoatRoughness:.15,envMapIntensity:1,depthWrite:false}));lm2.position.y=1.15;g.add(lm2);
+    // wine glaze band at the base
+    g.add(lathe([[0,.0],[.545,.0],[.545,.34],[0,.34]],new THREE.MeshPhysicalMaterial({color:0x5b1827,roughness:.26,clearcoat:.9,clearcoatRoughness:.08,envMapIntensity:1.2}),128));
+    // gold collar + pump: stem, actuator head, nozzle
+    var cl=lathe([[0,2.4],[.26,2.4],[.26,2.62],[.235,2.62],[0,2.62]],goldSatin,160);knurl(cl,2.42,2.6,56,.045);g.add(cl);
+    g.add(lathe([[0,2.62],[.2,2.62],[.2,2.7],[0,2.7]],gold));
+    g.add(lathe([[0,2.7],[.07,2.7],[.07,2.95],[0,2.95]],goldSatin));
+    var head=lathe([[0,2.92],[.2,2.92],[.22,2.99],[.22,3.1],[.18,3.16],[0,3.17]],gold);g.add(head);
+    var noz=cast(new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,.46,24),gold));noz.rotation.z=Math.PI/2;noz.position.set(.34,3.06,0);g.add(noz);
+    var tip=cast(new THREE.Mesh(new THREE.SphereGeometry(.058,20,16),gold));tip.position.set(.57,3.06,0);g.add(tip);
+    return g}
+  var pump=pumpBottle();pump.position.set(.15,yB,-.7);pump.rotation.y=-Math.PI/2+.35-1.25;S.add(pump);
+
+  /* ---------- PRODUCT 3: frosted glass jar with knurled gold lid (right pedestal) ---------- */
+  function jarProd(){
+    var g=new THREE.Group();
+    var prof=[[0,0]].concat(arc(.82,.12,.12,-Math.PI/2,0,8)).concat([[.94,.12],[.94,.72],[.88,.78],[.78,.78],[0,.78]]);
+    g.add(lathe(prof,glassFrost,128));
+    g.add(lathe([[0,.1],[.8,.1],[.82,.2],[.82,.66],[0,.66]],creamFill));
+    var lid=lathe([[0,.78],[.97,.78],[.97,1.12],[.93,1.18],[0,1.18]],goldSatin,192);knurl(lid,.8,1.1,96,.035);g.add(lid);
+    g.add(lathe([[0,1.17],[.92,1.17],[.92,1.2],[.88,1.22],[0,1.22]],gold,128));
+    // engraved wordmark on lid
+    var tl=labelTex(512,512,function(c,w,h){c.clearRect(0,0,w,h);c.fillStyle='rgba(60,30,6,.55)';c.textAlign='center';c.font='700 74px "Bricolage Grotesque"';c.fillText('LUMEN',w/2,h/2+24)});
+    var d=new THREE.Mesh(new THREE.CircleGeometry(.7,64),new THREE.MeshBasicMaterial({map:tl,transparent:true,depthWrite:false}));d.rotation.x=-Math.PI/2;d.position.y=1.222;g.add(d);
+    return g}
+  var jar=jarProd();jar.position.set(2.2,yC,-.05);jar.rotation.y=.3;S.add(jar);
+
+  /* ---------- real scanned props (CC0, Poly Haven) ---------- */
+  var loader=new THREE.GLTFLoader(),pending=0,ready=false;
+  function prop(name,h,x,y,z,ry){pending++;loader.load(A+'models/'+name+'/'+name+'_1k.gltf',function(g){
+      var o=g.scene;var b=new THREE.Box3().setFromObject(o),sz=b.getSize(new THREE.Vector3()),s=h/sz.y;o.scale.setScalar(s);
+      b=new THREE.Box3().setFromObject(o);var c=b.getCenter(new THREE.Vector3());o.position.set(x-c.x,y-b.min.y,z-c.z);o.rotation.y=ry||0;
+      o.traverse(function(m){if(m.isMesh){m.castShadow=true;m.receiveShadow=true;if(m.material)m.material.envMapIntensity=.9}});
+      S.add(o);if(--pending===0&&ready)go()},undefined,function(e){console.error('load fail',name,e);if(--pending===0&&ready)go()})}
+  prop('ceramic_vase_04',2.3,-3.7,0,1.2,.4);
+  prop('ceramic_vase_02',1.0,1.15,0,2.3,.8);
+  prop('potted_plant_04',1.8,4.0,0,.9,.3);
+
+  /* ---------- a few tiny gold motes only (no clutter) ---------- */
+  for(var i=0;i<9;i++){var m=new THREE.Mesh(new THREE.SphereGeometry(.03+.025*(i%3),10,10),new THREE.MeshBasicMaterial({color:0xa87a36}));m.position.set(-4+((i*37)%70)/10,1.5+((i*53)%30)/10,-2.2+((i*29)%50)/10);S.add(m)}
+
+  /* ---------- linearise flat colours, camera ---------- */
+  function finalize(){var seen={};S.traverse(function(o){var m=o.material;if(m&&!seen[m.uuid]){seen[m.uuid]=1;if(m.color&&!m.map&&!m.isMeshBasicMaterial&&!m.__lin){m.color.convertSRGBToLinear();m.__lin=1}if(m.emissive&&!m.__lin2){m.emissive.convertSRGBToLinear();m.__lin2=1}}});
+    S.background.convertSRGBToLinear();S.fog.color.convertSRGBToLinear()}
+  var focus=new THREE.Vector3(.15,2.2,-.25);
+  C.position.set(Math.sin(.40)*22.5,2.6,Math.cos(.40)*22.5);C.lookAt(focus);
+
+  function go(){finalize();
+    document.fonts.ready.then(function(){
+      PhotoStill.render({renderer:R,scene:S,camera:C,focus:focus,aperture:.2,light:sun,lightJitter:1.6,samples:72,grain:.028,vignette:.32,bloom:{amount:.28,radius:30}})})}
+
+  new THREE.RGBELoader().setDataType(THREE.UnsignedByteType).load(A+'studio.hdr',function(t){
+    var pm=new THREE.PMREMGenerator(R);S.environment=pm.fromEquirectangular(t).texture;t.dispose();pm.dispose();
+    ready=true;if(pending===0)go()},undefined,function(e){console.error('hdri fail',e);ready=true;if(pending===0)go()});
+})();
+</script></body></html>

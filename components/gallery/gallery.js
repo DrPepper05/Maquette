@@ -116,6 +116,8 @@ if(stage){
   var metaKick = document.getElementById('metaKick');
   var metaTitle = document.getElementById('metaTitle');
   var metaDesc = document.getElementById('metaDesc');
+  var metaStory = document.getElementById('metaStory');
+  var metaOpen = document.getElementById('metaOpen');
   var stackEl = document.getElementById('stack');
   var countEl = document.getElementById('count');
   var liveEl = document.getElementById('live');
@@ -137,6 +139,7 @@ if(stage){
   var startTime = performance.now(), inView = true, running = false, lastT = 0;
   var trailLock = false;
   var currentProjectBg = '';
+
 
   /* ------------------------------------------------------------------ */
   /* Crumpled Paper Shaders from reference                              */
@@ -194,7 +197,6 @@ float hash11(float n){ return fract(sin(n*127.1)*43758.5453); }
   var VERT = `
 uniform float uTime;
 uniform float uCrumple;
-uniform float uGlitch;
 uniform float uSeed;
 varying vec2 vUv;
 varying vec3 vN;
@@ -224,10 +226,6 @@ void main(){
 
   vec3 pos = a.xyz * 2.6;
 
-  float band = floor(p.y * 16.0 + floor(uTime * 14.0));
-  float r = hash11(band);
-  if (r > 0.74) pos.x += (hash11(band + 7.0) - 0.5) * 0.52 * uGlitch;
-
   vUv = uv;
   vH = a.w;
   vWob = snoise(vec3(uv * vec2(3.2, 4.0) + uSeed * 5.0, uTime * 0.09)) * 0.5 + 0.5;
@@ -243,7 +241,6 @@ precision highp float;
 uniform sampler2D uTex;
 uniform float uTime;
 uniform float uCrumple;
-uniform float uGlitch;
 uniform float uReveal;
 uniform vec3 uDeep;
 uniform vec3 uMid;
@@ -287,8 +284,14 @@ void main(){
   vec3 lit = t * mix(0.85 + 0.15 * shade, 1.0, smoothstep(0.3, 1.0, uReveal));
   col = mix(col, lit, uReveal);
 
-  // Fine archival paper tooth texture
-  col *= 0.985 + 0.03 * hash21(vUv * 850.0);
+  // Paper tooth only while crumpled; the flattened sheet stays crisp
+  float flatAmt = (1.0 - uCrumple) * smoothstep(0.6, 1.0, uReveal);
+  col *= mix(0.985 + 0.03 * hash21(vUv * 850.0), 1.0, flatAmt);
+
+  // Warm room light falling across the flat sheet (same glow as the gallery room)
+  float roomLight = 0.97 + 0.06 * smoothstep(1.1, 0.0, distance(vUv, vec2(0.25, 0.85)));
+  col *= mix(1.0, roomLight, flatAmt);
+  col = mix(col, col * vec3(1.025, 1.0, 0.965), 0.6 * flatAmt);
 
   // Topographic fold iso-contour elevation lines + travelling scan light on crumpled paper
   float hv = vH * 10.0;
@@ -296,11 +299,13 @@ void main(){
   float d = min(f, 1.0 - f);
   float line = 1.0 - smoothstep(0.0, fwidth(hv) * 1.3, d);
   float scan = exp(-pow((vUv.y - fract(uTime * 0.11)) * 8.0, 2.0));
-  col += uAccent * line * uCrumple * (0.22 + 0.95 * scan);
+  // Contour lines + scan only on crumpled paper; they fade out before the printed site shows
+  float paperOnly = 1.0 - smoothstep(0.08, 0.45, uReveal);
+  col += uAccent * line * uCrumple * paperOnly * (0.22 + 0.95 * scan);
 
   // 3D paper fold Fresnel rim glow when crumpled
   float fres = pow(1.0 - abs(dot(n, V)), 2.5);
-  col += uAccent * fres * 0.28 * uCrumple;
+  col += uAccent * fres * 0.28 * uCrumple * paperOnly;
 
   // Subtle physical paper stock edge bevel (clean 1px natural highlight, zero digital ticks/neon glow)
   float bevel = smoothstep(0.0, 0.003, e - cut) * (1.0 - smoothstep(0.003, 0.008, e - cut));
@@ -348,140 +353,81 @@ void main(){
 
   function createCardTexture(project) {
     var cv = document.createElement('canvas');
-    cv.width = 1024;
-    cv.height = 1312;
+    var hiRes = window.innerWidth > 820;
+    cv.width = hiRes ? 1536 : 1024;          // same 0.78 aspect as the card plane (2.6 x 3.328)
+    cv.height = hiRes ? 1968 : 1312;
     var ctx = cv.getContext('2d');
     var W = cv.width, H = cv.height;
 
     var tex = new THREE.CanvasTexture(cv);
     if (THREE.sRGBEncoding) tex.encoding = THREE.sRGBEncoding;
     var isMobile = (window.innerWidth <= 820);
-    tex.anisotropy = isMobile ? 1 : 4;
+    tex.anisotropy = isMobile ? 1 : 8;
 
     function renderCard(img) {
       ctx.save();
       ctx.clearRect(0, 0, W, H);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
 
-      // Archival Board substrate clip (crisp 24px corner radius)
-      roundRect(ctx, 4, 4, W - 8, H - 8, 24);
+      // Tablet: dark glass body with rounded corners
+      var R0 = W * 0.0234;
+      roundRect(ctx, 4, 4, W - 8, H - 8, R0);
       ctx.clip();
-
-      // Deep matte obsidian / museum archival board ground
-      var bg = ctx.createLinearGradient(0, 0, 0, H);
-      bg.addColorStop(0, '#131117');
-      bg.addColorStop(0.55, '#0e0d12');
-      bg.addColorStop(1, '#070709');
-      ctx.fillStyle = bg;
+      var body = ctx.createLinearGradient(0, 0, W, H);
+      body.addColorStop(0, '#1b1b20');
+      body.addColorStop(0.5, '#0d0d10');
+      body.addColorStop(1, '#060607');
+      ctx.fillStyle = body;
       ctx.fillRect(0, 0, W, H);
 
-      // Subtle atmospheric warmth in palette tone
-      var glow = ctx.createRadialGradient(W * 0.5, H * 0.22, 40, W * 0.5, H * 0.22, W * 0.85);
-      glow.addColorStop(0, project.palette[1] + '26');
-      glow.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = glow;
-      ctx.fillRect(0, 0, W, H);
-
-      // --- Mounted Artwork Viewport (Upper Section, Top-Aligned) ---
-      var padX = 40;
-      var padTop = 36;
-      var artW = W - padX * 2; // 944px
-      var artH = 700;          // 700px
-      var artR = 14;
-
-      // Soft physical mounting drop shadow behind screenshot
+      // Screen, inset behind a slim bezel
+      var bz = Math.round(W * 0.03);
+      var sxp = bz, syp = bz, sw = W - bz * 2, sh = H - bz * 2, sr = R0 * 0.55;
       ctx.save();
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
-      ctx.shadowBlur = 24;
-      ctx.shadowOffsetY = 10;
-      roundRect(ctx, padX, padTop, artW, artH, artR);
-      ctx.fillStyle = '#0a090d';
-      ctx.fill();
-      ctx.restore();
-
-      // Clip and draw screenshot image (top-aligned so headers, carts, logos are clear!)
-      ctx.save();
-      roundRect(ctx, padX, padTop, artW, artH, artR);
+      roundRect(ctx, sxp, syp, sw, sh, sr);
       ctx.clip();
-
       if (img && img.complete && img.naturalWidth > 0) {
         var imgRatio = img.naturalWidth / img.naturalHeight;
-        var artRatio = artW / artH;
-        var sx = 0, sy = 0, sWidth = img.naturalWidth, sHeight = img.naturalHeight;
-
-        if (imgRatio > artRatio) {
-          sWidth = img.naturalHeight * artRatio;
-          sx = (img.naturalWidth - sWidth) / 2;
-        } else {
-          sHeight = img.naturalWidth / artRatio;
-          sy = 0; // Top-aligned so site navigation & cart drawer are front and center!
-        }
-
-        ctx.drawImage(img, sx, sy, sWidth, sHeight, padX, padTop, artW, artH);
-
-        // Delicate top edge vignette
-        var innerShadow = ctx.createLinearGradient(padX, padTop, padX, padTop + 20);
-        innerShadow.addColorStop(0, 'rgba(0,0,0,0.18)');
-        innerShadow.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = innerShadow;
-        ctx.fillRect(padX, padTop, artW, 20);
+        var scrRatio = sw / sh;
+        var ix = 0, iy = 0, iw = img.naturalWidth, ih = img.naturalHeight;
+        if (imgRatio > scrRatio) { iw = img.naturalHeight * scrRatio; ix = (img.naturalWidth - iw) / 2; }
+        else { ih = img.naturalWidth / scrRatio; }
+        ctx.drawImage(img, ix, iy, iw, ih, sxp, syp, sw, sh);
       } else {
-        var fb = ctx.createLinearGradient(padX, padTop, padX + artW, padTop + artH);
+        var fb = ctx.createLinearGradient(sxp, syp, sxp + sw, syp + sh);
         fb.addColorStop(0, project.palette[0]);
         fb.addColorStop(1, project.palette[3]);
         ctx.fillStyle = fb;
-        ctx.fillRect(padX, padTop, artW, artH);
+        ctx.fillRect(sxp, syp, sw, sh);
       }
+      var ish = ctx.createLinearGradient(0, syp, 0, syp + bz * 0.9);
+      ish.addColorStop(0, 'rgba(0,0,0,0.35)');
+      ish.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = ish;
+      ctx.fillRect(sxp, syp, sw, bz * 0.9);
       ctx.restore();
 
-      // Crisp 1px mounting frame around screenshot
-      roundRect(ctx, padX, padTop, artW, artH, artR);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-      ctx.lineWidth = 1;
+      roundRect(ctx, sxp, syp, sw, sh, sr);
+      ctx.strokeStyle = 'rgba(0,0,0,0.6)';
+      ctx.lineWidth = 2;
       ctx.stroke();
 
-      // --- Lower Story Section: Clean, Prominent, Big Text (No Small Pills) ---
-      var ty = padTop + artH + 34; // ~770px
-      var lineCol = project.lineColor || project.palette[2];
+      // front camera dot in the top bezel
+      var cx = W / 2, cyy = bz / 2;
+      ctx.beginPath(); ctx.arc(cx, cyy, bz * 0.16, 0, Math.PI * 2);
+      ctx.fillStyle = '#050506'; ctx.fill();
+      ctx.beginPath(); ctx.arc(cx - bz * 0.04, cyy - bz * 0.04, bz * 0.05, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(120,140,200,0.35)'; ctx.fill();
 
-      // 1. Prominent Platform Type Tag (BIGGER, HIGH-VISIBILITY, NOT A DESIGN PILL)
-      ctx.font = '800 21px "DM Mono", monospace';
-      ctx.fillStyle = lineCol;
-      ctx.letterSpacing = '0.06em';
-      ctx.fillText(project.category.toUpperCase(), padX, ty + 24);
-
-      // Client Name on Right
-      ctx.font = '600 15px "DM Mono", monospace';
-      ctx.fillStyle = 'rgba(245, 241, 233, 0.5)';
-      ctx.textAlign = 'right';
-      ctx.letterSpacing = '0.04em';
-      ctx.fillText(project.client.toUpperCase(), padX + artW, ty + 24);
-      ctx.textAlign = 'left';
-
-      // 2. Project Title
-      ctx.font = '800 50px "Bricolage Grotesque", sans-serif';
-      ctx.fillStyle = '#f5f1e9';
-      ctx.letterSpacing = '-0.02em';
-      ctx.fillText(project.title, padX, ty + 80);
-
-      // 3. Headline Scope
-      ctx.font = '600 24px "Plus Jakarta Sans", sans-serif';
-      ctx.fillStyle = 'rgba(245, 241, 233, 0.9)';
-      ctx.letterSpacing = '-0.01em';
-      ctx.fillText(project.headline, padX, ty + 122);
-
-      // Hairline divider
-      ctx.fillStyle = 'rgba(245, 241, 233, 0.1)';
-      ctx.fillRect(padX, ty + 148, artW, 1);
-
-      // 4. The Main Description (MADE BIGGER, COMFORTABLE TO READ, NO SMALL TEXT)
-      ctx.font = '400 23px "Plus Jakarta Sans", sans-serif';
-      ctx.fillStyle = 'rgba(245, 241, 233, 0.88)';
-      wrapText(ctx, project.story, padX, ty + 196, artW, 38);
-
-      // Subtle Outer Archival Board Bevel
-      roundRect(ctx, 4, 4, W - 8, H - 8, 24);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-      ctx.lineWidth = 1.5;
+      // polished outer rim
+      roundRect(ctx, 5, 5, W - 10, H - 10, R0);
+      var rim = ctx.createLinearGradient(0, 0, W, H);
+      rim.addColorStop(0, 'rgba(255,255,255,0.28)');
+      rim.addColorStop(0.5, 'rgba(255,255,255,0.06)');
+      rim.addColorStop(1, 'rgba(255,255,255,0.16)');
+      ctx.strokeStyle = rim;
+      ctx.lineWidth = 2.5;
       ctx.stroke();
 
       ctx.restore();
@@ -534,23 +480,23 @@ void main(){
 
   function toggleActiveFlat(){
     flatOn = !flatOn;
-    var targetMesh = meshes.find(function(m){ return m.index === active; });
-    if(targetMesh){
-      targetMesh.burst = 1; // Glitch kick on toggle
-    }
   }
 
   function setActive(i, animate){
     i = mod(i, N);
     if(i === active) return;
-    var prevActive = active;
     active = i;
     var p = PROJECTS[i];
     var lineCol = p.lineColor || p.palette[2];
     metaKick.textContent = (p.category || p.badge) + ' · ' + p.year;
     metaDesc.textContent = p.headline || (p.client + ' — ' + p.tagline);
     metaTitle.textContent = p.title;
-    metaDesc.textContent = p.client + ' — ' + p.tagline;
+    metaDesc.textContent = p.headline;
+    if (metaStory) metaStory.textContent = p.story;
+    if (metaOpen) {
+      metaOpen.href = ((window.location.pathname.indexOf('/preview/') !== -1) ? '../' : '') + 'projects/' + p.slug + '/';
+      metaOpen.style.color = lineCol;
+    }
     if (countEl) countEl.textContent = pad(i + 1) + ' — ' + pad(N);
     if (stackEl) stackEl.textContent = p.label || p.category;
     currentProjectBg = 'radial-gradient(65% 58% at 50% 42%, ' + p.palette[1] + '77, transparent 72%), radial-gradient(80% 65% at 75% 35%, rgba(212, 120, 96, 0.32), transparent 72%), radial-gradient(70% 60% at 20% 70%, rgba(248, 136, 71, 0.22), transparent 68%)';
@@ -566,12 +512,6 @@ void main(){
     });
 
     liveEl.textContent = (i + 1) + ' of ' + N + ': ' + p.title + ', ' + p.category + ', ' + p.year + '. ' + p.tagline;
-
-    // Trigger glitch burst when newly active painting opens
-    var newMesh = meshes.find(function(m){ return m.index === i; });
-    if(newMesh && prevActive !== -1){
-      newMesh.burst = 1;
-    }
 
     if(animate && !reduce && metaInner.animate){
       metaInner.animate([
@@ -661,7 +601,7 @@ void main(){
       renderer = new THREE.WebGLRenderer({
         canvas: canvas,
         alpha: true,
-        antialias: false,
+        antialias: window.innerWidth > 820,
         powerPreference: 'high-performance'
       });
     } catch(e) {
@@ -672,7 +612,7 @@ void main(){
 
     try {
       var isMobile = (window.innerWidth <= 820);
-      renderer.setPixelRatio(isMobile ? Math.min(devicePixelRatio || 1, 1.0) : Math.min(devicePixelRatio || 1, 1.5));
+      renderer.setPixelRatio(isMobile ? Math.min(devicePixelRatio || 1, 1.0) : Math.min(devicePixelRatio || 1, 2));
       renderer.setClearColor(0x000000, 0);
       scene = new THREE.Scene();
       camera = new THREE.PerspectiveCamera(38, 1, 0.1, 50);
@@ -681,6 +621,19 @@ void main(){
       var geom = isMobile
         ? new THREE.PlaneGeometry(2.6, 3.328, 12, 16)
         : new THREE.PlaneGeometry(2.6, 3.328, 64, 82);
+
+      // Device slab geometry (rounded rect, extruded) + light for its metal edge
+      var SLAB_D = 0.075, sw2 = 2.6 * 0.985, sh2 = 3.328 * 0.985, sr2 = 0.07;
+      var sShape = new THREE.Shape();
+      sShape.moveTo(-sw2 / 2 + sr2, -sh2 / 2);
+      sShape.lineTo(sw2 / 2 - sr2, -sh2 / 2); sShape.quadraticCurveTo(sw2 / 2, -sh2 / 2, sw2 / 2, -sh2 / 2 + sr2);
+      sShape.lineTo(sw2 / 2, sh2 / 2 - sr2); sShape.quadraticCurveTo(sw2 / 2, sh2 / 2, sw2 / 2 - sr2, sh2 / 2);
+      sShape.lineTo(-sw2 / 2 + sr2, sh2 / 2); sShape.quadraticCurveTo(-sw2 / 2, sh2 / 2, -sw2 / 2, sh2 / 2 - sr2);
+      sShape.lineTo(-sw2 / 2, -sh2 / 2 + sr2); sShape.quadraticCurveTo(-sw2 / 2, -sh2 / 2, -sw2 / 2 + sr2, -sh2 / 2);
+      var slabGeom = new THREE.ExtrudeGeometry(sShape, { depth: SLAB_D, bevelEnabled: true, bevelThickness: 0.012, bevelSize: 0.012, bevelSegments: 3, curveSegments: 10 });
+      scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+      var keyL = new THREE.DirectionalLight(0xfff1e0, 1.1); keyL.position.set(-3, 4, 6); scene.add(keyL);
+      var rimL = new THREE.DirectionalLight(0x9fb4ff, 0.6); rimL.position.set(4, -2, 3); scene.add(rimL);
 
       PROJECTS.forEach(function(p, i){
         var tex = createCardTexture(p);
@@ -692,7 +645,6 @@ void main(){
           uniforms: {
             uTime: { value: 0 },
             uCrumple: { value: (i === 0 ? 0 : 1) },
-            uGlitch: { value: 0 },
             uReveal: { value: (i === 0 ? 1 : 0.05) },
             uSeed: { value: i * 7.3 + 1.2 },
             uTex: { value: tex },
@@ -707,20 +659,25 @@ void main(){
         var mesh = new THREE.Mesh(geom, mat);
         mesh.frustumCulled = false;
         scene.add(mesh);
+
+        // Physical thickness: a rounded slab behind the flattened card (hidden when crumpled)
+        var slabMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1f, metalness: 0.75, roughness: 0.32, transparent: true, opacity: 0 });
+        var slab = new THREE.Mesh(slabGeom, slabMat);
+        slab.position.z = -(SLAB_D + 0.018);
+        slab.visible = false;
+        mesh.add(slab);
         meshes.push({
+          slab: slab,
           mesh: mesh,
           index: i,
           project: p,
-          curFlat: (i === 0 ? 1 : 0),
-          burst: 0,
-          nextGlitch: 2.0 + Math.random() * 2.5,
-          gStart: -10,
-          gDur: 0.3
+          curFlat: (i === 0 ? 1 : 0)
         });
       });
 
       gl = true;
       stage.classList.add('has-gl');
+
     } catch(e) {
       gl = false;
       renderer = null;
@@ -966,21 +923,17 @@ void main(){
         if(Math.abs(targetFlat - item.curFlat) < 0.001) item.curFlat = targetFlat;
         var e = ease(item.curFlat);
 
-        // Glitch burst on transition
-        if(t > item.nextGlitch){
-          item.gStart = t;
-          item.gDur = 0.2 + Math.random() * 0.25;
-          item.nextGlitch = t + 3.0 + Math.random() * 4.5;
-        }
-        var gx = (t - item.gStart) / item.gDur;
-        var periodic = (gx >= 0 && gx < 1) ? (1 - gx) * (0.65 + 0.35 * Math.sin(t * 85)) : 0;
-        item.burst *= Math.exp(-timeDelta * 3.5);
-        var glitchVal = Math.max(periodic * 0.8, item.burst) * (reduce ? 0 : 0.85);
-
         mesh.material.uniforms.uTime.value = t;
         mesh.material.uniforms.uCrumple.value = (1 - e);
-        mesh.material.uniforms.uGlitch.value = glitchVal;
         mesh.material.uniforms.uReveal.value = 0.05 + 0.95 * smoothstep(item.curFlat, 0.18, 0.92);
+        if(item.slab){
+          var so = smoothstep(item.curFlat, 0.985, 1.0); // only once fully flat, else it pokes through the folds
+          item.slab.visible = so > 0.01;
+          item.slab.material.opacity = so;
+          item.slab.material.transparent = so < 0.99;
+          item.slab.scale.z = Math.max(0.01, so);
+          item.slab.position.z = -0.018 - 0.075 * Math.max(0.01, so);
+        }
 
         // Keep our exact sine track positioning!
         mesh.visible = isMobile ? (a2 < 0.8) : (a2 < 2.1);
@@ -989,7 +942,7 @@ void main(){
         // Keep the painting slightly rotated at us (active piece at slight stylish gallery angle)
         var rotY = -o2 * 0.45 - 0.14; // -0.14 rad (~-8°) tilts slightly towards viewer
         var rotX = 0.05;
-        var rotZ = (1 - (1 - e)) * -0.04;
+        var rotZ = e * -0.04;
 
         // Subtle breathing float from reference crumpled animation
         var k = 1 - e * 0.85;

@@ -12,6 +12,8 @@ The site loads exactly three typefaces (declared in the font `<link>` in `index.
 
 Never add a fourth typeface: no new Google Fonts family, no custom `@font-face`, no system-font override for a one-off section. If a section needs a different feel, get it from weight, size, tracking, or color within these three — not a new font import. This applies to every file that duplicates the font `<link>`, not just `styles/base.css`.
 
+**Exception (user decision, 2026-11-24):** the fictional client mockups in `projects/*/` (Northwind, Lumen, Forge, Verdant, Atlas — the pages screenshotted into `assets/projects/*.jpg` for the carousel) each use their own brand typefaces so they read as different companies. This exemption covers only `projects/*/`; Maquette's own pages stay on the three fonts above.
+
 ## Banned pattern: monospace dot-separated "eyebrow" labels
 
 Do not use this pattern anywhere, including new sections or components:

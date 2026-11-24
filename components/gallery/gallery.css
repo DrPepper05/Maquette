@@ -350,7 +350,7 @@
   z-index: 6;
   left: 28px;
   bottom: calc(28px + env(safe-area-inset-bottom, 0px));
-  max-width: 280px;
+  max-width: 360px;
   pointer-events: none;
   will-change: opacity;
   transition: opacity 0.2s ease-out;
@@ -370,12 +370,29 @@
 }
 
 .sc-desc {
-  font-size: 0.82rem;
-  line-height: 1.45;
-  color: rgba(236, 231, 223, 0.7);
-  margin: 8px 0 0;
-  max-width: 260px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: rgba(236, 231, 223, 0.9);
+  margin: 10px 0 0;
+  max-width: 340px;
 }
+.sc-story {
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: rgba(236, 231, 223, 0.62);
+  margin: 10px 0 0;
+  max-width: 340px;
+}
+.sc-open {
+  display: inline-block;
+  margin-top: 12px;
+  font: 700 0.82rem 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  text-decoration: none;
+  pointer-events: auto;
+}
+.sc-open:hover { text-decoration: underline; }
+.sc-open:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; border-radius: 4px; }
 
 .showcase-controls {
   position: absolute;
@@ -563,6 +580,9 @@
     margin-right: auto;
     font-size: 0.8rem;
     line-height: 1.4;
+  }
+  .sc-story {
+    display: none;
   }
   .showcase-stack {
     display: none !important;

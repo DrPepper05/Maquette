@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verdant Foods Direct — Fresh from the grower.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=DM+Sans:opsz,wght@9..40,400..700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#f6f4ee;--card:#ffffff;--ink:#14301f;--mute:#5e6e62;--line:rgba(20,48,31,.12);--lime:#c4e84e;--green:#1f5a36;--img:#f2f1ed}
+  *{box-sizing:border-box;margin:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
+  .page{max-width:1120px;margin:0 auto;padding:0 32px 48px}
+  .top{background:var(--ink);color:#e9f3dc;text-align:center;font-size:13px;padding:9px;margin:0 -32px}
+  .top b{color:var(--lime)}
+  nav{display:flex;align-items:center;gap:26px;padding:20px 0}
+  .logo{font-family:'Fraunces';font-weight:800;font-size:26px;letter-spacing:-.03em}
+  .logo span{color:#4f8a2e}
+  .search{flex:1;max-width:340px;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:99px;padding:11px 16px;font-size:13.5px;color:var(--mute)}
+  .search svg{width:16px;stroke:var(--mute);fill:none;stroke-width:2;stroke-linecap:round}
+  nav ul{display:flex;gap:22px;list-style:none;padding:0;font-size:14px;font-weight:500;margin-left:auto}
+  .cart{display:flex;align-items:center;gap:8px;background:var(--ink);color:#fff;font-weight:600;font-size:13px;padding:11px 16px;border-radius:99px}
+  .cart b{background:var(--lime);color:var(--ink);border-radius:99px;width:20px;height:20px;display:grid;place-items:center;font-size:11px}
+  /* hero */
+  .hero{display:grid;grid-template-columns:1.05fr 1fr;gap:24px;align-items:stretch;background:var(--card);border-radius:30px;border:1px solid var(--line);padding:12px 12px 12px 40px;margin-top:6px;overflow:hidden}
+  h1{font-family:'Fraunces';font-weight:700;font-size:clamp(38px,5.6vw,62px);line-height:.98;letter-spacing:-.04em}
+  h1 em{font-style:normal;color:var(--green)}
+  .sub{margin-top:16px;font-size:16px;line-height:1.55;color:var(--mute);max-width:380px}
+  .cta{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+  .btn{display:inline-block;background:var(--ink);color:#fff;font-weight:700;font-size:14.5px;padding:14px 22px;border-radius:99px}
+  .btn.g{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .perks{display:flex;gap:18px;margin-top:22px;font-size:13px;color:var(--mute);flex-wrap:wrap}
+  .perks span::before{content:"✓";color:var(--green);font-weight:800;margin-right:6px}
+  .heroimg{position:relative;min-height:380px;background:var(--img);border-radius:22px;overflow:hidden}
+  .hero>div:first-child{align-self:center;padding:26px 0}
+  .heroimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.12)}
+  .tagp{position:absolute;left:5%;bottom:7%;z-index:2;background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 14px;box-shadow:0 14px 30px rgba(20,48,31,.12);font-size:13px}
+  .tagp b{display:block;font-family:'Fraunces';font-size:16px}
+  /* products */
+  .hd{display:flex;justify-content:space-between;align-items:flex-end;margin:44px 0 18px}
+  h2{font-family:'Fraunces';font-weight:700;font-size:32px;letter-spacing:-.035em}
+  .hd a{font-size:14px;font-weight:600;color:var(--green)}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .p{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:12px 12px 16px}
+  .p .im{background:var(--img);border-radius:14px;overflow:hidden;aspect-ratio:1/1;position:relative}
+  .p .im img{width:100%;height:100%;object-fit:cover;transform:scale(1.18)}
+  .p .badge{position:absolute;left:10px;top:10px;background:var(--lime);color:var(--ink);font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:99px}
+  .p h3{font-family:'Fraunces';font-size:19px;letter-spacing:-.01em;margin:14px 6px 2px}
+  .p .o{font-size:12.5px;color:var(--mute);margin:0 6px}
+  .p .r{display:flex;justify-content:space-between;align-items:center;margin:12px 6px 0}
+  .p .r strong{font-size:17px}.p .r strong small{font-size:12px;color:var(--mute);font-weight:500}
+  .add{background:var(--ink);color:#fff;font-weight:700;font-size:13px;padding:9px 15px;border-radius:99px}
+  .crate{background:var(--green);color:#fff;border-radius:22px;padding:24px;display:flex;flex-direction:column;justify-content:space-between;min-height:260px}
+  .crate h3{font-family:'Fraunces';font-size:26px;letter-spacing:-.03em;line-height:1.05}
+  .crate p{font-size:13.5px;line-height:1.5;color:#cfe5c3;margin-top:8px}
+  .crate .btn{background:var(--lime);color:var(--ink);align-self:flex-start}
+  .how{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:44px;padding-top:30px;border-top:1px solid var(--line)}
+  .how b{font-family:'Fraunces';font-size:19px;display:block;margin-bottom:5px}
+  .how span{font-size:13.5px;line-height:1.5;color:var(--mute)}
+  @media (max-width:760px){.hero{grid-template-columns:1fr;padding:28px}.heroimg img{width:100%;margin:0}.grid{grid-template-columns:1fr 1fr}.how{grid-template-columns:1fr}nav ul,.search{display:none}}
+  /* brand typography (projects/ mockups are exempt from the site font rule) */
+  h1,h2,.p h3,.crate h3,.how b,.logo,.tagp b{font-variation-settings:'SOFT' 100,'opsz' 96;letter-spacing:-.02em}h1{font-weight:600}h1 em{font-style:italic;font-weight:500}.logo{font-weight:700;font-size:28px}.p h3{font-weight:600}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top">Free delivery on orders over <b>$40</b> · Picked and packed within 24 hours</div>
+  <nav>
+    <div class="logo">Verdant<span>.</span></div>
+    <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>Search fruit, veg, bread…</div>
+    <ul><li>Shop</li><li>Harvest crates</li><li>Our growers</li></ul>
+    <span class="cart">Basket <b>3</b></span>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <h1>Fruit and veg, <em>picked this morning.</em></h1>
+      <p class="sub">Straight from independent growers to your door. Choose what you like, or let us fill a weekly crate.</p>
+      <div class="cta"><span class="btn">Shop this week’s harvest</span><span class="btn g">Build a weekly crate</span></div>
+      <div class="perks"><span>Free delivery over $40</span><span>Skip or pause anytime</span><span>100% organic</span></div>
+    </div>
+    <div class="heroimg">
+      <img src="img/apples.jpg" alt="Fresh red apples">
+      <div class="tagp"><b>Royal Gala apples</b>Orchard Hill · $4.20 / kg</div>
+    </div>
+  </section>
+
+  <div class="hd"><h2>This week’s harvest</h2><a>See all 48 products →</a></div>
+  <section class="grid">
+    <div class="p"><div class="im"><span class="badge">Just picked</span><img src="img/apples.jpg" alt="Apples"></div><h3>Royal Gala apples</h3><div class="o">Orchard Hill · 1 kg bag</div><div class="r"><strong>$4.20 <small>/ kg</small></strong><span class="add">Add</span></div></div>
+    <div class="p"><div class="im"><img src="img/avocados.jpg" alt="Avocados"></div><h3>Hass avocados</h3><div class="o">Sunridge Farm · pack of 4</div><div class="r"><strong>$6.90</strong><span class="add">Add</span></div></div>
+    <div class="p"><div class="im"><img src="img/lemons.jpg" alt="Lemons"></div><h3>Unwaxed lemons</h3><div class="o">Casa Verde · 500 g</div><div class="r"><strong>$3.10</strong><span class="add">Add</span></div></div>
+    <div class="p"><div class="im"><span class="badge">Seasonal</span><img src="img/pomegranates.jpg" alt="Pomegranates"></div><h3>Pomegranates</h3><div class="o">Ruby Grove · pack of 2</div><div class="r"><strong>$5.40</strong><span class="add">Add</span></div></div>
+    <div class="p"><div class="im"><img src="img/pears.jpg" alt="Pears"></div><h3>Asian pears</h3><div class="o">Hillside Co-op · 600 g</div><div class="r"><strong>$4.80</strong><span class="add">Add</span></div></div>
+    <div class="crate"><div><h3>Weekly harvest crate</h3><p>12 seasonal items, chosen by our growers. Swap anything, skip any week.</p></div><span class="btn">From $29 / week</span></div>
+  </section>
+
+  <div class="how">
+    <div><b>Grown by people you can name</b><span>Every product shows the farm it came from.</span></div>
+    <div><b>Picked to order</b><span>Nothing sits in a warehouse. Harvested, packed, delivered.</span></div>
+    <div><b>Flexible by default</b><span>Change, skip or cancel your crate in two taps.</span></div>
+  </div>
+</div>
+</body>
+</html>
